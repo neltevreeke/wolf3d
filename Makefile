@@ -3,15 +3,16 @@
 #                                                         ::::::::             #
 #    Makefile                                           :+:    :+:             #
 #                                                      +:+                     #
-#    By: nvreeke <nvreeke@student.codam.nl>           +#+                      #
+#    By: jvisser <jvisser@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/02/22 13:27:36 by nvreeke        #+#    #+#                 #
-#    Updated: 2019/04/15 12:31:20 by nvreeke       ########   odam.nl          #
+#    Updated: 2019/04/15 14:31:52 by jvisser       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 BINARY = wolf3d
 SRCS = src/init.c src/fps_meter.c src/event_handlers.c
+HEADER = src/wolf3d.h
 OBJ = $(SRCS:%.c=%.o)
 FLAGS = -L minilibx_macos/ -lmlx -framework OpenGL -framework AppKit -o $(BINARY)
 ERRFLAGS = -Wall -Wextra -Werror
@@ -20,7 +21,11 @@ LIBS = ./libft/libft.a
 
 all: $(BINARY)
 
-$(BINARY):
+%.o: %.c $(HEADER)
+	@echo "\033[1;32m 🛠️  Building $@ from $< file \033[0m"
+	@gcc $(ERRFLAGS) -c -o $@ $<
+
+$(BINARY): $(OBJ)
 	@echo "Compiling..."
 	@make -C minilibx_macos re > /dev/null
 	@make -C libft re > /dev/null
