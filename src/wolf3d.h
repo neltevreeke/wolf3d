@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:13:17 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/12 18:15:25 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/15 14:10:15 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,23 @@
 # define MEM(x) (x*)ft_memalloc(sizeof(x))
 # define WIDTH 1000
 # define HEIGHT 600
+
+/*
+**	Key & mouse defines
+*/
+
+# define KEY_ESC 53
+# define KEY_W 13
+# define KEY_A 0
+# define KEY_D 2
+# define KEY_S 1
+# define KEY_SPA 49
+
+# define BTN_LEFT 1
+# define BTN_RIGHT 2
+# define BTN_MID 3
+# define BTN_UP 4
+# define BTN_DOWN 5
 
 /*
 ***********************************************************	Structs
@@ -63,6 +80,14 @@ typedef struct	s_mlx
 */
 
 void			put_ui(t_mlx *mlx, char *str);
+
+/*
+**	Event_handler functions
+*/
+
+void			ui_handlers(t_mlx *mlx);
+int				exit_x(void *nul);
+int				deal_key(int key, t_mlx *mlx);
 
 /*
 **	Fps meter functions

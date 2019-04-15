@@ -6,12 +6,12 @@
 #    By: nvreeke <nvreeke@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/02/22 13:27:36 by nvreeke        #+#    #+#                 #
-#    Updated: 2019/04/12 15:23:48 by nvreeke       ########   odam.nl          #
+#    Updated: 2019/04/15 12:31:20 by nvreeke       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 BINARY = wolf3d
-SRCS = src/init.c src/fps_meter.c
+SRCS = src/init.c src/fps_meter.c src/event_handlers.c
 OBJ = $(SRCS:%.c=%.o)
 FLAGS = -L minilibx_macos/ -lmlx -framework OpenGL -framework AppKit -o $(BINARY)
 ERRFLAGS = -Wall -Wextra -Werror

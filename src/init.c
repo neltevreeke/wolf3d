@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:35:19 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/12 18:14:25 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/15 13:51:19 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,9 @@ t_mlx	*init_program(void)
 
 	mlx = MEM(t_mlx);
 	mlx->init = mlx_init();
-	mlx->win = mlx_new_window(mlx->init, WIDTH, HEIGHT, "Jelle en Neltes nazi steekpartij");
+	mlx->win = mlx_new_window(mlx->init, WIDTH, HEIGHT, "Wolf3D");
 	mlx->img = mlx_new_image(mlx->init, WIDTH, HEIGHT);
 	mlx->data_addr = mlx_get_data_addr(mlx->img, &(mlx->bits_per_pixel), &(mlx->size_line), &(mlx->endian));
-
 	return (mlx);
 }
 
@@ -44,13 +43,22 @@ void	put_ui(t_mlx *mlx, char *str)
 	mlx_string_put(mlx->init, mlx->win, (WIDTH / 100 * 92) + 50, HEIGHT / 100, 0xFFFFFF, str);
 }
 
+void	event_hooks(t_mlx *mlx)
+{
+	mlx_hook(mlx->win, 2, 1L << 0, deal_key, mlx);
+	mlx_hook(mlx->win, 17, 1L << 19, exit_x, NULL);
+	mlx_loop_hook(mlx->init, loop_program, mlx);
+	mlx_loop(mlx->init);
+}
+
 int		main(void)
 {
 	t_mlx *mlx;
 	
 	mlx = init_program();
 	loop_program(mlx);
-	mlx_loop_hook(mlx->init, loop_program, mlx);
-	mlx_loop(mlx->init);
+	event_hooks(mlx);
+	// mlx_loop_hook(mlx->init, loop_program, mlx);
+	// mlx_loop(mlx->init);
 	return (0);
 }
