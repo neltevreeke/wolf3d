@@ -3,10 +3,10 @@
 #                                                         ::::::::             #
 #    Makefile                                           :+:    :+:             #
 #                                                      +:+                     #
-#    By: jvisser <jvisser@student.codam.nl>           +#+                      #
+#    By: nvreeke <nvreeke@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/02/22 13:27:36 by nvreeke        #+#    #+#                 #
-#    Updated: 2019/04/15 15:24:34 by jvisser       ########   odam.nl          #
+#    Updated: 2019/04/15 18:36:26 by nvreeke       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,9 @@ BINARY = wolf3d
 SRCS =	src/init.c \
 		src/fps_meter.c \
 		src/event_handlers.c \
-		src/input.c
+		src/input.c \
+		src/error.c \
+		src/raycast.c
 HEADER = src/wolf3d.h
 OBJ = $(SRCS:%.c=%.o)
 FLAGS = -L minilibx_macos/ -lmlx -framework OpenGL -framework AppKit -o $(BINARY)

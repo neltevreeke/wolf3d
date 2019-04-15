@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   wolf3d.h                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
+/*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:13:17 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/15 15:52:42 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/04/15 19:15:39 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@
 # include "../libft/libft.h"
 # include <sys/time.h>
 # include <stdio.h>
+# include <fcntl.h>
+
+#include <math.h>
 
 /*
 ***********************************************************	Defines
@@ -60,19 +63,38 @@
 */
 
 /*
-**	mlx struct
+**	Map struct
 */
 
-typedef struct	s_mlx
+typedef struct	s_map
 {
-	void		*init;
-	void		*win;
-	void		*img;
-	char		*data_addr;
-	int			bits_per_pixel;
-	int			size_line;
-	int			endian;
-}				t_mlx;
+	int			**level;
+	int			size_x;
+	int			size_y;
+}				t_map;
+
+/*
+**	Raycasting struct
+*/
+
+typedef struct	s_casting
+{
+	int			hit;
+	int			side;
+	int			map_x;
+	int			map_y;
+	int			step_x;
+	int			step_y;
+	int			lineheight;
+	double		camera_x;
+	double		ray_dir_x;
+	double		ray_dir_y;
+	double		side_dist_x;
+	double		side_dist_y;
+	double		delta_dist_x;
+	double		delta_dist_y;
+	double		per_wall_dist;
+}				t_casting;
 
 /*
 **	player struct
@@ -88,12 +110,23 @@ typedef struct	s_player
 	double		planey; // Viewing width y
 }				t_player;
 
-typedef struct	s_map
+/*
+**	MLX struct
+*/
+
+typedef struct	s_mlx
 {
-	int			**map;
-	int			size_x;
-	int			size_y;
-}				t_map;
+	void		*init;
+	void		*win;
+	void		*img;
+	char		*data_addr;
+	int			bits_per_pixel;
+	int			size_line;
+	int			endian;
+
+	t_map		*map;
+	t_player	*player;
+}				t_mlx;
 
 /*
 ***********************************************************	Prototypes
@@ -127,6 +160,14 @@ void			malloc_map(t_map *map, char *filename);
 
 double			get_cur_time(void);
 char			*get_fps(char *str);
+
+/*
+**	Fps meter functions
+*/
+
+void			no_param(void);
+void			exit_failure_errno(void);
+void 		   create_image(t_mlx *mlx);
 
 
 #endif
