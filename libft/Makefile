@@ -1,14 +1,14 @@
-#******************************************************************************#
+# **************************************************************************** #
 #                                                                              #
 #                                                         ::::::::             #
 #    Makefile                                           :+:    :+:             #
 #                                                      +:+                     #
-#    By: nvreeke <marvin@codam.nl>                    +#+                      #
+#    By: jvisser <jvisser@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
-#    Created: 2019/01/22 16:54:17 by nvreeke       #+#    #+#                  #
-#    Updated: 2019/01/22 16:54:21 by nvreeke       ########   odam.nl          #
+#    Created: 2019/01/22 16:54:17 by nvreeke        #+#    #+#                 #
+#    Updated: 2019/04/15 15:39:26 by jvisser       ########   odam.nl          #
 #                                                                              #
-#******************************************************************************#
+# **************************************************************************** #
 
 NAME = libft.a
 SRCS = ft_atoi.c ft_bzero.c ft_isalnum.c ft_isalpha.c ft_isascii.c \
@@ -23,7 +23,8 @@ ft_strdup.c ft_strequ.c ft_striter.c ft_striteri.c ft_strjoin.c \
 ft_strlcat.c ft_strlen.c ft_strmap.c ft_strmapi.c ft_strncat.c \
 ft_strncmp.c ft_strncpy.c ft_strnequ.c ft_strnew.c ft_strnstr.c \
 ft_strrchr.c ft_strsplit.c ft_strstr.c ft_strsub.c ft_strtolower.c \
-ft_strtoupper.c ft_strtrim.c ft_tolower.c ft_toupper.c ft_wordcount.c
+ft_strtoupper.c ft_strtrim.c ft_tolower.c ft_toupper.c ft_wordcount.c \
+get_next_line.c
 COMP = gcc
 FLAG = -Wall -Wextra -Werror
 OBJ = ft_atoi.o ft_bzero.o ft_isalnum.o ft_isalpha.o ft_isascii.o \
@@ -38,7 +39,8 @@ ft_strdup.o ft_strequ.o ft_striter.o ft_striteri.o ft_strjoin.o \
 ft_strlcat.o ft_strlen.o ft_strmap.o ft_strmapi.o ft_strncat.o \
 ft_strncmp.o ft_strncpy.o ft_strnequ.o ft_strnew.o ft_strnstr.o \
 ft_strrchr.o ft_strsplit.o ft_strstr.o ft_strsub.o ft_strtolower.o \
-ft_strtoupper.o ft_strtrim.o ft_tolower.o ft_toupper.o ft_wordcount.o
+ft_strtoupper.o ft_strtrim.o ft_tolower.o ft_toupper.o ft_wordcount.o \
+get_next_line.o
 
 all: $(NAME)
 

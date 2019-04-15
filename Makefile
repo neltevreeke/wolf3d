@@ -6,12 +6,15 @@
 #    By: jvisser <jvisser@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/02/22 13:27:36 by nvreeke        #+#    #+#                 #
-#    Updated: 2019/04/15 14:31:52 by jvisser       ########   odam.nl          #
+#    Updated: 2019/04/15 15:24:34 by jvisser       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 BINARY = wolf3d
-SRCS = src/init.c src/fps_meter.c src/event_handlers.c
+SRCS =	src/init.c \
+		src/fps_meter.c \
+		src/event_handlers.c \
+		src/input.c
 HEADER = src/wolf3d.h
 OBJ = $(SRCS:%.c=%.o)
 FLAGS = -L minilibx_macos/ -lmlx -framework OpenGL -framework AppKit -o $(BINARY)

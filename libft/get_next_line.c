@@ -3,126 +3,81 @@
 /*                                                        ::::::::            */
 /*   get_next_line.c                                    :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
+/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/01/29 15:33:05 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/02/02 12:18:50 by nvreeke       ########   odam.nl         */
+/*   Created: 2019/01/14 17:33:06 by jvisser        #+#    #+#                */
+/*   Updated: 2019/03/27 13:48:26 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include <stdlib.h>
+#include <unistd.h>
+#include "libft.h"
 
-static char			*ft_strjoinchar(char *s, char c)
+static void		save_new_line(t_list *list, char **line)
 {
-	int				i;
-	int				j;
-	char			*str;
+	size_t	index;
 
-	if (!s)
-		return (NULL);
-	i = ft_strlen(s);
-	j = 0;
-	str = ft_strnew(i + 1);
-	if (!str)
-		return (NULL);
-	while (j < i)
-	{
-		str[j] = s[j];
-		j++;
-	}
-	str[i] = c;
-	str[i + 1] = '\0';
-	free(s);
-	return (str);
+	index = 0;
+	while (((char*)list->content)[index] != '\n'
+	&& ((char*)list->content)[index] != '\0')
+		index++;
+	*line = ft_strsub((char*)list->content, 0, index);
+	if (((char*)list->content)[index] == '\n')
+		list->content = ft_strsub(list->content, index + 1,
+									ft_strlen(list->content) - index);
+	else
+		list->content = ft_strnew(1);
 }
 
-static int			ft_copytill(char **line, char *src, char c)
+static t_list	*get_curr_file(const int fd, t_list **list)
 {
-	int				i;
-	int				j;
-	int				pos;
+	t_list	*cpy_lst;
 
-	i = 0;
-	while (src[i])
+	cpy_lst = *list;
+	while (cpy_lst)
 	{
-		if (src[i] == c)
-			break ;
-		i++;
+		if ((int)cpy_lst->content_size == fd)
+			return (cpy_lst);
+		cpy_lst = cpy_lst->next;
 	}
-	pos = i;
-	j = 0;
-	while (src[j] != c && src[j])
-	{
-		*line = ft_strjoinchar(*line, src[j]);
-		j++;
-	}
-	return (pos);
+	cpy_lst = ft_lstnew("\0", fd);
+	ft_lstadd(list, cpy_lst);
+	return (cpy_lst);
 }
 
-t_list				*ft_get_cur(t_list **list, const int fd)
+static void		set_current_content(void **content, char *str, char **tmp)
 {
-	t_list			*tmp;
-
-	tmp = *list;
-	while (tmp)
-	{
-		if ((int)tmp->content_size == fd)
-			return (tmp);
-		tmp = tmp->next;
-	}
-	tmp = ft_lstnew("\0", 1);
-	tmp->content_size = fd;
-	ft_lstadd(list, tmp);
-	return (tmp);
+	*tmp = ft_strjoin(*content, str);
+	free(*content);
+	*content = *tmp;
 }
 
-static int			ft_read(const int fd, t_list *cur)
+int				get_next_line(const int fd, char **line)
 {
-	int				ret;
+	ssize_t			ret;
 	char			*tmp;
 	char			buf[BUFF_SIZE + 1];
+	t_list			*current_file;
+	static t_list	*list;
 
+	if (fd < 0 || line == NULL || read(fd, buf, 0) < 0)
+		return (-1);
+	tmp = NULL;
+	current_file = get_curr_file(fd, &list);
 	ret = 1;
-	while (ret)
+	while (!(ft_strchr(current_file->content, '\n')) && (ret))
 	{
 		ret = read(fd, buf, BUFF_SIZE);
 		buf[ret] = '\0';
-		tmp = cur->content;
-		cur->content = ft_strjoin(tmp, buf);
-		if (!cur->content)
-			return (-1);
-		free(tmp);
-		if (ft_strchr(buf, '\n'))
-			break ;
+		set_current_content(&(current_file->content), buf, &tmp);
 	}
-	return (ret);
-}
-
-int					get_next_line(const int fd, char **line)
-{
-	static t_list	*list;
-	char			buf[BUFF_SIZE + 1];
-	int				ret;
-	t_list			*cur;
-	char			*tmp;
-
-	if (fd < 0 || line == NULL || (read(fd, buf, 0) < 0))
-		return (-1);
-	cur = ft_get_cur(&list, fd);
-	*line = ft_strnew(0);
-	if (!*line)
-		return (-1);
-	ret = ft_read(fd, cur);
-	if (ret < BUFF_SIZE && ft_strlen(cur->content) == 0)
+	if (ft_strchr(current_file->content, '\n'))
+		set_current_content(&(current_file->content), "\0", &tmp);
+	if (ret < BUFF_SIZE && !ft_strlen(current_file->content))
 		return (0);
-	ret = ft_copytill(line, cur->content, '\n');
-	if (ret < (int)ft_strlen(cur->content))
-	{
-		tmp = cur->content;
-		cur->content = ft_strdup(cur->content + ret + 1);
+	save_new_line(current_file, line);
+	if (tmp)
 		free(tmp);
-	}
-	else
-		ft_strclr(cur->content);
 	return (1);
 }
