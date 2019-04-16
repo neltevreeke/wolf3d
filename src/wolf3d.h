@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   wolf3d.h                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
+/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:13:17 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/16 17:28:07 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/16 19:32:40 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

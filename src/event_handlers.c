@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   event_handlers.c                                   :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
+/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 12:06:06 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/16 16:10:02 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/16 18:55:18 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,20 +51,20 @@ int			deal_key(int key, t_mlx *mlx)
 	else if (key == KEY_A)
 	{
 		double x_save = mlx->player->dirx;
-		mlx->player->dirx = x_save * cos(3 * M_PI / 180) - mlx->player->diry * sin(3 * M_PI / 180);
-		mlx->player->diry = x_save * sin(3 * M_PI / 180) + mlx->player->diry * cos(3 * M_PI / 180);
+		mlx->player->dirx = x_save * cos(-2 * M_PI / 180) - mlx->player->diry * sin(-2 * M_PI / 180);
+		mlx->player->diry = x_save * sin(-2 * M_PI / 180) + mlx->player->diry * cos(-2 * M_PI / 180);
 		x_save = mlx->player->planex;
-		mlx->player->planex = x_save * cos(3 * M_PI / 180) - mlx->player->planey * sin(3 * M_PI / 180);
-		mlx->player->planey = x_save * sin(3 * M_PI / 180) + mlx->player->planey * cos(3 * M_PI / 180);
+		mlx->player->planex = x_save * cos(-2 * M_PI / 180) - mlx->player->planey * sin(-2 * M_PI / 180);
+		mlx->player->planey = x_save * sin(-2 * M_PI / 180) + mlx->player->planey * cos(-2 * M_PI / 180);
 	}
 	else if (key == KEY_D)
 	{
 		double x_save = mlx->player->dirx;
-		mlx->player->dirx = x_save * cos(-3 * M_PI / 180) - mlx->player->diry * sin(-3 * M_PI / 180);
-		mlx->player->diry = x_save * sin(-3 * M_PI / 180) + mlx->player->diry * cos(-3 * M_PI / 180);
+		mlx->player->dirx = x_save * cos(2 * M_PI / 180) - mlx->player->diry * sin(2 * M_PI / 180);
+		mlx->player->diry = x_save * sin(2 * M_PI / 180) + mlx->player->diry * cos(2 * M_PI / 180);
 		x_save = mlx->player->planex;
-		mlx->player->planex = x_save * cos(-3 * M_PI / 180) - mlx->player->planey * sin(-3 * M_PI / 180);
-		mlx->player->planey = x_save * sin(-3 * M_PI / 180) + mlx->player->planey * cos(-3 * M_PI / 180);
+		mlx->player->planex = x_save * cos(2 * M_PI / 180) - mlx->player->planey * sin(2 * M_PI / 180);
+		mlx->player->planey = x_save * sin(2 * M_PI / 180) + mlx->player->planey * cos(2 * M_PI / 180);
 	}
 	return (0);
 }
