@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:35:19 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/15 20:12:02 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/04/16 12:58:29 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int		loop_program(t_mlx *mlx)
 	fps_str = get_fps(fps_str);
 	ft_bzero(IMG_ADD, HEIGHT * WIDTH * (mlx->bits_per_pixel / 8));
 	create_image(mlx);
-	// mlx_put_image_to_window(MLX_PTR, WIN_PTR, IMG_PTR, 0, 0);
+	mlx_put_image_to_window(MLX_PTR, WIN_PTR, IMG_PTR, 0, 0);
 	put_ui(mlx, fps_str);
 	free(fps_str);
 	return (0);

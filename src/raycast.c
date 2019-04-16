@@ -6,11 +6,18 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 18:35:01 by jvisser        #+#    #+#                */
-/*   Updated: 2019/04/15 20:04:17 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/04/16 12:58:55 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+void	pixel_to_img(t_mlx *mlx, int px, int py, int color)
+{
+	color = mlx_get_color_value(MLX_PTR, color);
+	ft_memcpy(IMG_ADD + mlx->size_line * py + px * mlx->bits_per_pixel / 8,
+				&color, sizeof(int));
+}
 
 void    create_image(t_mlx *mlx)
 {
@@ -71,30 +78,29 @@ void    create_image(t_mlx *mlx)
 		
 		if (casting.side == 0)
 		{
-			printf("0\n");
+			// printf("0\n");
 			casting.per_wall_dist = (casting.map_x - mlx->player->posx + (1 - casting.step_x) / 2) / casting.ray_dir_x;
 		}
 		else
 		{
-			printf("1\n");
+			// printf("1\n");
 			casting.per_wall_dist = (casting.map_y - mlx->player->posy + (1 - casting.step_y) / 2) / casting.ray_dir_y;
 		}
 
-		printf("wall dist: %lf\n", casting.per_wall_dist);
-		printf("map y: %d\n", casting.map_x);
-		printf("pos y: %lf\n", mlx->player->posx);
-		printf("step y: %d\n", casting.step_x);
-		printf("ray dir y: %lf\n", casting.ray_dir_x);
-		printf("wall dist: %lf\n", casting.per_wall_dist);
-		printf("map y: %d\n", casting.map_y);
-		printf("pos y: %lf\n", mlx->player->posy);
-		printf("step y: %d\n", casting.step_y);
-		printf("ray dir y: %lf\n", casting.ray_dir_y);
+		// printf("wall dist: %lf\n", casting.per_wall_dist);
+		// printf("map y: %d\n", casting.map_x);
+		// printf("pos y: %lf\n", mlx->player->posx);
+		// printf("step y: %d\n", casting.step_x);
+		// printf("ray dir y: %lf\n", casting.ray_dir_x);
+		// printf("wall dist: %lf\n", casting.per_wall_dist);
+		// printf("map y: %d\n", casting.map_y);
+		// printf("pos y: %lf\n", mlx->player->posy);
+		// printf("step y: %d\n", casting.step_y);
+		// printf("ray dir y: %lf\n", casting.ray_dir_y);
 
 
 		casting.lineheight = (int)(HEIGHT / casting.per_wall_dist);
 
-		printf("lineheight: %d\n", casting.lineheight);
 		int color;
 		for(int start = 0; start < casting.lineheight; start++)
 		{
@@ -104,10 +110,8 @@ void    create_image(t_mlx *mlx)
 				color = 0x00FF00;
 			else if (mlx->map->level[casting.map_y][casting.map_x] == 3)
 				color = 0xFF0000;
-			
-			mlx_pixel_put(MLX_PTR, WIN_PTR, x, start + (HEIGHT / 2 - casting.lineheight / 2), color);
+			pixel_to_img(mlx, x, start + (HEIGHT / 2 - casting.lineheight / 2), color);
 		}
 		x++;
 	}
-	getchar();
 }

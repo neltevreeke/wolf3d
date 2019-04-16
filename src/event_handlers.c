@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   event_handlers.c                                   :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
+/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 12:06:06 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/15 18:23:55 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/16 13:09:42 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,20 @@ int			deal_key(int key, t_mlx *mlx)
 	(void)mlx;
 	if (KEY_ESC == key)
 		put_menu(mlx);
+	else if (key == KEY_W)
+		mlx->player->posx += 0.1;
+	else if (key == KEY_S)
+		mlx->player->posx -= 0.1;
+	else if (key == KEY_A)
+	{
+		mlx->player->dirx += 0.05;
+		mlx->player->diry -= 0.05;
+	}
+	else if (key == KEY_D)
+	{
+		mlx->player->dirx -= 0.05;
+		mlx->player->diry += 0.05;
+	}
 	return (0);
 }
 
