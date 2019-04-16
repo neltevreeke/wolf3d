@@ -3,10 +3,10 @@
 #                                                         ::::::::             #
 #    Makefile                                           :+:    :+:             #
 #                                                      +:+                     #
-#    By: nvreeke <nvreeke@student.codam.nl>           +#+                      #
+#    By: jvisser <jvisser@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/02/22 13:27:36 by nvreeke        #+#    #+#                 #
-#    Updated: 2019/04/15 18:36:26 by nvreeke       ########   odam.nl          #
+#    Updated: 2019/04/16 13:27:36 by jvisser       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,20 +33,20 @@ all: $(BINARY)
 $(BINARY): $(OBJ)
 	@echo "Compiling..."
 	@make -C minilibx_macos re > /dev/null
-	@make -C libft re > /dev/null
+	@make -C libft
 	@$(GCC) $(SRCS) $(INC) -I/usr/X11/includes $(FLAGS) $(ERRFLAGS) $(LIBS)
 	@echo "Done"
 
 clean:
 	@echo "Removing object files"
 	@make -C minilibx_macos clean > /dev/null
-	@make -C libft clean > /dev/null
+	@make -C libft clean
 	@rm -rf $(OBJ)
 	@echo "Done"
 
 fclean: clean
 	@echo "Removing binary and extraneous directories"
-	@make -C libft fclean > /dev/null
+	@make -C libft fclean
 	@rm -rf .vscode
 	@rm -rf minilibx_macos/.vscode
 	@rm -rf $(BINARY)

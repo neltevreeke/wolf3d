@@ -1,20 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_isalnum.c                                       :+:    :+:            */
+/*   ft_factorial.c                                     :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jvisser <marvin@codam.nl>                    +#+                     */
+/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/01/09 19:33:56 by jvisser       #+#    #+#                 */
-/*   Updated: 2019/01/09 19:33:56 by jvisser       ########   odam.nl         */
+/*   Created: 2019/01/14 19:03:19 by jvisser        #+#    #+#                */
+/*   Updated: 2019/02/12 14:22:17 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isalnum(int c)
+int	ft_factorial(int nb)
 {
-	if (c >= '0' && c <= '9')
+	int result;
+
+	result = nb;
+	if (nb < 0 || nb > 12)
+		return (0);
+	if (nb == 0)
 		return (1);
-	if (c >= 'A' && c <= 'z' && (c <= 'Z' || c >= 'a'))
-		return (1);
-	return (0);
+	while (nb > 1)
+	{
+		nb--;
+		result = result * nb;
+	}
+	return (result);
 }

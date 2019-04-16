@@ -1,20 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_isalnum.c                                       :+:    :+:            */
+/*   ft_wclen.c                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jvisser <marvin@codam.nl>                    +#+                     */
+/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/01/09 19:33:56 by jvisser       #+#    #+#                 */
-/*   Updated: 2019/01/09 19:33:56 by jvisser       ########   odam.nl         */
+/*   Created: 2019/03/04 15:07:14 by jvisser        #+#    #+#                */
+/*   Updated: 2019/03/04 15:09:33 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isalnum(int c)
+#include <wchar.h>
+
+int	ft_wclen(wchar_t wc)
 {
-	if (c >= '0' && c <= '9')
+	if (wc >= 0x00 && wc <= 0x7F)
 		return (1);
-	if (c >= 'A' && c <= 'z' && (c <= 'Z' || c >= 'a'))
-		return (1);
+	else if (wc >= 0x80 && wc <= 0x7FF)
+		return (2);
+	else if (wc >= 0x800 && wc <= 0xFFFF)
+		return (3);
+	else if (wc >= 0x10000 && wc <= 0x10FFFF)
+		return (4);
 	return (0);
 }

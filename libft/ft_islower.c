@@ -1,20 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_isalnum.c                                       :+:    :+:            */
+/*   ft_islower.c                                       :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jvisser <marvin@codam.nl>                    +#+                     */
+/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/01/09 19:33:56 by jvisser       #+#    #+#                 */
-/*   Updated: 2019/01/09 19:33:56 by jvisser       ########   odam.nl         */
+/*   Created: 2019/03/05 14:07:01 by jvisser        #+#    #+#                */
+/*   Updated: 2019/03/05 14:07:36 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isalnum(int c)
+int	ft_islower(int c)
 {
-	if (c >= '0' && c <= '9')
-		return (1);
-	if (c >= 'A' && c <= 'z' && (c <= 'Z' || c >= 'a'))
+	if (c >= 'a' && c <= 'z')
 		return (1);
 	return (0);
 }

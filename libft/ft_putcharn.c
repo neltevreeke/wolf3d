@@ -1,20 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_isalnum.c                                       :+:    :+:            */
+/*   ft_putcharn.c                                      :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jvisser <marvin@codam.nl>                    +#+                     */
+/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/01/09 19:33:56 by jvisser       #+#    #+#                 */
-/*   Updated: 2019/01/09 19:33:56 by jvisser       ########   odam.nl         */
+/*   Created: 2019/02/12 17:42:35 by jvisser        #+#    #+#                */
+/*   Updated: 2019/02/12 18:04:48 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isalnum(int c)
+#include <string.h>
+#include <unistd.h>
+
+void	ft_putcharn(char c, size_t n)
 {
-	if (c >= '0' && c <= '9')
-		return (1);
-	if (c >= 'A' && c <= 'z' && (c <= 'Z' || c >= 'a'))
-		return (1);
-	return (0);
+	while (n > 0)
+	{
+		write(1, &c, 1);
+		n--;
+	}
 }

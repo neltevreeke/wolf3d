@@ -1,20 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_isalnum.c                                       :+:    :+:            */
+/*   ft_wstrdup.c                                       :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jvisser <marvin@codam.nl>                    +#+                     */
+/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/01/09 19:33:56 by jvisser       #+#    #+#                 */
-/*   Updated: 2019/01/09 19:33:56 by jvisser       ########   odam.nl         */
+/*   Created: 2019/03/04 16:53:10 by jvisser        #+#    #+#                */
+/*   Updated: 2019/03/04 16:58:57 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isalnum(int c)
+#include <wchar.h>
+#include <stdlib.h>
+#include "libft.h"
+
+wchar_t	*ft_wstrdup(wchar_t *str)
 {
-	if (c >= '0' && c <= '9')
-		return (1);
-	if (c >= 'A' && c <= 'z' && (c <= 'Z' || c >= 'a'))
-		return (1);
-	return (0);
+	wchar_t			*result;
+	int				len;
+
+	len = ft_wstrbytes(str);
+	result = (wchar_t*)malloc(len + 1);
+	ft_memcpy(result, str, len + 1);
+	return (result);
 }
