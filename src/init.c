@@ -3,29 +3,60 @@
 /*                                                        ::::::::            */
 /*   init.c                                             :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
+/*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:35:19 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/16 12:58:29 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/04/16 17:28:03 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-/*
-**	Rotate Vector:
-**	[ cos(a) -sin(a) ]
-**	[ sin(a)  cos(a) ]
-*/
 
-t_map	*init_map(char *filename)
+char	**init_textures_data(t_textures *textures)
+{
+	char	**texture_data;
+
+	texture_data = (char**)malloc(sizeof(char*) * 4);
+	if (!texture_data)
+		exit_failure_errno();
+	texture_data[0] = mlx_get_data_addr(textures->tex_arr[0], &textures->bits_per_pixel[0], &textures->size_line[0], &textures->endian[0]);
+	texture_data[1] = mlx_get_data_addr(textures->tex_arr[1], &textures->bits_per_pixel[1], &textures->size_line[1], &textures->endian[1]);
+	texture_data[2] = mlx_get_data_addr(textures->tex_arr[2], &textures->bits_per_pixel[2], &textures->size_line[2], &textures->endian[2]);
+	texture_data[3] = mlx_get_data_addr(textures->tex_arr[3], &textures->bits_per_pixel[3], &textures->size_line[3], &textures->endian[3]);
+	return (texture_data);
+}
+
+t_textures	*init_textures(t_mlx *mlx)
+{
+	int			width;
+	t_textures	*textures;
+
+	width = 64;
+	textures = MEM(t_textures);
+	if (!textures)
+		exit_failure_errno();
+	textures->tex_arr = (void**)malloc(sizeof(void*) * 4);
+	textures->endian = (int*)malloc(sizeof(int) * 4);
+	textures->size_line = (int*)malloc(sizeof(int) * 4);
+	textures->bits_per_pixel = (int*)malloc(sizeof(int) * 4);
+	textures->tex_arr[0] = mlx_xpm_file_to_image(MLX_PTR, "textures/wall_29.xpm", &width, &width);
+	textures->tex_arr[1] = mlx_xpm_file_to_image(MLX_PTR, "textures/wall_30.xpm", &width, &width);
+	textures->tex_arr[2] = mlx_xpm_file_to_image(MLX_PTR, "textures/wall_31.xpm", &width, &width);
+	textures->tex_arr[3] = mlx_xpm_file_to_image(MLX_PTR, "textures/wall_32.xpm", &width, &width);
+	textures->texture_data = init_textures_data(textures);
+	return (textures);
+}
+
+t_map	*init_map(char *filename, t_mlx *mlx)
 {
 	t_map	*map;
-	
+
 	map = MEM(t_map);
 	if (!map)
 		exit_failure_errno();
 	malloc_map(map, filename);
 	fill_map(map, filename);
+	map->textures = init_textures(mlx);
 	return(map);
 }
 
@@ -50,12 +81,12 @@ t_player	*init_player(void)
 	player = MEM(t_player);
 	if (!player)
 		exit_failure_errno();
-	player->posx = 1.5;
-	player->posy = 2.5;
+	player->posx = 15.5;
+	player->posy = 3.5;
 	player->dirx = 0.5;
 	player->diry = 0.5;
-	player->planex = 0;
-	player->planey = 0.66;
+	player->planex = -0.5;
+	player->planey = 0.5;
 	return (player);
 }
 
@@ -64,7 +95,7 @@ t_mlx	*init_program(char *filename)
 	t_mlx *mlx;
 
 	mlx = init_mlx();
-	mlx->map = init_map(filename);
+	mlx->map = init_map(filename, mlx);
 	mlx->player = init_player();
 	return (mlx);
 }

@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   raycast.c                                          :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
+/*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 18:35:01 by jvisser        #+#    #+#                */
-/*   Updated: 2019/04/16 12:58:55 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/04/16 17:27:57 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,39 +78,54 @@ void    create_image(t_mlx *mlx)
 		
 		if (casting.side == 0)
 		{
-			// printf("0\n");
 			casting.per_wall_dist = (casting.map_x - mlx->player->posx + (1 - casting.step_x) / 2) / casting.ray_dir_x;
 		}
 		else
 		{
-			// printf("1\n");
 			casting.per_wall_dist = (casting.map_y - mlx->player->posy + (1 - casting.step_y) / 2) / casting.ray_dir_y;
 		}
-
-		// printf("wall dist: %lf\n", casting.per_wall_dist);
-		// printf("map y: %d\n", casting.map_x);
-		// printf("pos y: %lf\n", mlx->player->posx);
-		// printf("step y: %d\n", casting.step_x);
-		// printf("ray dir y: %lf\n", casting.ray_dir_x);
-		// printf("wall dist: %lf\n", casting.per_wall_dist);
-		// printf("map y: %d\n", casting.map_y);
-		// printf("pos y: %lf\n", mlx->player->posy);
-		// printf("step y: %d\n", casting.step_y);
-		// printf("ray dir y: %lf\n", casting.ray_dir_y);
-
-
 		casting.lineheight = (int)(HEIGHT / casting.per_wall_dist);
 
-		int color;
-		for(int start = 0; start < casting.lineheight; start++)
+		// int color = 0;
+		for(int start = 0; start < (HEIGHT / 2 - casting.lineheight / 2); start++)	
+			pixel_to_img(mlx, x, start, 0x414141);
+		for(int start = 1; start <= casting.lineheight; start++)
 		{
-			if (mlx->map->level[casting.map_y][casting.map_x] == 1)
-				color = 0xFFFFFF;
-			else if (mlx->map->level[casting.map_y][casting.map_x] == 2)
-				color = 0x00FF00;
-			else if (mlx->map->level[casting.map_y][casting.map_x] == 3)
-				color = 0xFF0000;
-			pixel_to_img(mlx, x, start + (HEIGHT / 2 - casting.lineheight / 2), color);
+			// if (mlx->map->level[casting.map_y][casting.map_x] == 1)
+			// 	color = 0xFFFFFF;
+			// else if (mlx->map->level[casting.map_y][casting.map_x] == 2)
+			// 	color = 0x00FF00;
+			// else if (mlx->map->level[casting.map_y][casting.map_x] == 3)
+			// 	color = 0xFF0000;
+			// else
+			// 	color = 0xF00F00;
+			
+			// color = something from textures scaled from lineheight
+			// getchar();
+			// y = lineheight / start * texture
+
+		// 	if (t->side == 0)
+		// 		t->x_wall = t->y_raypos + t->walldist * t->y_raydir;
+		// 	else
+		// 		t->x_wall = t->x_raypos + t->walldist * t->x_raydir;
+		// 	t->x_text = (int)(t->x_wall * (double)(64));
+		// 	if (t->side == 0 && t->x_raydir > 0)
+		// 		t->x_text = 64 - t->x_text - 1;
+		// 	if (t->side == 1 && t->y_raydir < 0)
+		// 		t->x_text = 64 - t->x_text - 1;
+		// 	t->x_text = abs(t->x_text);
+			int xscale;
+
+			if (start + (HEIGHT / 2 - casting.lineheight / 2) < HEIGHT && start + (HEIGHT / 2 - casting.lineheight / 2) >= 0)
+			{		
+				ft_memcpy(IMG_ADD + mlx->size_line * (start + (HEIGHT / 2 - casting.lineheight / 2)) + x * mlx->bits_per_pixel / 8,
+				&mlx->map->textures->texture_data[0][(casting.lineheight / start * mlx->map->textures->size_line[0]) + (x * (mlx->map->textures->bits_per_pixel[0] / 8))], sizeof(int));
+			}
+			// onze y_text == (int)((start / lineheight) * 128)
+			// onze x_text == x;
+
+			// if (start + (HEIGHT / 2 - casting.lineheight / 2) < HEIGHT && start + (HEIGHT / 2 - casting.lineheight / 2) >= 0)
+			// 	pixel_to_img(mlx, x, start + (HEIGHT / 2 - casting.lineheight / 2), color);
 		}
 		x++;
 	}

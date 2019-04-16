@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   event_handlers.c                                   :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
+/*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 12:06:06 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/16 13:09:42 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/04/16 16:10:02 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,22 +30,41 @@ void		put_menu(t_mlx *mlx)
 
 int			deal_key(int key, t_mlx *mlx)
 {
-	(void)mlx;
 	if (KEY_ESC == key)
 		put_menu(mlx);
 	else if (key == KEY_W)
-		mlx->player->posx += 0.1;
+	{
+		if (mlx->map->level[(int)(mlx->player->posy + mlx->player->diry / 5)][(int)(mlx->player->posx + mlx->player->dirx / 5)] == 0)
+		{
+			mlx->player->posx += mlx->player->dirx / 5;
+			mlx->player->posy += mlx->player->diry / 5;
+		}
+	}
 	else if (key == KEY_S)
-		mlx->player->posx -= 0.1;
+	{
+		if (mlx->map->level[(int)(mlx->player->posy - mlx->player->diry / 5)][(int)(mlx->player->posx - mlx->player->dirx / 5)] == 0)
+		{
+			mlx->player->posx -= mlx->player->dirx / 5;
+			mlx->player->posy -= mlx->player->diry / 5;
+		}
+	}
 	else if (key == KEY_A)
 	{
-		mlx->player->dirx += 0.05;
-		mlx->player->diry -= 0.05;
+		double x_save = mlx->player->dirx;
+		mlx->player->dirx = x_save * cos(3 * M_PI / 180) - mlx->player->diry * sin(3 * M_PI / 180);
+		mlx->player->diry = x_save * sin(3 * M_PI / 180) + mlx->player->diry * cos(3 * M_PI / 180);
+		x_save = mlx->player->planex;
+		mlx->player->planex = x_save * cos(3 * M_PI / 180) - mlx->player->planey * sin(3 * M_PI / 180);
+		mlx->player->planey = x_save * sin(3 * M_PI / 180) + mlx->player->planey * cos(3 * M_PI / 180);
 	}
 	else if (key == KEY_D)
 	{
-		mlx->player->dirx -= 0.05;
-		mlx->player->diry += 0.05;
+		double x_save = mlx->player->dirx;
+		mlx->player->dirx = x_save * cos(-3 * M_PI / 180) - mlx->player->diry * sin(-3 * M_PI / 180);
+		mlx->player->diry = x_save * sin(-3 * M_PI / 180) + mlx->player->diry * cos(-3 * M_PI / 180);
+		x_save = mlx->player->planex;
+		mlx->player->planex = x_save * cos(-3 * M_PI / 180) - mlx->player->planey * sin(-3 * M_PI / 180);
+		mlx->player->planey = x_save * sin(-3 * M_PI / 180) + mlx->player->planey * cos(-3 * M_PI / 180);
 	}
 	return (0);
 }

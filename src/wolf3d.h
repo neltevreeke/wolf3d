@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   wolf3d.h                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
+/*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:13:17 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/15 19:15:39 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/04/16 17:28:07 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,19 @@
 */
 
 /*
+**	texture struct
+*/
+
+typedef struct s_textures
+{
+	void		**tex_arr;
+	char		**texture_data;
+	int			*bits_per_pixel;
+	int			*size_line;
+	int			*endian;
+}				t_textures;
+
+/*
 **	Map struct
 */
 
@@ -71,6 +84,7 @@ typedef struct	s_map
 	int			**level;
 	int			size_x;
 	int			size_y;
+	t_textures	*textures;
 }				t_map;
 
 /*
@@ -168,6 +182,5 @@ char			*get_fps(char *str);
 void			no_param(void);
 void			exit_failure_errno(void);
 void 		   create_image(t_mlx *mlx);
-
 
 #endif
