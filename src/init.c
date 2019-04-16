@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:35:19 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/16 17:28:03 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/16 18:45:45 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ t_textures	*init_textures(t_mlx *mlx)
 	textures->size_line = (int*)malloc(sizeof(int) * 4);
 	textures->bits_per_pixel = (int*)malloc(sizeof(int) * 4);
 	textures->tex_arr[0] = mlx_xpm_file_to_image(MLX_PTR, "textures/wall_29.xpm", &width, &width);
-	textures->tex_arr[1] = mlx_xpm_file_to_image(MLX_PTR, "textures/wall_30.xpm", &width, &width);
+	textures->tex_arr[1] = mlx_xpm_file_to_image(MLX_PTR, "textures/wall_33.xpm", &width, &width);
 	textures->tex_arr[2] = mlx_xpm_file_to_image(MLX_PTR, "textures/wall_31.xpm", &width, &width);
 	textures->tex_arr[3] = mlx_xpm_file_to_image(MLX_PTR, "textures/wall_32.xpm", &width, &width);
 	textures->texture_data = init_textures_data(textures);

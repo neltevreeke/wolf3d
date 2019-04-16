@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 18:35:01 by jvisser        #+#    #+#                */
-/*   Updated: 2019/04/16 17:27:57 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/16 18:52:34 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void    create_image(t_mlx *mlx)
 			casting.step_y = 1;
 			casting.side_dist_y = (casting.map_y + 1 - mlx->player->posy) * casting.delta_dist_y;
 		}
+	
 		while (casting.hit == 0)
 		{
 			if (casting.side_dist_x < casting.side_dist_y)
@@ -75,7 +76,7 @@ void    create_image(t_mlx *mlx)
 			if (mlx->map->level[casting.map_y][casting.map_x] > 0)
 				casting.hit = 1;
 		}
-		
+	
 		if (casting.side == 0)
 		{
 			casting.per_wall_dist = (casting.map_x - mlx->player->posx + (1 - casting.step_x) / 2) / casting.ray_dir_x;
@@ -86,47 +87,56 @@ void    create_image(t_mlx *mlx)
 		}
 		casting.lineheight = (int)(HEIGHT / casting.per_wall_dist);
 
+
+		double wallX;
+     	if (casting.side == 0)
+	  		wallX = mlx->player->posy + casting.per_wall_dist * casting.ray_dir_y;
+		else
+	  		wallX = mlx->player->posx + casting.per_wall_dist * casting.ray_dir_x;
+      	wallX -= floor((wallX));
+
+		int texX = (int)(wallX * (double)64);
+      if(casting.side == 0 && casting.ray_dir_x > 0)
+	  	texX = 64 - texX - 1;
+      if(casting.side == 1 && casting.ray_dir_y < 0)
+	  	texX = 64 - texX - 1;
+
 		// int color = 0;
 		for(int start = 0; start < (HEIGHT / 2 - casting.lineheight / 2); start++)	
 			pixel_to_img(mlx, x, start, 0x414141);
-		for(int start = 1; start <= casting.lineheight; start++)
+
+		for(int y = (HEIGHT / 2 - casting.lineheight / 2); y < casting.lineheight; y++)
 		{
-			// if (mlx->map->level[casting.map_y][casting.map_x] == 1)
-			// 	color = 0xFFFFFF;
-			// else if (mlx->map->level[casting.map_y][casting.map_x] == 2)
-			// 	color = 0x00FF00;
-			// else if (mlx->map->level[casting.map_y][casting.map_x] == 3)
-			// 	color = 0xFF0000;
-			// else
-			// 	color = 0xF00F00;
-			
-			// color = something from textures scaled from lineheight
-			// getchar();
-			// y = lineheight / start * texture
+			if (y < HEIGHT && y >= 0)
+			{  
+				int d = y * 256 - HEIGHT * 128 + casting.lineheight * 128;
+				int texY = abs(((d) / casting.lineheight) / 256);
 
-		// 	if (t->side == 0)
-		// 		t->x_wall = t->y_raypos + t->walldist * t->y_raydir;
-		// 	else
-		// 		t->x_wall = t->x_raypos + t->walldist * t->x_raydir;
-		// 	t->x_text = (int)(t->x_wall * (double)(64));
-		// 	if (t->side == 0 && t->x_raydir > 0)
-		// 		t->x_text = 64 - t->x_text - 1;
-		// 	if (t->side == 1 && t->y_raydir < 0)
-		// 		t->x_text = 64 - t->x_text - 1;
-		// 	t->x_text = abs(t->x_text);
-			int xscale;
-
-			if (start + (HEIGHT / 2 - casting.lineheight / 2) < HEIGHT && start + (HEIGHT / 2 - casting.lineheight / 2) >= 0)
-			{		
-				ft_memcpy(IMG_ADD + mlx->size_line * (start + (HEIGHT / 2 - casting.lineheight / 2)) + x * mlx->bits_per_pixel / 8,
-				&mlx->map->textures->texture_data[0][(casting.lineheight / start * mlx->map->textures->size_line[0]) + (x * (mlx->map->textures->bits_per_pixel[0] / 8))], sizeof(int));
+					ft_memcpy(IMG_ADD + mlx->size_line * y + x * (mlx->bits_per_pixel / 8) ,
+							&mlx->map->textures->texture_data[1][ texY % 64 * mlx->map->textures->size_line[1] + texX % 64 * (mlx->map->textures->bits_per_pixel[1] / 8) ], 
+							sizeof(int));
 			}
-			// onze y_text == (int)((start / lineheight) * 128)
-			// onze x_text == x;
-
-			// if (start + (HEIGHT / 2 - casting.lineheight / 2) < HEIGHT && start + (HEIGHT / 2 - casting.lineheight / 2) >= 0)
-			// 	pixel_to_img(mlx, x, start + (HEIGHT / 2 - casting.lineheight / 2), color);
 		}
+			
+		// for(int start = 1; start <= casting.lineheight; start++)
+		// {
+		// 	// if (mlx->map->level[casting.map_y][casting.map_x] == 1)
+		// 	// 	color = 0xFFFFFF;
+		// 	// else if (mlx->map->level[casting.map_y][casting.map_x] == 2)
+		// 	// 	color = 0x00FF00;
+		// 	// else if (mlx->map->level[casting.map_y][casting.map_x] == 3)
+		// 	// 	color = 0xFF0000;
+		// 	// else
+		// 	// 	color = 0xF00F00;
+		// 	if (start + (HEIGHT / 2 - casting.lineheight / 2) < HEIGHT && start + (HEIGHT / 2 - casting.lineheight / 2) >= 0)
+		// 	{        
+		// 		// ft_memcpy(IMG_ADD + mlx->size_line * (start + (HEIGHT / 2 - casting.lineheight / 2)) + x * (mlx->bits_per_pixel  / 8) ,
+		// 		// &mlx->map->textures->texture_data[0] + mlx->map->textures->size_line[0] * yscale + (mlx->map->textures->bits_per_pixel[0] / 8) * xscale, 
+		// 		// sizeof(int));
+		// 	}
+		// 	// if (start + (HEIGHT / 2 - casting.lineheight / 2) < HEIGHT && start + (HEIGHT / 2 - casting.lineheight / 2) >= 0)
+		// 	// 	pixel_to_img(mlx, x, start + (HEIGHT / 2 - casting.lineheight / 2), color);
+		// }
 		x++;
 	}
 }
