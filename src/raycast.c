@@ -77,6 +77,14 @@ void    *raycasting(void *data)
 			if (mlx->map->level[casting.map_y][casting.map_x] > 0)
 				casting.hit = 1;
 		}
+
+		//	oplossing 1:
+
+		//	Hoeken hier apart berekenen? || groter maken want die bestaan in principe nog niet
+		//	met behulp van pythagoras de hoeken uitrekenen voor triangles.
+		//	dus je C^2 van a^2 + b^2 (je eind punt van (mlx->player->posy + mlx->player->diry / 5 - 0.15 ^ 2 + (mlx->player->posx + mlx->player->dirx / 5 - 0.15) ^ 2)
+		//	Dan heb je je C^2 en dan moeten we die nog tekenen
+		//	Dan met Sinus de hoek rond afwerken?
 	
 		if (casting.side == 0)
 		{
@@ -87,7 +95,6 @@ void    *raycasting(void *data)
 			casting.per_wall_dist = (casting.map_y - mlx->player->posy + (1 - casting.step_y) / 2) / casting.ray_dir_y;
 		}
 		casting.lineheight = (int)(HEIGHT / casting.per_wall_dist);
-
 
 		double wallX;
      	if (casting.side == 0)
