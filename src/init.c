@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   init.c                                             :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
+/*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:35:19 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/16 19:28:59 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/04/17 12:02:01 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,17 @@
 char	**init_textures_data(t_textures *textures)
 {
 	char	**texture_data;
+	int		i;
 
-	texture_data = (char**)malloc(sizeof(char*) * 4);
+	i = 0;
+	texture_data = (char**)malloc(sizeof(char*) * textures->amount_textures);
 	if (!texture_data)
 		exit_failure_errno();
-	texture_data[0] = mlx_get_data_addr(textures->tex_arr[0], &textures->bits_per_pixel[0], &textures->size_line[0], &textures->endian[0]);
-	texture_data[1] = mlx_get_data_addr(textures->tex_arr[1], &textures->bits_per_pixel[1], &textures->size_line[1], &textures->endian[1]);
-	texture_data[2] = mlx_get_data_addr(textures->tex_arr[2], &textures->bits_per_pixel[2], &textures->size_line[2], &textures->endian[2]);
-	texture_data[3] = mlx_get_data_addr(textures->tex_arr[3], &textures->bits_per_pixel[3], &textures->size_line[3], &textures->endian[3]);
+	while (i < textures->amount_textures - 1)
+	{
+		texture_data[i] = mlx_get_data_addr(textures->tex_arr[i], &textures->bits_per_pixel[i], &textures->size_line[i], &textures->endian[i]);
+		i++;
+	}
 	return (texture_data);
 }
 
@@ -39,6 +42,7 @@ t_textures	*init_textures(t_mlx *mlx)
 	textures->endian = (int*)malloc(sizeof(int) * 4);
 	textures->size_line = (int*)malloc(sizeof(int) * 4);
 	textures->bits_per_pixel = (int*)malloc(sizeof(int) * 4);
+	textures->amount_textures = 4;
 	textures->tex_arr[0] = mlx_xpm_file_to_image(MLX_PTR, "textures/wall_29.xpm", &width, &width);
 	textures->tex_arr[1] = mlx_xpm_file_to_image(MLX_PTR, "textures/wall_36.xpm", &width, &width);
 	textures->tex_arr[2] = mlx_xpm_file_to_image(MLX_PTR, "textures/wall_03.xpm", &width, &width);

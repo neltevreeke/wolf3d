@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   raycast.c                                          :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
+/*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 18:35:01 by jvisser        #+#    #+#                */
-/*   Updated: 2019/04/16 19:28:16 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/04/17 12:04:22 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,13 +101,14 @@ void    create_image(t_mlx *mlx)
 		if(casting.side == 1 && casting.ray_dir_y < 0)
 	  		texX = 128 - texX - 1;
 		texX = abs(texX);
+
 		for(int start = 0; start < (HEIGHT / 2 - casting.lineheight / 2); start++)	
-			pixel_to_img(mlx, x, start, 0x414141);
+			pixel_to_img(mlx, x, start, 0x191970);
 		int	index = mlx->map->level[casting.map_y][casting.map_x];
 		for(int y = (HEIGHT / 2 - casting.lineheight / 2); y < (HEIGHT / 2 - casting.lineheight / 2) + casting.lineheight; y++)
 		{
 			if (y < HEIGHT && y >= 0)
-			{  
+			{
 				int d = y - HEIGHT * 0.5 + casting.lineheight * 0.5;
 				int texY = abs(((d * 128) / casting.lineheight));
 

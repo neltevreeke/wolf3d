@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   wolf3d.h                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
+/*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:13:17 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/16 19:32:40 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/04/17 11:56:33 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct s_textures
 	int			*bits_per_pixel;
 	int			*size_line;
 	int			*endian;
+	int			amount_textures;
 }				t_textures;
 
 /*
