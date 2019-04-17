@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:35:19 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/17 12:02:01 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/17 18:19:47 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	**init_textures_data(t_textures *textures)
 	texture_data = (char**)malloc(sizeof(char*) * textures->amount_textures);
 	if (!texture_data)
 		exit_failure_errno();
-	while (i < textures->amount_textures - 1)
+	while (i < textures->amount_textures)
 	{
 		texture_data[i] = mlx_get_data_addr(textures->tex_arr[i], &textures->bits_per_pixel[i], &textures->size_line[i], &textures->endian[i]);
 		i++;
@@ -31,22 +31,31 @@ char	**init_textures_data(t_textures *textures)
 
 t_textures	*init_textures(t_mlx *mlx)
 {
+	int			i;
 	int			width;
+	char		*tmp;
+	char		*filename;
 	t_textures	*textures;
 
+	i = 0;
 	width = 128;
 	textures = MEM(t_textures);
 	if (!textures)
 		exit_failure_errno();
-	textures->tex_arr = (void**)malloc(sizeof(void*) * 4);
-	textures->endian = (int*)malloc(sizeof(int) * 4);
-	textures->size_line = (int*)malloc(sizeof(int) * 4);
-	textures->bits_per_pixel = (int*)malloc(sizeof(int) * 4);
-	textures->amount_textures = 4;
-	textures->tex_arr[0] = mlx_xpm_file_to_image(MLX_PTR, "textures/wall_29.xpm", &width, &width);
-	textures->tex_arr[1] = mlx_xpm_file_to_image(MLX_PTR, "textures/wall_36.xpm", &width, &width);
-	textures->tex_arr[2] = mlx_xpm_file_to_image(MLX_PTR, "textures/wall_03.xpm", &width, &width);
-	textures->tex_arr[3] = mlx_xpm_file_to_image(MLX_PTR, "textures/wall_32.xpm", &width, &width);
+	textures->amount_textures = 38;
+	textures->tex_arr = (void**)malloc(sizeof(void*) * textures->amount_textures);
+	textures->endian = (int*)malloc(sizeof(int) * textures->amount_textures);
+	textures->size_line = (int*)malloc(sizeof(int) * textures->amount_textures);
+	textures->bits_per_pixel = (int*)malloc(sizeof(int) * textures->amount_textures);
+	while (i < textures->amount_textures)
+	{
+		tmp = ft_strjoin("textures/wall_", ft_itoa(i + 1));
+		filename = ft_strjoin(tmp, ".xpm");
+		textures->tex_arr[i] = mlx_xpm_file_to_image(MLX_PTR, filename, &width, &width);
+		free(tmp);
+		free(filename);
+		i++;
+	}
 	textures->texture_data = init_textures_data(textures);
 	return (textures);
 }
@@ -94,12 +103,29 @@ t_player	*init_player(void)
 	return (player);
 }
 
+t_keys	*init_keys(void)
+{
+	t_keys	*keys;
+
+	keys = MEM(t_keys);
+	if (!keys)
+		exit_failure_errno();
+	keys->key_w = false;
+	keys->key_a = false;
+	keys->key_s = false;
+	keys->key_d = false;
+	keys->key_space = false;
+	keys->key_ctrl = false;
+	return (keys);
+}
+
 t_mlx	*init_program(char *filename)
 {
 	t_mlx *mlx;
 
 	mlx = init_mlx();
 	mlx->map = init_map(filename, mlx);
+	mlx->keys = init_keys();
 	mlx->player = init_player();
 	return (mlx);
 }
@@ -110,6 +136,7 @@ int		loop_program(t_mlx *mlx)
 
 	fps_str = NULL;
 	fps_str = get_fps(fps_str);
+	check_player_move(mlx);
 	ft_bzero(IMG_ADD, HEIGHT * WIDTH * (mlx->bits_per_pixel / 8));
 	create_image(mlx);
 	mlx_put_image_to_window(MLX_PTR, WIN_PTR, IMG_PTR, 0, 0);
@@ -126,7 +153,8 @@ void	put_ui(t_mlx *mlx, char *fps_str)
 
 void	event_hooks(t_mlx *mlx)
 {
-	mlx_hook(WIN_PTR, 2, 1L << 0, deal_key, mlx);
+	mlx_hook(WIN_PTR, 2, 1L << 0, deal_key_press, mlx);
+	mlx_hook(WIN_PTR, 3, 1L << 1, deal_key_release, mlx);
 	mlx_hook(WIN_PTR, 4, 1L << 8, deal_mouse, NULL);
 	mlx_hook(WIN_PTR, 17, 1L << 19, exit_x, NULL);
 	mlx_loop_hook(MLX_PTR, loop_program, mlx);

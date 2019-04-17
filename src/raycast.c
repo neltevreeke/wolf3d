@@ -6,10 +6,11 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 18:35:01 by jvisser        #+#    #+#                */
-/*   Updated: 2019/04/17 12:04:22 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/17 18:21:10 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <pthread.h>
 #include "wolf3d.h"
 
 void	pixel_to_img(t_mlx *mlx, int px, int py, int color)
@@ -19,15 +20,15 @@ void	pixel_to_img(t_mlx *mlx, int px, int py, int color)
 				&color, sizeof(int));
 }
 
-void    create_image(t_mlx *mlx)
+void    *raycasting(void *data)
 {
-	int	x;
+	t_mlx		*mlx;
 	t_casting	casting;
 
-	x = 0;
-	while (x < WIDTH)
+	mlx = (t_mlx*)data;
+	while (mlx->cur_x < mlx->max_x)
 	{
-		casting.camera_x = 2 * x / (double)WIDTH - 1;
+		casting.camera_x = 2 * mlx->cur_x / (double)WIDTH - 1;
 		casting.ray_dir_x = mlx->player->dirx + mlx->player->planex * casting.camera_x;
 		casting.ray_dir_y = mlx->player->diry + mlx->player->planey * casting.camera_x;
 
@@ -103,20 +104,78 @@ void    create_image(t_mlx *mlx)
 		texX = abs(texX);
 
 		for(int start = 0; start < (HEIGHT / 2 - casting.lineheight / 2); start++)	
-			pixel_to_img(mlx, x, start, 0x191970);
+			pixel_to_img(mlx, mlx->cur_x, start, 0x414141);
 		int	index = mlx->map->level[casting.map_y][casting.map_x];
-		for(int y = (HEIGHT / 2 - casting.lineheight / 2); y < (HEIGHT / 2 - casting.lineheight / 2) + casting.lineheight; y++)
+		int y = (HEIGHT / 2 - casting.lineheight / 2);
+		if (y < 0)
+			y = 0;
+		int end = (HEIGHT / 2 - casting.lineheight / 2) + casting.lineheight;
+		if (end > HEIGHT)
+			end = HEIGHT;
+		while (y < end)
 		{
 			if (y < HEIGHT && y >= 0)
 			{
 				int d = y - HEIGHT * 0.5 + casting.lineheight * 0.5;
 				int texY = abs(((d * 128) / casting.lineheight));
 
-					ft_memcpy(IMG_ADD + mlx->size_line * y + x * mlx->bits_per_pixel / 8,
+					ft_memcpy(IMG_ADD + mlx->size_line * y + mlx->cur_x * mlx->bits_per_pixel / 8,
 							&mlx->map->textures->texture_data[index - 1][ texY % 128 * mlx->map->textures->size_line[index - 1] + texX % 128 * (mlx->map->textures->bits_per_pixel[index - 1] / 8) ], 
 							sizeof(int));
 			}
+			y++;
 		}
-		x++;
+		mlx->cur_x++;
 	}
+	return (data);
+}
+
+void	crosshair_to_img(t_mlx *mlx)
+{
+	int i;
+	int j;
+
+	i = 0;
+	j = 0;
+	pixel_to_img(mlx, 500, 300, 0x25ff00);
+	while (i < 5 && j < 5)
+	{
+		pixel_to_img(mlx, i + 490, 300, 0x25ff00);
+		pixel_to_img(mlx, 506 + j, 300, 0x25ff00);
+		i++;
+		j++;
+	}
+	i = 0;
+	j = 0;
+	while (i < 5 && j < 5)
+	{
+		pixel_to_img(mlx, 500, i + 290, 0x25ff00);
+		pixel_to_img(mlx, 500, j + 306, 0x25ff00);
+		i++;
+		j++;
+	}
+}
+
+void	create_image(t_mlx *mlx)
+{
+	int			i;
+	t_mlx		tab[THREAD_AMOUNT];
+	pthread_t	thread[THREAD_AMOUNT];
+
+	i = 0;
+	while (i < THREAD_AMOUNT)
+	{
+		ft_memcpy((void*)&tab[i], (void*)mlx, sizeof(t_mlx));
+		tab[i].max_x = (i + 1) * (WIDTH / THREAD_AMOUNT);
+		tab[i].cur_x = i * (WIDTH / THREAD_AMOUNT);
+
+		pthread_create(&thread[i], NULL, &raycasting, &tab[i]);
+		i++;
+	}
+	while (i)
+	{
+		pthread_join(thread[i - 1], NULL);
+		i--;
+	}
+	crosshair_to_img(mlx);
 }

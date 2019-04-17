@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:13:17 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/17 11:56:33 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/17 18:24:19 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@
 # include <sys/time.h>
 # include <stdio.h>
 # include <fcntl.h>
-
-#include <math.h>
+# include <math.h>
 
 /*
 ***********************************************************	Defines
@@ -40,6 +39,7 @@
 # define IMG_ADD mlx->data_addr
 # define WIDTH 1000
 # define HEIGHT 600
+# define THREAD_AMOUNT 5
 
 /*
 **	Key & mouse defines
@@ -61,6 +61,25 @@
 /*
 ***********************************************************	Structs
 */
+
+typedef enum	e_bool
+{
+	true = 1,
+	false = 0
+}				t_bool;
+/*
+**	keys struct
+*/
+
+typedef struct s_keys
+{
+	t_bool		key_w;
+	t_bool		key_a;
+	t_bool		key_s;
+	t_bool		key_d;
+	t_bool		key_space;
+	t_bool		key_ctrl;
+}				t_keys;
 
 /*
 **	texture struct
@@ -138,8 +157,11 @@ typedef struct	s_mlx
 	int			bits_per_pixel;
 	int			size_line;
 	int			endian;
+	int			max_x;
+	int			cur_x;
 
 	t_map		*map;
+	t_keys		*keys;
 	t_player	*player;
 }				t_mlx;
 
@@ -159,7 +181,9 @@ void			put_ui(t_mlx *mlx, char *str);
 
 void			ui_handlers(t_mlx *mlx);
 int				exit_x(void *nul);
-int				deal_key(int key, t_mlx *mlx);
+void			check_player_move(t_mlx *mlx);
+int				deal_key_press(int key, t_mlx *mlx);
+int				deal_key_release(int key, t_mlx *mlx);
 int				deal_mouse(int mousebutton, t_mlx *mlx);
 
 /*
