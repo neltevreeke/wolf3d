@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   raycast.c                                          :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
+/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 18:35:01 by jvisser        #+#    #+#                */
-/*   Updated: 2019/04/17 18:21:10 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/22 16:29:52 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ void    *raycasting(void *data)
 		texX = abs(texX);
 
 		for(int start = 0; start < (HEIGHT / 2 - casting.lineheight / 2); start++)	
-			pixel_to_img(mlx, mlx->cur_x, start, 0x414141);
+			pixel_to_img(mlx, mlx->cur_x, start, 0x383838);
 		int	index = mlx->map->level[casting.map_y][casting.map_x];
 		int y = (HEIGHT / 2 - casting.lineheight / 2);
 		if (y < 0)
@@ -132,6 +132,8 @@ void    *raycasting(void *data)
 			}
 			y++;
 		}
+		for(int start = (HEIGHT / 2 + casting.lineheight / 2); start < HEIGHT; start++)	
+			pixel_to_img(mlx, mlx->cur_x, start, 0x707070);
 		mlx->cur_x++;
 	}
 	return (data);
@@ -175,7 +177,6 @@ void	create_image(t_mlx *mlx)
 		ft_memcpy((void*)&tab[i], (void*)mlx, sizeof(t_mlx));
 		tab[i].max_x = (i + 1) * (WIDTH / THREAD_AMOUNT);
 		tab[i].cur_x = i * (WIDTH / THREAD_AMOUNT);
-
 		pthread_create(&thread[i], NULL, &raycasting, &tab[i]);
 		i++;
 	}

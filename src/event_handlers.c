@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   event_handlers.c                                   :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
+/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 12:06:06 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/17 18:25:45 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/22 16:34:47 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,6 @@ int			exit_x(void *nul)
 	exit(EXIT_SUCCESS);
 }
 
-void		put_menu(t_mlx *mlx)
-{
-	mlx_string_put(mlx->init, mlx->win, 200, 200, 0xFFFFFF, "DIT IS HET MENU");
-}
-
 void		check_player_move(t_mlx *mlx)
 {
 	if (mlx->keys->key_w == true)
@@ -37,12 +32,7 @@ void		check_player_move(t_mlx *mlx)
 		// || mlx->map->level[(int)(mlx->player->posy + mlx->player->diry / 5 - 0.15)][(int)(mlx->player->posx + mlx->player->dirx / 5 + 0.15)] == 1
 		// || mlx->map->level[(int)(mlx->player->posy + mlx->player->diry / 5 + 0.15)][(int)(mlx->player->posx + mlx->player->dirx / 5 + 0.15)] == 1)
 		// {
-		// 	if (mlx->map->level[(int)(mlx->player->posy + mlx->player->diry / 5 - 0.15)][(int)(mlx->player->posx + mlx->player->dirx / 5)] == 0
-		// 	|| mlx->map->level[(int)(mlx->player->posy + mlx->player->diry / 5 + 0.15)][(int)(mlx->player->posx + mlx->player->dirx / 5)] == 0)
-		// 		mlx->player->posx -= mlx->player->dirx / 5;
-		// 	if (mlx->map->level[(int)(mlx->player->posy + mlx->player->diry / 5)][(int)(mlx->player->posx + mlx->player->dirx / 5 - 0.15)] == 0
-		// 	|| mlx->map->level[(int)(mlx->player->posy + mlx->player->diry / 5)][(int)(mlx->player->posx + mlx->player->dirx / 5 + 0.15)] == 0)
-		// 		mlx->player->posy -= mlx->player->diry / 5;
+		// 	
 		// }
 		// else
 		// {
@@ -65,12 +55,11 @@ void		check_player_move(t_mlx *mlx)
 		// || mlx->map->level[(int)(mlx->player->posy - mlx->player->diry / 5 - 0.15)][(int)(mlx->player->posx - mlx->player->dirx / 5 + 0.15)] == 1
 		// || mlx->map->level[(int)(mlx->player->posy - mlx->player->diry / 5 + 0.15)][(int)(mlx->player->posx - mlx->player->dirx / 5 + 0.15)] == 1)
 		// {
-		// 	if (mlx->map->level[(int)(mlx->player->posy - mlx->player->diry / 5 - 0.15)][(int)(mlx->player->posx - mlx->player->dirx / 5)] == 1
-		// 	|| mlx->map->level[(int)(mlx->player->posy - mlx->player->diry / 5 + 0.15)][(int)(mlx->player->posx - mlx->player->dirx / 5)] == 1)
-		// 		mlx->player->posx -= mlx->player->dirx / 5;
-		// 	if (mlx->map->level[(int)(mlx->player->posy - mlx->player->diry / 5)][(int)(mlx->player->posx - mlx->player->dirx / 5 - 0.15)] == 1
-		// 	|| mlx->map->level[(int)(mlx->player->posy - mlx->player->diry / 5)][(int)(mlx->player->posx - mlx->player->dirx / 5 + 0.15)] == 1)
-		// 		mlx->player->posy -= mlx->player->diry / 5;
+		// 		calc_what_side();
+		// 		if (y side hit)
+		// 			move x side;
+		// 		if (x side hit)
+		// 			move y side;
 		// }
 		// else
 		// {
@@ -109,34 +98,66 @@ void		check_player_move(t_mlx *mlx)
 int			deal_key_press(int key, t_mlx *mlx)
 {
 	if (KEY_ESC == key)
-		put_menu(mlx);
-	else if (key == KEY_W)
-		mlx->keys->key_w = true;
-	else if (key == KEY_S)
-		mlx->keys->key_s = true;
-	else if (key == KEY_A)
-		mlx->keys->key_a = true;
-	else if (key == KEY_D)
-		mlx->keys->key_d = true;
+	{
+		mlx_destroy_image(MLX_PTR, IMG_PTR);
+		if (mlx->screen->main_game == false)
+		{
+			IMG_PTR = mlx_new_image(MLX_PTR, WIDTH, HEIGHT);
+			IMG_ADD = mlx_get_data_addr(IMG_PTR, &(mlx->bits_per_pixel), &(mlx->size_line), &(mlx->endian));
+			mlx->screen->main_game = true;
+			mlx->screen->menu = false;
+		}
+		else
+		{
+			mlx->screen->main_game = false;
+			mlx->screen->menu = true;
+		}
+	}
+	else if (mlx->screen->main_game == true)
+	{
+		if (key == KEY_W)
+			mlx->keys->key_w = true;
+		else if (key == KEY_S)
+			mlx->keys->key_s = true;
+		else if (key == KEY_A)
+			mlx->keys->key_a = true;
+		else if (key == KEY_D)
+			mlx->keys->key_d = true;
+	}
 	return (0);
 }
 
 int			deal_key_release(int key, t_mlx *mlx)
 {
-	if (key == KEY_W)
-		mlx->keys->key_w = false;
-	else if (key == KEY_S)
-		mlx->keys->key_s = false;
-	else if (key == KEY_A)
-		mlx->keys->key_a = false;
-	else if (key == KEY_D)
-		mlx->keys->key_d = false;
+	if (mlx->screen->main_game == true)
+	{
+		if (key == KEY_W)
+			mlx->keys->key_w = false;
+		else if (key == KEY_S)
+			mlx->keys->key_s = false;
+		else if (key == KEY_A)
+			mlx->keys->key_a = false;
+		else if (key == KEY_D)
+			mlx->keys->key_d = false;
+	}
 	return (0);
 }
 
-int			deal_mouse(int mousebutton, t_mlx *mlx)
+int			deal_mouse(int mousebutton, int x, int y, t_mlx *mlx)
 {
 	(void)mlx;
 	(void)mousebutton;
+	if (mlx->screen->menu == true)
+	{
+		// 35 high
+		// from 160 till 510
+		if (x >= 350 && x <= 750)
+		{
+			if (y >= 475 && y < 510)
+				exit_x(NULL);
+			else if (y >= 370 && y < 405)
+				system("open README.md");
+		}
+	}
 	return (0);
 }

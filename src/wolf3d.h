@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   wolf3d.h                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
+/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:13:17 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/17 18:24:19 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/22 15:41:43 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,12 @@ typedef struct s_keys
 	t_bool		key_space;
 	t_bool		key_ctrl;
 }				t_keys;
+
+typedef struct s_screen
+{
+	t_bool		main_game;
+	t_bool		menu;
+}				t_screen;
 
 /*
 **	texture struct
@@ -162,6 +168,7 @@ typedef struct	s_mlx
 
 	t_map		*map;
 	t_keys		*keys;
+	t_screen	*screen;
 	t_player	*player;
 }				t_mlx;
 
@@ -184,7 +191,7 @@ int				exit_x(void *nul);
 void			check_player_move(t_mlx *mlx);
 int				deal_key_press(int key, t_mlx *mlx);
 int				deal_key_release(int key, t_mlx *mlx);
-int				deal_mouse(int mousebutton, t_mlx *mlx);
+int				deal_mouse(int mousebutton, int x, int y, t_mlx *mlx);
 
 /*
 **	Event_handler functions
