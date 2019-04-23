@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:13:17 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/22 15:41:43 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/04/23 18:21:02 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ typedef enum	e_bool
 **	keys struct
 */
 
-typedef struct s_keys
+typedef struct	s_keys
 {
 	t_bool		key_w;
 	t_bool		key_a;
@@ -81,7 +81,7 @@ typedef struct s_keys
 	t_bool		key_ctrl;
 }				t_keys;
 
-typedef struct s_screen
+typedef struct	s_screen
 {
 	t_bool		main_game;
 	t_bool		menu;
@@ -91,7 +91,7 @@ typedef struct s_screen
 **	texture struct
 */
 
-typedef struct s_textures
+typedef struct	s_textures
 {
 	void		**tex_arr;
 	char		**texture_data;
