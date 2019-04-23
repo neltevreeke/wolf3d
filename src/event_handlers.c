@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   event_handlers.c                                   :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
+/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 12:06:06 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/23 18:17:54 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/23 20:13:40 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,6 @@
 // {
 
 // }
-
-int			exit_x(void *nul)
-{
-	(void)nul;
-	exit(EXIT_SUCCESS);
-}
 
 
 	//	oplossing 1:
@@ -121,13 +115,7 @@ int			exit_x(void *nul)
 // 	*side = casting.side;
 // }
 
-// # include <float.h>
-
-void		check_player_move(t_mlx *mlx)
-{
-	if (mlx->keys->key_w == true)
-	{
-		// // ft_printf("Wstart\n");
+	// // ft_printf("Wstart\n");
 		// if (
 		// // 	// (mlx->map->level[(int)(mlx->player->posy + mlx->player->diry / 5 - 0.15)][(int)(mlx->player->posx + mlx->player->dirx / 5)] == 0
 		// // && mlx->map->level[(int)(mlx->player->posy + mlx->player->diry / 5 + 0.15)][(int)(mlx->player->posx + mlx->player->dirx / 5)] == 0)
@@ -183,10 +171,38 @@ void		check_player_move(t_mlx *mlx)
 		// 	mlx->player->posy += mlx->player->diry / 5;
 		// 	mlx->player->posx += mlx->player->dirx / 5;
 		// }
+
+int			exit_x(void *nul)
+{
+	(void)nul;
+	exit(EXIT_SUCCESS);
+}
+
+void		check_player_move(t_mlx *mlx)
+{
+	if (mlx->keys->key_w == true)
+	{
 		if (mlx->map->level[(int)(mlx->player->posy + mlx->player->diry / 5 - 0.15)][(int)(mlx->player->posx + mlx->player->dirx / 5)] == 0
 		&& mlx->map->level[(int)(mlx->player->posy + mlx->player->diry / 5 + 0.15)][(int)(mlx->player->posx + mlx->player->dirx / 5)] == 0)
 		{
-			mlx->player->posy += mlx->player->diry / 5;
+			ft_printf("%d, %d\n", (int)(mlx->player->posy + mlx->player->diry / 5 - 0.15), (int)(mlx->player->posx + mlx->player->dirx / 5));
+			ft_printf("%d, %d\n", (int)(mlx->player->posy + mlx->player->diry / 5 + 0.15), (int)(mlx->player->posx + mlx->player->dirx / 5));
+			
+			//check of dicht in de buurt van x coordinaat muur
+			if (((mlx->player->posx + mlx->player->dirx / 5) - (int)(mlx->player->posx + mlx->player->dirx / 5) <= 0.15)
+			|| ((mlx->player->posx + mlx->player->dirx / 5) - (int)(mlx->player->posx + mlx->player->dirx / 5) >= 0.85))
+			{
+				ft_printf("n = %f\n", ((mlx->player->posx + mlx->player->dirx / 5) - (int)(mlx->player->posx + mlx->player->dirx / 5)));
+				if (
+					mlx->map->level[(int)(mlx->player->posy + mlx->player->diry / 5 + 0.15)][(int)(mlx->player->posx + mlx->player->dirx / 5 + 0.15)] == 0
+				&& mlx->map->level[(int)(mlx->player->posy + mlx->player->diry / 5 + 0.15)][(int)(mlx->player->posx + mlx->player->dirx / 5 - 0.15)] == 0
+				&& mlx->map->level[(int)(mlx->player->posy + mlx->player->diry / 5 - 0.15)][(int)(mlx->player->posx + mlx->player->dirx / 5 + 0.15)] == 0
+				&& mlx->map->level[(int)(mlx->player->posy + mlx->player->diry / 5 - 0.15)][(int)(mlx->player->posx + mlx->player->dirx / 5 - 0.15)] == 0
+				)
+				mlx->player->posy += mlx->player->diry / 5;
+			}
+			else
+				mlx->player->posy += mlx->player->diry / 5;
 		}
 
 		if (mlx->map->level[(int)(mlx->player->posy + mlx->player->diry / 5)][(int)(mlx->player->posx + mlx->player->dirx / 5 - 0.15)] == 0
@@ -194,6 +210,7 @@ void		check_player_move(t_mlx *mlx)
 		{
 			mlx->player->posx += mlx->player->dirx / 5;
 		}
+		ft_printf("%f, %f\n", mlx->player->posx, mlx->player->posy);
 	}
 	if (mlx->keys->key_s == true)
 	{
