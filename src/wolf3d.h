@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   wolf3d.h                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
+/*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:13:17 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/22 15:41:43 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/04/25 13:40:50 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,9 @@
 # define WIDTH 1000
 # define HEIGHT 600
 # define THREAD_AMOUNT 5
+
+
+# define TILE_AT(x, y) mlx->map->level[(int)(x)][(int)(y)]
 
 /*
 **	Key & mouse defines
@@ -148,6 +151,7 @@ typedef struct	s_player
 	double		diry; // Viewing direction y
 	double		planex; // Viewing width x
 	double		planey; // Viewing width y
+	double		ms;
 }				t_player;
 
 /*
@@ -176,6 +180,8 @@ typedef struct	s_mlx
 ***********************************************************	Prototypes
 */
 
+void	pixel_to_img(t_mlx *mlx, int px, int py, int color);
+
 /*
 **	UI functions
 */
@@ -192,6 +198,7 @@ void			check_player_move(t_mlx *mlx);
 int				deal_key_press(int key, t_mlx *mlx);
 int				deal_key_release(int key, t_mlx *mlx);
 int				deal_mouse(int mousebutton, int x, int y, t_mlx *mlx);
+void			rotate(t_mlx *mlx);
 
 /*
 **	Event_handler functions

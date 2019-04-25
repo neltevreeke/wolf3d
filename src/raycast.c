@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 18:35:01 by jvisser        #+#    #+#                */
-/*   Updated: 2019/04/23 15:32:11 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/25 11:44:19 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,13 +142,6 @@ void	crosshair_to_img(t_mlx *mlx)
 	{
 		pixel_to_img(mlx, i + 490, 300, 0x25ff00);
 		pixel_to_img(mlx, 506 + j, 300, 0x25ff00);
-		i++;
-		j++;
-	}
-	i = 0;
-	j = 0;
-	while (i < 5 && j < 5)
-	{
 		pixel_to_img(mlx, 500, i + 290, 0x25ff00);
 		pixel_to_img(mlx, 500, j + 306, 0x25ff00);
 		i++;

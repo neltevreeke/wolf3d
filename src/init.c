@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:35:19 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/22 16:12:53 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/04/25 13:10:58 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ t_player	*init_player(void)
 	player->diry = 0.5;
 	player->planex = -0.5;
 	player->planey = 0.5;
+	player->ms =  0.13;
 	return (player);
 }
 
