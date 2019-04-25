@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   event_handlers.c                                   :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
+/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 12:06:06 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/25 13:41:44 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/25 14:17:21 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

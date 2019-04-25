@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:13:17 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/25 13:40:50 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/25 14:17:19 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,6 @@
 # define HEIGHT 600
 # define THREAD_AMOUNT 5
 
-
-# define TILE_AT(x, y) mlx->map->level[(int)(x)][(int)(y)]
-
 /*
 **	Key & mouse defines
 */
@@ -74,7 +71,7 @@ typedef enum	e_bool
 **	keys struct
 */
 
-typedef struct s_keys
+typedef struct	s_keys
 {
 	t_bool		key_w;
 	t_bool		key_a;
@@ -84,7 +81,7 @@ typedef struct s_keys
 	t_bool		key_ctrl;
 }				t_keys;
 
-typedef struct s_screen
+typedef struct	s_screen
 {
 	t_bool		main_game;
 	t_bool		menu;
@@ -94,7 +91,7 @@ typedef struct s_screen
 **	texture struct
 */
 
-typedef struct s_textures
+typedef struct	s_textures
 {
 	void		**tex_arr;
 	char		**texture_data;
