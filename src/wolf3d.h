@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:13:17 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/25 14:17:19 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/25 17:13:27 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,20 @@ typedef struct	s_textures
 }				t_textures;
 
 /*
+**	sprite struct
+*/
+
+typedef struct	s_sprites
+{
+	void		**spr_arr;
+	char		**sprite_data;
+	int			*bits_per_pixel;
+	int			*size_line;
+	int			*endian;
+	int			amount_sprites;
+}				t_sprites;
+
+/*
 **	Map struct
 */
 
@@ -111,6 +125,7 @@ typedef struct	s_map
 	int			size_x;
 	int			size_y;
 	t_textures	*textures;
+	t_sprites	*sprites;
 }				t_map;
 
 /*
@@ -218,5 +233,11 @@ char			*get_fps(char *str);
 void			no_param(void);
 void			exit_failure_errno(void);
 void 		   create_image(t_mlx *mlx);
+
+/*
+**	print map functions
+*/
+
+void	print_walls(t_mlx *mlx, t_casting casting);
 
 #endif

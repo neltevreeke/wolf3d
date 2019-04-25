@@ -6,11 +6,62 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:35:19 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/25 13:10:58 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/25 17:04:48 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+char	**init_sprites_data(t_sprites *sprites)
+{
+	char	**sprite_data;
+	int		i;
+
+	i = 0;
+	sprite_data = (char**)malloc(sizeof(char*) * sprites->amount_sprites);
+	if (!sprite_data)
+		exit_failure_errno();
+	while (i < sprites->amount_sprites)
+	{
+		sprite_data[i] = mlx_get_data_addr(sprites->spr_arr[i], &sprites->bits_per_pixel[i], &sprites->size_line[i], &sprites->endian[i]);
+		i++;
+	}
+	return (sprite_data);
+}
+
+t_sprites	*init_sprites(t_mlx *mlx)
+{
+	int			i;
+	int			width;
+	char		*tmp;
+	char		*filename;
+	t_sprites	*sprites;
+
+	i = 0;
+	width = 128;
+	sprites = MEM(t_sprites);
+	if (!sprites)
+		exit_failure_errno();
+	sprites->amount_sprites = 24;
+	sprites->spr_arr = (void**)malloc(sizeof(void*) * sprites->amount_sprites);
+	sprites->endian = (int*)malloc(sizeof(int) * sprites->amount_sprites);
+	sprites->size_line = (int*)malloc(sizeof(int) * sprites->amount_sprites);
+	sprites->bits_per_pixel = (int*)malloc(sizeof(int) * sprites->amount_sprites);
+	while (i < sprites->amount_sprites)
+	{
+		char *num = ft_itoa(i + 1);
+		tmp = ft_strjoin("textures/sprites/sprite_", num);
+		filename = ft_strjoin(tmp, ".xpm");
+		sprites->spr_arr[i] = mlx_xpm_file_to_image(MLX_PTR, filename, &width, &width);
+		free(num);
+		free(tmp);
+		free(filename);
+		i++;
+	}
+	sprites->sprite_data = init_sprites_data(sprites);
+	return (sprites);
+}
+
 
 char	**init_textures_data(t_textures *textures)
 {
@@ -50,7 +101,7 @@ t_textures	*init_textures(t_mlx *mlx)
 	while (i < textures->amount_textures)
 	{
 		char *num = ft_itoa(i + 1);
-		tmp = ft_strjoin("textures/wall_", num);
+		tmp = ft_strjoin("textures/walls/wall_", num);
 		filename = ft_strjoin(tmp, ".xpm");
 		textures->tex_arr[i] = mlx_xpm_file_to_image(MLX_PTR, filename, &width, &width);
 		free(num);
@@ -72,6 +123,7 @@ t_map	*init_map(char *filename, t_mlx *mlx)
 	malloc_map(map, filename);
 	fill_map(map, filename);
 	map->textures = init_textures(mlx);
+	map->sprites = init_sprites(mlx);
 	return(map);
 }
 

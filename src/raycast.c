@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 18:35:01 by jvisser        #+#    #+#                */
-/*   Updated: 2019/04/25 11:44:19 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/25 17:33:30 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ void    *raycasting(void *data)
 	  		texX = 128 - texX - 1;
 		texX = abs(texX);
 
+		// sky texture
 		for(int start = 0; start < (HEIGHT / 2 - casting.lineheight / 2); start++)	
 			pixel_to_img(mlx, mlx->cur_x, start, 0x383838);
 		int	index = mlx->map->level[casting.map_y][casting.map_x];
@@ -110,25 +111,101 @@ void    *raycasting(void *data)
 		int end = (HEIGHT / 2 - casting.lineheight / 2) + casting.lineheight;
 		if (end > HEIGHT)
 			end = HEIGHT;
-		while (y < end)
-		{
-			if (y < HEIGHT && y >= 0)
+
+		// walls
+			while (y < end)
 			{
-				int d = y - HEIGHT * 0.5 + casting.lineheight * 0.5;
-				int texY = abs(((d * 128) / casting.lineheight));
+				if (y < HEIGHT && y >= 0)
+				{
+					int d = y - HEIGHT * 0.5 + casting.lineheight * 0.5;
+					int texY = abs(((d * 128) / casting.lineheight));
 
 					ft_memcpy(IMG_ADD + mlx->size_line * y + mlx->cur_x * mlx->bits_per_pixel / 8,
-							&mlx->map->textures->texture_data[index - 1][ texY % 128 * mlx->map->textures->size_line[index - 1] + texX % 128 * (mlx->map->textures->bits_per_pixel[index - 1] / 8) ], 
+							&mlx->map->textures->texture_data[index - 1][ texY % 128 * mlx->map->textures->size_line[index - 1] + texX % 128 * (mlx->map->textures->bits_per_pixel[index - 1] / 8)], 
 							sizeof(int));
+				}
+				y++;
 			}
-			y++;
-		}
-		for(int start = (HEIGHT / 2 + casting.lineheight / 2); start < HEIGHT; start++)	
-			pixel_to_img(mlx, mlx->cur_x, start, 0x707070);
+
+		// print_walls(mlx, casting);
+
+		// sprites					//	waarom is dit een wall??????	// waarom worden alle walls sprites??
+		// y = (HEIGHT / 2 - casting.lineheight / 2);
+		// while (y < end)
+		// {
+		// 	if (y < HEIGHT && y >= 0)
+		// 	{
+		// 		// printf("HALOEEEEEEE\n");
+		// 		int d = y - HEIGHT * 0.5 + casting.lineheight * 0.5;
+		// 		int texY = abs(((d * 128) / casting.lineheight));
+
+		// 			ft_memcpy(IMG_ADD + mlx->size_line * y + mlx->cur_x * mlx->bits_per_pixel / 8,
+		// 					&mlx->map->sprites->sprite_data[index - 1][ texY % 128 * mlx->map->sprites->size_line[index - 1] + texX % 128 * (mlx->map->sprites->bits_per_pixel[index - 1] / 8)], 
+		// 					sizeof(int));
+		// 	}
+		// 	y++;
+		// }
+
+		// Floor texture
+		for(int start = (HEIGHT / 2 + casting.lineheight / 2); start < HEIGHT; start++)
+			pixel_to_img(mlx, mlx->cur_x, start, 0x000000);
 		mlx->cur_x++;
 	}
 	return (data);
 }
+
+// void	print_walls(t_mlx *mlx, t_casting casting)
+// {
+// 	double wallX;
+// 	if (casting.side == 0)
+// 		wallX = mlx->player->posy + casting.per_wall_dist * casting.ray_dir_y;
+// 	else
+// 		wallX = mlx->player->posx + casting.per_wall_dist * casting.ray_dir_x;
+// 	wallX -= floor((wallX));
+
+// 	int texX = (int)(wallX * (double)128);
+// 	if(casting.side == 0 && casting.ray_dir_x > 0)
+// 		texX = 128 - texX - 1;
+// 	if(casting.side == 1 && casting.ray_dir_y < 0)
+// 		texX = 128 - texX - 1;
+// 	texX = abs(texX);
+
+// 	int	index = mlx->map->level[casting.map_y][casting.map_x];
+// 	int y = (HEIGHT / 2 - casting.lineheight / 2);
+// 	if (y < 0)
+// 		y = 0;
+// 	int end = (HEIGHT / 2 - casting.lineheight / 2) + casting.lineheight;
+// 	if (end > HEIGHT)
+// 		end = HEIGHT;
+
+// 	while (y < end)
+// 	{
+// 		if (y < HEIGHT && y >= 0)
+// 		{
+// 			int d = y - HEIGHT * 0.5 + casting.lineheight * 0.5;
+// 			int texY = abs(((d * 128) / casting.lineheight));
+
+// 			int testy = 0;
+// 			int testx = 0;
+// 			while (mlx->map->level[testy] < &mlx->map->size_y)
+// 			{
+// 				testx = 0;
+// 				while (mlx->map->level[testy][testx] < mlx->map->size_x)
+// 				{
+// 					if (mlx->map->level[testy][testx] == 3)
+// 					{
+// 						ft_memcpy(IMG_ADD + mlx->size_line * y + mlx->cur_x * mlx->bits_per_pixel / 8,
+// 								&mlx->map->textures->texture_data[index - 1][ texY % 128 * mlx->map->textures->size_line[index - 1] + texX % 128 * (mlx->map->textures->bits_per_pixel[index - 1] / 8)], 
+// 								sizeof(int));
+// 					}
+// 					testx++;
+// 				}
+// 				testy++;
+// 			}
+// 		}
+// 		y++;
+// 	}
+// }
 
 void	crosshair_to_img(t_mlx *mlx)
 {
