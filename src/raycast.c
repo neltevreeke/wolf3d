@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   raycast.c                                          :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
+/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 18:35:01 by jvisser        #+#    #+#                */
-/*   Updated: 2019/04/25 17:33:30 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/26 13:27:08 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ void    *raycasting(void *data)
 					int texY = abs(((d * 128) / casting.lineheight));
 
 					ft_memcpy(IMG_ADD + mlx->size_line * y + mlx->cur_x * mlx->bits_per_pixel / 8,
-							&mlx->map->textures->texture_data[index - 1][ texY % 128 * mlx->map->textures->size_line[index - 1] + texX % 128 * (mlx->map->textures->bits_per_pixel[index - 1] / 8)], 
+							&mlx->map->textures->texture_data[index - 1 + casting.side][ texY % 128 * mlx->map->textures->size_line[index - 1 + casting.side] + texX % 128 * (mlx->map->textures->bits_per_pixel[index - 1 + casting.side] / 8)], 
 							sizeof(int));
 				}
 				y++;

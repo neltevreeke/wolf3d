@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 12:06:06 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/25 14:17:21 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/26 13:35:42 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ int			exit_x(void *nul)
 
 void		check_player_move(t_mlx *mlx)
 {
-	double	movex = mlx->player->dirx * mlx->player->ms;	
-	double	movey = mlx->player->diry * mlx->player->ms;
 	if (mlx->keys->key_w == true)
 	{
+		double	movex = mlx->player->dirx * mlx->player->ms;	
+		double	movey = mlx->player->diry * mlx->player->ms;
 		if (mlx->map->level[(int)(mlx->player->posy + mlx->player->diry * mlx->player->ms)][(int)(mlx->player->posx)] < 1)
 			mlx->player->posy += movey;
 		if (mlx->map->level[(int)(mlx->player->posy)][(int)(mlx->player->posx + mlx->player->dirx * mlx->player->ms)] < 1)
@@ -31,36 +31,45 @@ void		check_player_move(t_mlx *mlx)
 	}
 	if (mlx->keys->key_s == true)
 	{
+		double	movex = mlx->player->dirx * mlx->player->ms;	
+		double	movey = mlx->player->diry * mlx->player->ms;
 		if (mlx->map->level[(int)(mlx->player->posy - mlx->player->diry * mlx->player->ms)][(int)(mlx->player->posx)] < 1)
 			mlx->player->posy -= movey;
 		if (mlx->map->level[(int)(mlx->player->posy)][(int)(mlx->player->posx - mlx->player->dirx * mlx->player->ms)] < 1)
 			mlx->player->posx -= movex;
 	}
-	if (mlx->keys->key_a == true)
-		rotate(mlx);
-	if (mlx->keys->key_d == true)
-		rotate(mlx);
-}
-
-void		rotate(t_mlx *mlx)
-{
-	double x_save = mlx->player->dirx;
+	double x_save;
 	if (mlx->keys->key_a == true)
 	{
+		x_save = mlx->player->dirx;
 		mlx->player->dirx = x_save * cos(-3 * M_PI * 0.0055) - mlx->player->diry * sin(-3 * M_PI * 0.0055);
 		mlx->player->diry = x_save * sin(-3 * M_PI * 0.0055) + mlx->player->diry * cos(-3 * M_PI * 0.0055);
 		x_save = mlx->player->planex;
 		mlx->player->planex = x_save * cos(-3 * M_PI * 0.0055) - mlx->player->planey * sin(-3 * M_PI * 0.0055);
 		mlx->player->planey = x_save * sin(-3 * M_PI * 0.0055) + mlx->player->planey * cos(-3 * M_PI * 0.0055);
 	}
+		// rotate(mlx);
 	if (mlx->keys->key_d == true)
 	{
+		x_save = mlx->player->dirx;
 		mlx->player->dirx = x_save * cos(3 * M_PI * 0.0055) - mlx->player->diry * sin(3 * M_PI * 0.0055);
 		mlx->player->diry = x_save * sin(3 * M_PI * 0.0055) + mlx->player->diry * cos(3 * M_PI * 0.0055);
 		x_save = mlx->player->planex;
 		mlx->player->planex = x_save * cos(3 * M_PI * 0.0055) - mlx->player->planey * sin(3 * M_PI * 0.0055);
 		mlx->player->planey = x_save * sin(3 * M_PI * 0.0055) + mlx->player->planey * cos(3 * M_PI * 0.0055);
 	}
+		// rotate(mlx);
+}
+
+void		rotate(t_mlx *mlx)
+{
+	if (mlx->keys->key_a == true)
+	{
+	}
+	if (mlx->keys->key_d == true)
+	{
+	}
+	ft_printf("%f, %f\n", mlx->player->planex, mlx->player->planey);
 }
 
 int			deal_key_press(int key, t_mlx *mlx)
