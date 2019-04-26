@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 12:06:06 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/26 18:40:25 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/04/26 20:10:46 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,14 @@ int			deal_mouse(int mousebutton, int x, int y, t_mlx *mlx)
 		// from 160 till 510
 		if (x >= 350 && x <= 750)
 		{
+			if (y >= 440 && y < 475)
+			{
+				mlx_destroy_image(MLX_PTR, IMG_PTR);
+				IMG_PTR = mlx_new_image(MLX_PTR, WIDTH, HEIGHT);
+				IMG_ADD = mlx_get_data_addr(IMG_PTR, &(mlx->bits_per_pixel), &(mlx->size_line), &(mlx->endian));
+				mlx->screen->main_game = true;
+				mlx->screen->menu = false;
+			}
 			if (y >= 475 && y < 510)
 				exit_x(NULL);
 			else if (y >= 370 && y < 405)
