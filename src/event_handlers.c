@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 12:06:06 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/26 18:25:13 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/26 18:40:25 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,25 +116,6 @@ int			deal_key_release(int key, t_mlx *mlx)
 	return (0);
 }
 
-void		*play_sound(void *filename)
-{
-	char	*systemcall;
-
-	systemcall = ft_strjoin("afplay ", filename);
-	system(systemcall);
-	free(systemcall);
-	return (filename);
-}
-
-void		*set_variable(void	*data)
-{
-	t_mlx	*mlx;
-
-	mlx = (t_mlx*)data;
-	mlx->screen->gunstate = 1;
-	return (data);
-}
-
 int			deal_mouse(int mousebutton, int x, int y, t_mlx *mlx)
 {
 	int	pid;
@@ -146,7 +127,7 @@ int			deal_mouse(int mousebutton, int x, int y, t_mlx *mlx)
 			pid = fork();
 			if (pid == 0)
 			{
-				system("afplay src/sound_fx/gun_shot_2.mp3");
+				system("afplay -v 0.1 src/sound_fx/gun_shot_2.mp3");
 				exit(EXIT_SUCCESS);
 			}
 			mlx->screen->gunstate = 1;

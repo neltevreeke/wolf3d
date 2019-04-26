@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:13:17 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/26 17:57:35 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/26 20:05:35 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@
 # define WIN_PTR mlx->win
 # define IMG_PTR mlx->img
 # define IMG_ADD mlx->data_addr
+# define MINIMAP_PTR mlx->minimap
+# define MINIMAP_ADD mlx->mm_data_addr
 # define WIDTH 1000
+# define REAL_WIDTH 1200
 # define HEIGHT 600
 # define THREAD_AMOUNT 5
 
@@ -105,8 +108,6 @@ typedef struct	s_screen
 	t_bool		main_game;
 	t_bool		menu;
 	void**		gun_img;
-	pthread_t	thread1;
-	pthread_t	thread2;
 	int			gunstate;
 }				t_screen;
 
@@ -200,10 +201,15 @@ typedef struct	s_mlx
 	void		*init;
 	void		*win;
 	void		*img;
+	void		*minimap;
 	char		*data_addr;
+	char		*mm_data_addr;
 	int			bits_per_pixel;
 	int			size_line;
 	int			endian;
+	int			mm_bits_per_pixel;
+	int			mm_size_line;
+	int			mm_endian;
 	int			max_x;
 	int			cur_x;
 

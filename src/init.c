@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:35:19 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/26 18:32:05 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/26 20:05:14 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,9 +133,11 @@ t_mlx	*init_mlx(void)
 	if (!mlx)
 		exit_failure_errno();
 	MLX_PTR = mlx_init();
-	WIN_PTR = mlx_new_window(MLX_PTR, WIDTH, HEIGHT, "Wolf3D");
+	WIN_PTR = mlx_new_window(MLX_PTR, REAL_WIDTH, HEIGHT, "Wolf3D");
 	IMG_PTR = mlx_new_image(MLX_PTR, WIDTH, HEIGHT);
+	MINIMAP_PTR = mlx_new_image(MLX_PTR, 200, 200);
 	IMG_ADD = mlx_get_data_addr(IMG_PTR, &(mlx->bits_per_pixel), &(mlx->size_line), &(mlx->endian));
+	MINIMAP_ADD = mlx_get_data_addr(MINIMAP_PTR, &(mlx->mm_bits_per_pixel), &(mlx->mm_size_line), &(mlx->mm_endian));
 	return(mlx);
 }
 
@@ -223,6 +225,88 @@ void	create_menu(t_mlx *mlx)
 	IMG_PTR = mlx_xpm_file_to_image(MLX_PTR, "textures/menu3.xpm", &x, &y);
 }
 
+void	color_border(t_mlx *mlx)
+{
+	int	y;
+	int	x;
+	int	color;
+
+	y = 0;
+	color = 0x0000FF;
+	while (y < 200)
+	{
+		x = 0;
+		while (x < 200)
+		{
+			if ((y < 5 || y >= 195) || (x < 5 || x >= 195))
+			{
+				color = mlx_get_color_value(MLX_PTR, color);
+				ft_memcpy(MINIMAP_ADD + mlx->mm_size_line * y + x * mlx->mm_bits_per_pixel / 8,
+					&color, sizeof(int));
+			}
+			x++;
+		}
+		y++;
+	}
+}
+
+void	color_block(t_mlx *mlx, int y, int x, int color)
+{
+	int	x2;
+	int	y2;
+
+	y2 = 0;
+	while (y2 < 10)
+	{
+		x2 = 0;
+		while (x2 < 10)
+		{
+			ft_memcpy(MINIMAP_ADD + mlx->mm_size_line * (y * 10 + y2 + 5) + (x * 10 + x2 + 5) * mlx->mm_bits_per_pixel / 8,
+				&color, sizeof(int));
+			x2++;
+		}
+		y2++;
+	}
+}
+
+void	create_minimap(t_mlx *mlx)
+{
+	int	y;
+	int	x;
+	int	mapx;
+	int	mapy;
+
+	y = 0;
+	mapx = (int)mlx->player->posx;
+	mapy = (int)mlx->player->posy;
+	ft_bzero(MINIMAP_ADD, sizeof(int) * 200 * 200);
+	color_border(mlx);
+	while (y < 19)
+	{
+		x = 0;
+		if (mapy - 9 + y >= 0 && mapy - 9 + y < mlx->map->size_y)
+		{
+			while (x < 19)
+			{
+				if (mapx - 9 + x >= 0 && mapx - 9 + x < mlx->map->size_x)
+				{
+					if (mlx->map->level[mapy - 9 + y][mapx - 9 + x] != 0)
+					{
+						if (mlx->map->level[mapy - 9 + y][mapx - 9 + x] > 0)
+							color_block(mlx, y, x, 0x707070);
+						else
+							color_block(mlx, y, x, 0x00ff00);
+					}
+					if (y == 9 && x == 9)
+						color_block(mlx, y, x, 0xff0000);
+				}
+				x++;
+			}
+		}
+		y++;
+	}
+}
+
 int		loop_program(t_mlx *mlx)
 {
 	char *fps_str;
@@ -232,10 +316,14 @@ int		loop_program(t_mlx *mlx)
 	check_player_move(mlx);
 	ft_bzero(IMG_ADD, HEIGHT * WIDTH * (mlx->bits_per_pixel / 8));
 	if (mlx->screen->main_game == true)
+	{
 		create_image(mlx);
+		create_minimap(mlx);
+	}
 	else if (mlx->screen->menu == true)
 		create_menu(mlx);
 	mlx_put_image_to_window(MLX_PTR, WIN_PTR, IMG_PTR, 0, 0);
+	mlx_put_image_to_window(MLX_PTR, WIN_PTR, MINIMAP_PTR, 1000, 0);
 	if (mlx->screen->main_game == true)
 	{
 		put_gun_to_window(mlx);
