@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/02/28 13:51:14 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/15 17:35:09 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/26 17:38:27 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ void	fill_map(t_map* map, char *filename)
 		{
 			while (line[i] == ' ')
 				i++;
-			if (ft_isdigit(line[i]))
+			if (ft_isdigit(line[i]) || line[i] == '-')
 				map->level[y][x] = ft_atoi(&line[i]);
-			while (ft_isdigit(line[i]))
+			while (ft_isdigit(line[i]) || line[i] == '-')
 				i++;
 			x++;
 		}

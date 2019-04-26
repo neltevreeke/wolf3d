@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:35:19 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/25 17:04:48 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/26 18:32:05 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ char	**init_sprites_data(t_sprites *sprites)
 	int		i;
 
 	i = 0;
-	sprite_data = (char**)malloc(sizeof(char*) * sprites->amount_sprites);
+	sprite_data = (char**)malloc(sizeof(char*) * AMOUNT_SPRITES);
 	if (!sprite_data)
 		exit_failure_errno();
-	while (i < sprites->amount_sprites)
+	while (i < AMOUNT_SPRITES)
 	{
 		sprite_data[i] = mlx_get_data_addr(sprites->spr_arr[i], &sprites->bits_per_pixel[i], &sprites->size_line[i], &sprites->endian[i]);
 		i++;
@@ -42,12 +42,11 @@ t_sprites	*init_sprites(t_mlx *mlx)
 	sprites = MEM(t_sprites);
 	if (!sprites)
 		exit_failure_errno();
-	sprites->amount_sprites = 24;
-	sprites->spr_arr = (void**)malloc(sizeof(void*) * sprites->amount_sprites);
-	sprites->endian = (int*)malloc(sizeof(int) * sprites->amount_sprites);
-	sprites->size_line = (int*)malloc(sizeof(int) * sprites->amount_sprites);
-	sprites->bits_per_pixel = (int*)malloc(sizeof(int) * sprites->amount_sprites);
-	while (i < sprites->amount_sprites)
+	sprites->spr_arr = (void**)malloc(sizeof(void*) * AMOUNT_SPRITES);
+	sprites->endian = (int*)malloc(sizeof(int) * AMOUNT_SPRITES);
+	sprites->size_line = (int*)malloc(sizeof(int) * AMOUNT_SPRITES);
+	sprites->bits_per_pixel = (int*)malloc(sizeof(int) * AMOUNT_SPRITES);
+	while (i < AMOUNT_SPRITES)
 	{
 		char *num = ft_itoa(i + 1);
 		tmp = ft_strjoin("textures/sprites/sprite_", num);
@@ -62,17 +61,16 @@ t_sprites	*init_sprites(t_mlx *mlx)
 	return (sprites);
 }
 
-
 char	**init_textures_data(t_textures *textures)
 {
 	char	**texture_data;
 	int		i;
 
 	i = 0;
-	texture_data = (char**)malloc(sizeof(char*) * textures->amount_textures);
+	texture_data = (char**)malloc(sizeof(char*) * AMOUNT_TEXTURES);
 	if (!texture_data)
 		exit_failure_errno();
-	while (i < textures->amount_textures)
+	while (i < AMOUNT_TEXTURES)
 	{
 		texture_data[i] = mlx_get_data_addr(textures->tex_arr[i], &textures->bits_per_pixel[i], &textures->size_line[i], &textures->endian[i]);
 		i++;
@@ -94,11 +92,11 @@ t_textures	*init_textures(t_mlx *mlx)
 	if (!textures)
 		exit_failure_errno();
 	textures->amount_textures = 38;
-	textures->tex_arr = (void**)malloc(sizeof(void*) * textures->amount_textures);
-	textures->endian = (int*)malloc(sizeof(int) * textures->amount_textures);
-	textures->size_line = (int*)malloc(sizeof(int) * textures->amount_textures);
-	textures->bits_per_pixel = (int*)malloc(sizeof(int) * textures->amount_textures);
-	while (i < textures->amount_textures)
+	textures->tex_arr = (void**)malloc(sizeof(void*) * AMOUNT_TEXTURES);
+	textures->endian = (int*)malloc(sizeof(int) * AMOUNT_TEXTURES);
+	textures->size_line = (int*)malloc(sizeof(int) * AMOUNT_TEXTURES);
+	textures->bits_per_pixel = (int*)malloc(sizeof(int) * AMOUNT_TEXTURES);
+	while (i < AMOUNT_TEXTURES)
 	{
 		char *num = ft_itoa(i + 1);
 		tmp = ft_strjoin("textures/walls/wall_", num);
@@ -174,13 +172,32 @@ t_keys	*init_keys(void)
 	return (keys);
 }
 
-t_screen	*init_screen(void)
+t_screen	*init_screen(t_mlx *mlx)
 {
+	int			i;
+	int			width;
+	char		*tmp;
+	char		*filename;
 	t_screen	*screen;
 
 	screen = MEM(t_screen);
 	screen->main_game = true;
 	screen->menu = false;
+	screen->gunstate = 0;
+	i = 0;
+	width = 0;
+	screen->gun_img = (void**)malloc(sizeof(void*) * AMOUNT_GUNS);
+	while (i < AMOUNT_GUNS)
+	{
+		char *num = ft_itoa(i + 1);
+		tmp = ft_strjoin("textures/pistol/pistol_", num);
+		filename = ft_strjoin(tmp, ".xpm");
+		screen->gun_img[i] = mlx_xpm_file_to_image(MLX_PTR, filename, &width, &width);
+		free(num);
+		free(tmp);
+		free(filename);
+		i++;
+	}
 	return (screen);
 }
 
@@ -191,7 +208,7 @@ t_mlx	*init_program(char *filename)
 	mlx = init_mlx();
 	mlx->map = init_map(filename, mlx);
 	mlx->keys = init_keys();
-	mlx->screen = init_screen();
+	mlx->screen = init_screen(mlx);
 	mlx->player = init_player();
 	return (mlx);
 }
@@ -219,9 +236,34 @@ int		loop_program(t_mlx *mlx)
 	else if (mlx->screen->menu == true)
 		create_menu(mlx);
 	mlx_put_image_to_window(MLX_PTR, WIN_PTR, IMG_PTR, 0, 0);
+	if (mlx->screen->main_game == true)
+	{
+		put_gun_to_window(mlx);
+	}
 	put_ui(mlx, fps_str);
 	free(fps_str);
 	return (0);
+}
+
+void	put_gun_to_window(t_mlx *mlx)
+{
+	if (mlx->screen->gunstate == 0)
+		mlx_put_image_to_window(MLX_PTR, WIN_PTR, IMG_IDLE_GUN, 244, 88);
+	else if (mlx->screen->gunstate > 0)
+	{
+		if (mlx->screen->gunstate == 1)
+			mlx_put_image_to_window(MLX_PTR, WIN_PTR, IMG_ACTION_GUN_1, 244, 88);
+		else if (mlx->screen->gunstate == 2)
+			mlx_put_image_to_window(MLX_PTR, WIN_PTR, IMG_ACTION_GUN_2, 244, 88);
+		else if (mlx->screen->gunstate == 3)
+			mlx_put_image_to_window(MLX_PTR, WIN_PTR, IMG_ACTION_GUN_3, 244, 88);
+		else if (mlx->screen->gunstate == 4)
+			mlx_put_image_to_window(MLX_PTR, WIN_PTR, IMG_ACTION_GUN_4, 244, 88);
+		if (mlx->screen->gunstate == 4)
+			mlx->screen->gunstate = 0;
+		else
+			mlx->screen->gunstate++;
+	}
 }
 
 void	put_ui(t_mlx *mlx, char *fps_str)

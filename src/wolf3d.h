@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:13:17 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/25 17:13:27 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/26 17:57:35 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <stdio.h>
 # include <fcntl.h>
 # include <math.h>
+# include <pthread.h>
 
 /*
 ***********************************************************	Defines
@@ -59,6 +60,24 @@
 # define BTN_DOWN 5
 
 /*
+**	Pistol defines
+*/
+
+# define AMOUNT_GUNS 5
+# define IMG_IDLE_GUN mlx->screen->gun_img[0]
+# define IMG_ACTION_GUN_1 mlx->screen->gun_img[1]
+# define IMG_ACTION_GUN_2 mlx->screen->gun_img[2]
+# define IMG_ACTION_GUN_3 mlx->screen->gun_img[3]
+# define IMG_ACTION_GUN_4 mlx->screen->gun_img[4]
+
+/*
+**	Sprite, texture defines
+*/
+
+# define AMOUNT_SPRITES 24
+# define AMOUNT_TEXTURES 39
+
+/*
 ***********************************************************	Structs
 */
 
@@ -85,6 +104,10 @@ typedef struct	s_screen
 {
 	t_bool		main_game;
 	t_bool		menu;
+	void**		gun_img;
+	pthread_t	thread1;
+	pthread_t	thread2;
+	int			gunstate;
 }				t_screen;
 
 /*
@@ -112,7 +135,9 @@ typedef struct	s_sprites
 	int			*bits_per_pixel;
 	int			*size_line;
 	int			*endian;
-	int			amount_sprites;
+	double		x;
+	double		y;
+	int			sprite;
 }				t_sprites;
 
 /*
@@ -198,6 +223,7 @@ void	pixel_to_img(t_mlx *mlx, int px, int py, int color);
 **	UI functions
 */
 
+void			put_gun_to_window(t_mlx *mlx);
 void			put_ui(t_mlx *mlx, char *str);
 
 /*
