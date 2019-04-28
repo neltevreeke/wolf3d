@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 12:06:06 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/28 14:23:34 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/28 15:36:37 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ void		rotate_right(t_mlx *mlx)
 
 void		check_player_move(t_mlx *mlx)
 {
+	int	pid;
+
 	if (mlx->keys->key_w == true)
 	{
 		double	movex = mlx->player->dirx * mlx->player->ms;	
@@ -65,6 +67,18 @@ void		check_player_move(t_mlx *mlx)
 		if (mlx->map->level[(int)(mlx->player->posy)][(int)(mlx->player->posx - mlx->player->dirx * mlx->player->ms)] == 0
 		|| mlx->map->level[(int)(mlx->player->posy)][(int)(mlx->player->posx - mlx->player->dirx * mlx->player->ms)] == -18)
 			mlx->player->posx -= movex;
+	}
+	if ((mlx->keys->key_w == true || mlx->keys->key_s == true) && !(mlx->keys->key_w == true && mlx->keys->key_s == true))
+	{
+		if (waitpid(0, WNOHANG, 0))
+		{
+			pid = fork();
+			if (pid == 0)
+			{
+				system("afplay -v 0.1 src/sound_fx/Single-footstep-snow.mp3");
+				exit(EXIT_SUCCESS);
+			}
+		}		
 	}
 	if (mlx->map->level[(int)mlx->player->posy][(int)mlx->player->posx] == -18)
 	{
@@ -125,6 +139,57 @@ int			deal_key_release(int key, t_mlx *mlx)
 	return (0);
 }
 
+void		load_game(t_mlx *mlx)
+{
+	int		fd;
+	int		ret;
+	char	*line;
+
+	fd = open("src/gamesaves/save1", O_RDONLY);
+	if (fd < 0)
+		exit_failure_errno();
+	ret = get_next_line(fd, &line);
+	mlx->player->ammo = ft_atoi(line);
+	free(line);
+	ret = get_next_line(fd, &line);
+	mlx->player->dirx = atof(line);
+	free(line);
+	ret = get_next_line(fd, &line);
+	mlx->player->diry = atof(line);
+	free(line);
+	ret = get_next_line(fd, &line);
+	mlx->player->ms = atof(line);
+	free(line);
+	ret = get_next_line(fd, &line);
+	mlx->player->planex = atof(line);
+	free(line);
+	ret = get_next_line(fd, &line);
+	mlx->player->planey = atof(line);
+	free(line);
+	ret = get_next_line(fd, &line);
+	mlx->player->posx = atof(line);
+	free(line);
+	ret = get_next_line(fd, &line);
+	mlx->player->posy = atof(line);
+	free(line);
+}
+
+void		save_game(t_mlx	*mlx)
+{
+	FILE	*save;
+
+	save = fopen("src/gamesaves/save1", "w");
+	fprintf(save, "%d\n", mlx->player->ammo);
+	fprintf(save, "%lf\n", mlx->player->dirx);
+	fprintf(save, "%lf\n", mlx->player->diry);
+	fprintf(save, "%lf\n", mlx->player->ms);
+	fprintf(save, "%lf\n", mlx->player->planex);
+	fprintf(save, "%lf\n", mlx->player->planey);
+	fprintf(save, "%lf\n", mlx->player->posx);
+	fprintf(save, "%lf\n", mlx->player->posy);
+	fclose(save);
+}
+
 int			deal_mouse(int mousebutton, int x, int y, t_mlx *mlx)
 {
 	int	pid;
@@ -148,6 +213,24 @@ int			deal_mouse(int mousebutton, int x, int y, t_mlx *mlx)
 		// from 160 till 510
 		if (x >= 350 && x <= 750)
 		{
+			if (y >= 265 && y < 300)
+			{
+				mlx_destroy_image(MLX_PTR, IMG_PTR);
+				IMG_PTR = mlx_new_image(MLX_PTR, WIDTH, HEIGHT);
+				IMG_ADD = mlx_get_data_addr(IMG_PTR, &(mlx->bits_per_pixel), &(mlx->size_line), &(mlx->endian));
+				mlx->screen->main_game = true;
+				mlx->screen->menu = false;
+				load_game(mlx);
+			}
+			if (y >= 300 && y < 335)
+			{
+				mlx_destroy_image(MLX_PTR, IMG_PTR);
+				IMG_PTR = mlx_new_image(MLX_PTR, WIDTH, HEIGHT);
+				IMG_ADD = mlx_get_data_addr(IMG_PTR, &(mlx->bits_per_pixel), &(mlx->size_line), &(mlx->endian));
+				mlx->screen->main_game = true;
+				mlx->screen->menu = false;
+				save_game(mlx);
+			}
 			if (y >= 440 && y < 475)
 			{
 				mlx_destroy_image(MLX_PTR, IMG_PTR);

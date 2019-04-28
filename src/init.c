@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:35:19 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/28 14:24:15 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/28 15:04:09 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -441,6 +441,7 @@ void	create_ui(t_mlx *mlx, char *fps_str)
 
 	mlx_string_put(MLX_PTR, WIN_PTR, REAL_WIDTH - 175, 250, 0xFFFFFF, "Ammo:");
 	mlx_string_put(MLX_PTR, WIN_PTR, REAL_WIDTH - 40, 250, 0xFFFFFF, ammo);
+	free(ammo);
 }
 
 /*
