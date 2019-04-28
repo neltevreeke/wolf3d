@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:13:17 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/26 20:05:35 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/04/28 14:26:11 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@
 # define IMG_ADD mlx->data_addr
 # define MINIMAP_PTR mlx->minimap
 # define MINIMAP_ADD mlx->mm_data_addr
+# define UI_PTR mlx->ui
+# define UI_ADD mlx->ui_data_addr
 # define WIDTH 1000
 # define REAL_WIDTH 1200
 # define HEIGHT 600
@@ -190,6 +192,7 @@ typedef struct	s_player
 	double		planex; // Viewing width x
 	double		planey; // Viewing width y
 	double		ms;
+	int			ammo;
 }				t_player;
 
 /*
@@ -201,15 +204,23 @@ typedef struct	s_mlx
 	void		*init;
 	void		*win;
 	void		*img;
+	void		*ui;
 	void		*minimap;
 	char		*data_addr;
 	char		*mm_data_addr;
+	char		*ui_data_addr;
+	
 	int			bits_per_pixel;
 	int			size_line;
 	int			endian;
+
 	int			mm_bits_per_pixel;
 	int			mm_size_line;
 	int			mm_endian;
+
+	int			ui_bits_per_pixel;
+	int			ui_size_line;
+	int			ui_endian;
 	int			max_x;
 	int			cur_x;
 
@@ -223,14 +234,14 @@ typedef struct	s_mlx
 ***********************************************************	Prototypes
 */
 
-void	pixel_to_img(t_mlx *mlx, int px, int py, int color);
+void			pixel_to_img(t_mlx *mlx, int px, int py, int color);
 
 /*
 **	UI functions
 */
 
 void			put_gun_to_window(t_mlx *mlx);
-void			put_ui(t_mlx *mlx, char *str);
+void			create_ui(t_mlx *mlx, char *str);
 
 /*
 **	Event_handler functions
@@ -264,7 +275,7 @@ char			*get_fps(char *str);
 
 void			no_param(void);
 void			exit_failure_errno(void);
-void 		   create_image(t_mlx *mlx);
+void			create_image(t_mlx *mlx);
 
 /*
 **	print map functions

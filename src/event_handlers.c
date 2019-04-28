@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 12:06:06 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/26 20:10:46 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/04/28 14:23:34 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,28 @@ void		check_player_move(t_mlx *mlx)
 	{
 		double	movex = mlx->player->dirx * mlx->player->ms;	
 		double	movey = mlx->player->diry * mlx->player->ms;
-		if (mlx->map->level[(int)(mlx->player->posy + mlx->player->diry * mlx->player->ms)][(int)(mlx->player->posx)] == 0)
+		if (mlx->map->level[(int)(mlx->player->posy + mlx->player->diry * mlx->player->ms)][(int)(mlx->player->posx)] == 0
+		|| mlx->map->level[(int)(mlx->player->posy + mlx->player->diry * mlx->player->ms)][(int)(mlx->player->posx)] == -18)
 			mlx->player->posy += movey;
-		if (mlx->map->level[(int)(mlx->player->posy)][(int)(mlx->player->posx + mlx->player->dirx * mlx->player->ms)] == 0)
+		if (mlx->map->level[(int)(mlx->player->posy)][(int)(mlx->player->posx + mlx->player->dirx * mlx->player->ms)] == 0
+		|| mlx->map->level[(int)(mlx->player->posy)][(int)(mlx->player->posx + mlx->player->dirx * mlx->player->ms)] == -18)
 			mlx->player->posx += movex;
 	}
 	if (mlx->keys->key_s == true)
 	{
 		double	movex = mlx->player->dirx * mlx->player->ms;	
 		double	movey = mlx->player->diry * mlx->player->ms;
-		if (mlx->map->level[(int)(mlx->player->posy - mlx->player->diry * mlx->player->ms)][(int)(mlx->player->posx)] == 0)
+		if (mlx->map->level[(int)(mlx->player->posy - mlx->player->diry * mlx->player->ms)][(int)(mlx->player->posx)] == 0
+		|| mlx->map->level[(int)(mlx->player->posy - mlx->player->diry * mlx->player->ms)][(int)(mlx->player->posx)] == -18)
 			mlx->player->posy -= movey;
-		if (mlx->map->level[(int)(mlx->player->posy)][(int)(mlx->player->posx - mlx->player->dirx * mlx->player->ms)] == 0)
+		if (mlx->map->level[(int)(mlx->player->posy)][(int)(mlx->player->posx - mlx->player->dirx * mlx->player->ms)] == 0
+		|| mlx->map->level[(int)(mlx->player->posy)][(int)(mlx->player->posx - mlx->player->dirx * mlx->player->ms)] == -18)
 			mlx->player->posx -= movex;
+	}
+	if (mlx->map->level[(int)mlx->player->posy][(int)mlx->player->posx] == -18)
+	{
+		mlx->player->ammo += 6;
+		mlx->map->level[(int)mlx->player->posy][(int)mlx->player->posx] = 0;
 	}
 	if (mlx->keys->key_a == true)
 		rotate_left(mlx);
@@ -119,10 +128,9 @@ int			deal_key_release(int key, t_mlx *mlx)
 int			deal_mouse(int mousebutton, int x, int y, t_mlx *mlx)
 {
 	int	pid;
-	(void)mlx;
 	if (mlx->screen->main_game == true)
 	{
-		if (mousebutton == 1)
+		if (mousebutton == 1 && mlx->player->ammo > 0)
 		{
 			pid = fork();
 			if (pid == 0)
@@ -130,6 +138,7 @@ int			deal_mouse(int mousebutton, int x, int y, t_mlx *mlx)
 				system("afplay -v 0.1 src/sound_fx/gun_shot_2.mp3");
 				exit(EXIT_SUCCESS);
 			}
+			mlx->player->ammo -= 1;
 			mlx->screen->gunstate = 1;
 		}
 	}

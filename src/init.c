@@ -6,11 +6,15 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:35:19 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/26 20:05:14 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/04/28 14:24:15 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+/*
+**	fills texture data adress array
+*/
 
 char	**init_sprites_data(t_sprites *sprites)
 {
@@ -28,6 +32,10 @@ char	**init_sprites_data(t_sprites *sprites)
 	}
 	return (sprite_data);
 }
+
+/*
+**	Initializes sprites
+*/
 
 t_sprites	*init_sprites(t_mlx *mlx)
 {
@@ -61,6 +69,10 @@ t_sprites	*init_sprites(t_mlx *mlx)
 	return (sprites);
 }
 
+/*
+**	fills texture data adress array
+*/
+
 char	**init_textures_data(t_textures *textures)
 {
 	char	**texture_data;
@@ -77,6 +89,10 @@ char	**init_textures_data(t_textures *textures)
 	}
 	return (texture_data);
 }
+
+/*
+**	Initializes textures
+*/
 
 t_textures	*init_textures(t_mlx *mlx)
 {
@@ -111,6 +127,11 @@ t_textures	*init_textures(t_mlx *mlx)
 	return (textures);
 }
 
+
+/*
+**	Initializes Map
+*/
+
 t_map	*init_map(char *filename, t_mlx *mlx)
 {
 	t_map	*map;
@@ -125,6 +146,10 @@ t_map	*init_map(char *filename, t_mlx *mlx)
 	return(map);
 }
 
+/*
+**	Initializes MLX
+*/
+
 t_mlx	*init_mlx(void)
 {
 	t_mlx	*mlx;
@@ -138,8 +163,14 @@ t_mlx	*init_mlx(void)
 	MINIMAP_PTR = mlx_new_image(MLX_PTR, 200, 200);
 	IMG_ADD = mlx_get_data_addr(IMG_PTR, &(mlx->bits_per_pixel), &(mlx->size_line), &(mlx->endian));
 	MINIMAP_ADD = mlx_get_data_addr(MINIMAP_PTR, &(mlx->mm_bits_per_pixel), &(mlx->mm_size_line), &(mlx->mm_endian));
+	UI_PTR = mlx_new_image(MLX_PTR, 200, 400);
+	UI_ADD = mlx_get_data_addr(UI_PTR, &(mlx->mm_bits_per_pixel), &(mlx->ui_size_line), &(mlx->ui_endian));
 	return(mlx);
 }
+
+/*
+**	Initializes Player
+*/
 
 t_player	*init_player(void)
 {
@@ -155,8 +186,13 @@ t_player	*init_player(void)
 	player->planex = -0.5;
 	player->planey = 0.5;
 	player->ms =  0.13;
+	player->ammo = 6;
 	return (player);
 }
+
+/*
+**	Initializes Keys for events
+*/
 
 t_keys	*init_keys(void)
 {
@@ -173,6 +209,10 @@ t_keys	*init_keys(void)
 	keys->key_ctrl = false;
 	return (keys);
 }
+
+/*
+**	Initializes window/screen
+*/
 
 t_screen	*init_screen(t_mlx *mlx)
 {
@@ -203,6 +243,10 @@ t_screen	*init_screen(t_mlx *mlx)
 	return (screen);
 }
 
+/*
+**	Initializes program
+*/
+
 t_mlx	*init_program(char *filename)
 {
 	t_mlx *mlx;
@@ -215,6 +259,10 @@ t_mlx	*init_program(char *filename)
 	return (mlx);
 }
 
+/*
+**	Creates the menu
+*/
+
 void	create_menu(t_mlx *mlx)
 {
 	int	x;
@@ -224,6 +272,10 @@ void	create_menu(t_mlx *mlx)
 	y = 0;
 	IMG_PTR = mlx_xpm_file_to_image(MLX_PTR, "textures/menu3.xpm", &x, &y);
 }
+
+/*
+**	Colors the border for minimap
+*/
 
 void	color_border(t_mlx *mlx)
 {
@@ -250,6 +302,10 @@ void	color_border(t_mlx *mlx)
 	}
 }
 
+/*
+**	Colors the block in the mminimap
+*/
+
 void	color_block(t_mlx *mlx, int y, int x, int color)
 {
 	int	x2;
@@ -268,6 +324,10 @@ void	color_block(t_mlx *mlx, int y, int x, int color)
 		y2++;
 	}
 }
+
+/*
+**	creates the minimap
+*/
 
 void	create_minimap(t_mlx *mlx)
 {
@@ -292,7 +352,9 @@ void	create_minimap(t_mlx *mlx)
 				{
 					if (mlx->map->level[mapy - 9 + y][mapx - 9 + x] != 0)
 					{
-						if (mlx->map->level[mapy - 9 + y][mapx - 9 + x] > 0)
+						if (mlx->map->level[mapy - 9 + y][mapx - 9 + x] == -18)
+							color_block(mlx, y, x, 0x4f74af);
+						else if (mlx->map->level[mapy - 9 + y][mapx - 9 + x] > 0)
 							color_block(mlx, y, x, 0x707070);
 						else
 							color_block(mlx, y, x, 0x00ff00);
@@ -306,6 +368,10 @@ void	create_minimap(t_mlx *mlx)
 		y++;
 	}
 }
+
+/*
+**	Keeps the program running in an infinite loop
+*/
 
 int		loop_program(t_mlx *mlx)
 {
@@ -324,14 +390,19 @@ int		loop_program(t_mlx *mlx)
 		create_menu(mlx);
 	mlx_put_image_to_window(MLX_PTR, WIN_PTR, IMG_PTR, 0, 0);
 	mlx_put_image_to_window(MLX_PTR, WIN_PTR, MINIMAP_PTR, 1000, 0);
+	mlx_put_image_to_window(MLX_PTR, WIN_PTR, UI_PTR, 1000, 200);
+	create_ui(mlx, fps_str);
 	if (mlx->screen->main_game == true)
 	{
 		put_gun_to_window(mlx);
 	}
-	put_ui(mlx, fps_str);
 	free(fps_str);
 	return (0);
 }
+
+/*
+**	Sets the right sprite for the gun in the window/screen
+*/
 
 void	put_gun_to_window(t_mlx *mlx)
 {
@@ -354,11 +425,27 @@ void	put_gun_to_window(t_mlx *mlx)
 	}
 }
 
-void	put_ui(t_mlx *mlx, char *fps_str)
+/*
+**	Puts the UI in the window/screen
+*/
+
+void	create_ui(t_mlx *mlx, char *fps_str)
 {
-	mlx_string_put(MLX_PTR, WIN_PTR, WIDTH / 100 * 92, HEIGHT / 100, 0xFFFFFF, "FPS:");
-	mlx_string_put(MLX_PTR, WIN_PTR, (WIDTH / 100 * 92) + 50, HEIGHT / 100, 0xFFFFFF, fps_str);
+	char *ammo;
+
+	ft_bzero(UI_ADD, sizeof(int) * 400 * 200);
+	mlx_string_put(MLX_PTR, WIN_PTR, REAL_WIDTH - 175, 575, 0xFFFFFF, "Fps:");
+	mlx_string_put(MLX_PTR, WIN_PTR, REAL_WIDTH - 40, 575, 0xFFFFFF, fps_str);
+
+	ammo = ft_itoa(mlx->player->ammo);
+
+	mlx_string_put(MLX_PTR, WIN_PTR, REAL_WIDTH - 175, 250, 0xFFFFFF, "Ammo:");
+	mlx_string_put(MLX_PTR, WIN_PTR, REAL_WIDTH - 40, 250, 0xFFFFFF, ammo);
 }
+
+/*
+**	Initializes event handlers
+*/
 
 void	event_hooks(t_mlx *mlx)
 {

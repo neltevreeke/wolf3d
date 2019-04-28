@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 18:35:01 by jvisser        #+#    #+#                */
-/*   Updated: 2019/04/26 18:39:24 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/04/28 12:53:09 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,45 +169,45 @@ void    *raycasting(void *data)
       double floorXWall, floorYWall; //x, y position of the floor texel at the bottom of the wall
 
       //4 different wall directions possible
-      if(casting.side % 2 == 0 && casting.ray_dir_x > 0)
-      {
-        floorXWall = casting.map_x;
-        floorYWall = casting.map_y + wallX;
-      }
-      else if(casting.side % 2 == 0 && casting.ray_dir_x < 0)
-      {
-        floorXWall = casting.map_x + 1.0;
-        floorYWall = casting.map_y + wallX;
-      }
-      else if(casting.side % 2 == 1 && casting.ray_dir_y > 0)
-      {
-        floorXWall = casting.map_x + wallX;
-        floorYWall = casting.map_y;
-      }
-      else
-      {
-        floorXWall = casting.map_x + wallX;
-        floorYWall = casting.map_y + 1.0;
-      }
+		if(casting.side % 2 == 0 && casting.ray_dir_x > 0)
+		{
+			floorXWall = casting.map_x;
+			floorYWall = casting.map_y + wallX;
+		}
+		else if(casting.side % 2 == 0 && casting.ray_dir_x < 0)
+		{
+			floorXWall = casting.map_x + 1.0;
+			floorYWall = casting.map_y + wallX;
+		}
+		else if(casting.side % 2 == 1 && casting.ray_dir_y > 0)
+		{
+			floorXWall = casting.map_x + wallX;
+			floorYWall = casting.map_y;
+		}
+		else
+		{
+			floorXWall = casting.map_x + wallX;
+			floorYWall = casting.map_y + 1.0;
+		}
 
-      double distWall, distPlayer, currentDist;
+		double distWall, distPlayer, currentDist;
 
-      distWall = casting.per_wall_dist;
-      distPlayer = 0.0;
+		distWall = casting.per_wall_dist;
+		distPlayer = 0.0;
 	  end = casting.lineheight / 2 + HEIGHT / 2;
-      if (end < 0) end = HEIGHT;
-      for(int y = end + 1; y < HEIGHT; y++)
-      {
-        currentDist = HEIGHT / (2.0 * y - HEIGHT); //you could make a small lookup table for this instead
+		if (end < 0) end = HEIGHT;
+		for(int y = end + 1; y < HEIGHT; y++)
+		{
+			currentDist = HEIGHT / (2.0 * y - HEIGHT); //you could make a small lookup table for this instead
 
-        double weight = (currentDist - distPlayer) / (distWall - distPlayer);
+			double weight = (currentDist - distPlayer) / (distWall - distPlayer);
 
-        double currentFloorX = weight * floorXWall + (1.0 - weight) * mlx->player->posx;
-        double currentFloorY = weight * floorYWall + (1.0 - weight) * mlx->player->posy;
+			double currentFloorX = weight * floorXWall + (1.0 - weight) * mlx->player->posx;
+			double currentFloorY = weight * floorYWall + (1.0 - weight) * mlx->player->posy;
 
-        int floorTexX, floorTexY;
-        floorTexX = (int)(currentFloorX * 128) % 128;
-        floorTexY = (int)(currentFloorY * 128) % 128;
+			int floorTexX, floorTexY;
+			floorTexX = (int)(currentFloorX * 128) % 128;
+			floorTexY = (int)(currentFloorY * 128) % 128;
 
 		// ft_memcpy(IMG_ADD + mlx->size_line * y + mlx->cur_x * mlx->bits_per_pixel / 8,
 		// 					&mlx->map->textures->texture_data[1]
@@ -215,7 +215,7 @@ void    *raycasting(void *data)
 		// 					+ floorTexX % 128 * (mlx->map->textures->bits_per_pixel[1] / 8)],
 		// 					sizeof(int));
         // buffer[y][x] = (mlx->textures->texture_data[3][128 * floorTexY + floorTexX] >> 1) & 8355711;
-        //ceiling (symmetrical!)
+		//ceiling (symmetrical!)
 		ft_memcpy(IMG_ADD + mlx->size_line * (HEIGHT - y) + mlx->cur_x * mlx->bits_per_pixel / 8,
 							&mlx->map->textures->texture_data[38]
 							[ floorTexY % 128 * mlx->map->textures->size_line[38]
