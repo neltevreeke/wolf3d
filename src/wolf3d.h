@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:13:17 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/28 14:26:11 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/28 16:53:33 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <fcntl.h>
 # include <math.h>
 # include <pthread.h>
+# include <unistd.h>
 
 /*
 ***********************************************************	Defines
@@ -111,6 +112,8 @@ typedef struct	s_screen
 	t_bool		menu;
 	void**		gun_img;
 	int			gunstate;
+	void*		save_img;
+	double		save_time;
 }				t_screen;
 
 /*
@@ -193,6 +196,8 @@ typedef struct	s_player
 	double		planey; // Viewing width y
 	double		ms;
 	int			ammo;
+	int			hp;
+	pid_t		step_pid;
 }				t_player;
 
 /*

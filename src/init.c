@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:35:19 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/28 15:04:09 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/04/28 18:34:26 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,14 +179,15 @@ t_player	*init_player(void)
 	player = MEM(t_player);
 	if (!player)
 		exit_failure_errno();
-	player->posx = 3.5;
-	player->posy = 2.5;
+	player->posx = 35.5;
+	player->posy = 55.5;
 	player->dirx = 0.5;
 	player->diry = 0.5;
 	player->planex = -0.5;
 	player->planey = 0.5;
 	player->ms =  0.13;
 	player->ammo = 6;
+	player->hp = 100;
 	return (player);
 }
 
@@ -228,6 +229,7 @@ t_screen	*init_screen(t_mlx *mlx)
 	screen->gunstate = 0;
 	i = 0;
 	width = 0;
+	screen->save_img = mlx_xpm_file_to_image(MLX_PTR, "textures/ui/saved.xpm", &width, &width);
 	screen->gun_img = (void**)malloc(sizeof(void*) * AMOUNT_GUNS);
 	while (i < AMOUNT_GUNS)
 	{
@@ -329,6 +331,9 @@ void	color_block(t_mlx *mlx, int y, int x, int color)
 **	creates the minimap
 */
 
+	// 7d160f
+	// 500a08
+
 void	create_minimap(t_mlx *mlx)
 {
 	int	y;
@@ -354,6 +359,10 @@ void	create_minimap(t_mlx *mlx)
 					{
 						if (mlx->map->level[mapy - 9 + y][mapx - 9 + x] == -18)
 							color_block(mlx, y, x, 0x4f74af);
+						else if (mlx->map->level[mapy - 9 + y][mapx - 9 + x] == -16)
+							color_block(mlx, y, x, 0xff7f7f);
+						else if (mlx->map->level[mapy - 9 + y][mapx - 9 + x] == -17)
+							color_block(mlx, y, x, 0xff7f7f);
 						else if (mlx->map->level[mapy - 9 + y][mapx - 9 + x] > 0)
 							color_block(mlx, y, x, 0x707070);
 						else
@@ -391,6 +400,8 @@ int		loop_program(t_mlx *mlx)
 	mlx_put_image_to_window(MLX_PTR, WIN_PTR, IMG_PTR, 0, 0);
 	mlx_put_image_to_window(MLX_PTR, WIN_PTR, MINIMAP_PTR, 1000, 0);
 	mlx_put_image_to_window(MLX_PTR, WIN_PTR, UI_PTR, 1000, 200);
+	if (mlx->screen->save_time > get_cur_time() - 2000)
+		mlx_put_image_to_window(MLX_PTR, WIN_PTR, mlx->screen->save_img, 734, 505);
 	create_ui(mlx, fps_str);
 	if (mlx->screen->main_game == true)
 	{
@@ -432,6 +443,7 @@ void	put_gun_to_window(t_mlx *mlx)
 void	create_ui(t_mlx *mlx, char *fps_str)
 {
 	char *ammo;
+	char *hp;
 
 	ft_bzero(UI_ADD, sizeof(int) * 400 * 200);
 	mlx_string_put(MLX_PTR, WIN_PTR, REAL_WIDTH - 175, 575, 0xFFFFFF, "Fps:");
@@ -441,7 +453,13 @@ void	create_ui(t_mlx *mlx, char *fps_str)
 
 	mlx_string_put(MLX_PTR, WIN_PTR, REAL_WIDTH - 175, 250, 0xFFFFFF, "Ammo:");
 	mlx_string_put(MLX_PTR, WIN_PTR, REAL_WIDTH - 40, 250, 0xFFFFFF, ammo);
+
+	hp = ft_itoa(mlx->player->hp);
+
+	mlx_string_put(MLX_PTR, WIN_PTR, REAL_WIDTH - 175, 275, 0xFFFFFF, "Health:");
+	mlx_string_put(MLX_PTR, WIN_PTR, REAL_WIDTH - 40, 275, 0xFFFFFF, hp);
 	free(ammo);
+	free(hp);
 }
 
 /*
