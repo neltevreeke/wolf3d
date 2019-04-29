@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 12:06:06 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/28 18:51:39 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/29 15:59:31 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,6 +182,9 @@ void		load_game(t_mlx *mlx)
 	int		fd;
 	int		ret;
 	char	*line;
+	char	*s;
+
+	s = "src/gamesaves/save_map";
 
 	fd = open("src/gamesaves/save1", O_RDONLY);
 	if (fd < 0)
@@ -189,13 +192,6 @@ void		load_game(t_mlx *mlx)
 	ret = get_next_line(fd, &line);
 	mlx->player->ammo = ft_atoi(line);
 	free(line);
-	// function(mlx->player->dirx, fd);
-	// function(mlx->player->diry, fd);
-	// function(mlx->player->di, fd);
-	// function(mlx->player->dirx, fd);
-	// function(mlx->player->dirx, fd);
-	// function(mlx->player->dirx, fd);
-
 	ret = get_next_line(fd, &line);
 	mlx->player->dirx = atof(line);
 	free(line);
@@ -217,13 +213,35 @@ void		load_game(t_mlx *mlx)
 	ret = get_next_line(fd, &line);
 	mlx->player->posy = atof(line);
 	free(line);
+	fill_map(mlx->map, s);
+}
+
+void		save_map_state(FILE *save, t_mlx *mlx)
+{
+	int x;
+	int y;
+
+	y = 0;
+	while (y < mlx->map->size_y)
+	{
+		x = 0;
+		while (x < mlx->map->size_x)
+		{
+			fprintf(save, "%d ", mlx->map->level[y][x]);
+			x++;
+		}
+		fprintf(save, "%c", '\n');
+		y++;
+	}
 }
 
 void		save_game(t_mlx	*mlx)
 {
 	FILE	*save;
+	FILE	*save_map;
 
 	save = fopen("src/gamesaves/save1", "w");
+	save_map = fopen("src/gamesaves/save_map", "w");
 	fprintf(save, "%d\n", mlx->player->ammo);
 	fprintf(save, "%lf\n", mlx->player->dirx);
 	fprintf(save, "%lf\n", mlx->player->diry);
@@ -232,7 +250,9 @@ void		save_game(t_mlx	*mlx)
 	fprintf(save, "%lf\n", mlx->player->planey);
 	fprintf(save, "%lf\n", mlx->player->posx);
 	fprintf(save, "%lf\n", mlx->player->posy);
+	save_map_state(save_map, mlx);
 	fclose(save);
+	fclose(save_map);
 }
 
 int			deal_mouse(int mousebutton, int x, int y, t_mlx *mlx)
