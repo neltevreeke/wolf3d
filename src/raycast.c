@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 18:35:01 by jvisser        #+#    #+#                */
-/*   Updated: 2019/04/28 12:53:09 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/29 18:00:43 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,32 +233,41 @@ void    *raycasting(void *data)
 	int	x;
 	int	spriteorder[AMOUNT_SPRITES];
 	int	spritedistance[AMOUNT_SPRITES];
+	int amount;
 
 	i = 0;
 	y = 0;
 	while (y < mlx->map->size_y)
-    {
+	{
 		x = 0;
 		while (x < mlx->map->size_x)
 		{
 			if (mlx->map->level[y][x] < 0)
 			{
+					mlx->map->sprites->x = x;
+					mlx->map->sprites->y = y;
      			spriteorder[i] = i;
-     			spritedistance[i] = ((mlx->player->posx - x) * (mlx->player->posx - x) + (mlx->player->posy - y) * (mlx->player->posy - y));
+     			spritedistance[i] = ((mlx->player->posx - mlx->map->sprites->x) * (mlx->player->posx - mlx->map->sprites->x) + (mlx->player->posy - mlx->map->sprites->y) * (mlx->player->posy - mlx->map->sprites->y));
+					i++;
 			}
 			x++;
 		}
 		y++;
-    }
-
+	}
+	amount = i;
+	double l = mlx->map->sprites->x;
+	double m = mlx->map->sprites->y;
+	sort_sprites(spriteorder, spritedistance, amount);
 	y = 0;
 	while (y < mlx->map->size_y)
-    {
+	{
 		x = 0;
 		while (x < mlx->map->size_x)
 		{
 			if (mlx->map->level[y][x] < 0)
 			{
+					// We resetten x en y hier i.p.v. die op een bepaalde manier over te nemen van bovenstaande loop.
+					// ik heb het geprobeerd over te nemen maar dan vind ie de sprites niet meer en print ie ze niet..
      			double spriteX = x + 0.5 - mlx->player->posx;
      			double spriteY = y + 0.5 - mlx->player->posy;
 
@@ -312,9 +321,37 @@ void    *raycasting(void *data)
 			x++;
 		}
 		y++;
-    }
+	}
 
 	return (data);
+}
+
+//	Hij swapped het goed. maar hij print nog steeds niet goed uit.
+//	Optimizen mogelijk?
+void	sort_sprites(int *spriteorder, int *spritedistance, int amount)
+{
+	int i;
+	int temp;
+	int	temp2;
+
+	i = 0;
+	while (i < amount - 1)
+	{
+		if (spritedistance[i] < spritedistance[i + 1])
+		{
+			temp = spritedistance[i];
+			spritedistance[i] = spritedistance[i + 1];
+			spritedistance[i + 1] = temp;
+
+			temp2 = spriteorder[i];
+			spriteorder[i] = spriteorder[i + 1];
+			spriteorder[i + 1] = temp2;
+			printf("swapped!\n");
+			i = 0;
+		}
+		else
+			i++;
+	}
 }
 
 void	crosshair_to_img(t_mlx *mlx)
