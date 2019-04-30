@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:35:19 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/28 18:34:26 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/30 15:57:01 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,9 @@ t_sprites	*init_sprites(t_mlx *mlx)
 	sprites->endian = (int*)malloc(sizeof(int) * AMOUNT_SPRITES);
 	sprites->size_line = (int*)malloc(sizeof(int) * AMOUNT_SPRITES);
 	sprites->bits_per_pixel = (int*)malloc(sizeof(int) * AMOUNT_SPRITES);
+
+	sprites->x = (double*)malloc(sizeof(double) * AMOUNT_SPRITES);
+	sprites->y = (double*)malloc(sizeof(double) * AMOUNT_SPRITES);
 	while (i < AMOUNT_SPRITES)
 	{
 		char *num = ft_itoa(i + 1);

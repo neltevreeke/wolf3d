@@ -6,12 +6,12 @@
 #    By: jvisser <jvisser@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/01/12 12:07:57 by jvisser        #+#    #+#                 #
-#    Updated: 2019/04/16 13:20:14 by jvisser       ########   odam.nl          #
+#    Updated: 2019/04/30 17:52:36 by jvisser       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -O3
 HEADER = libft.h ft_printf/ft_printf.h
 C_FILES =	ft_memalloc.c\
 			ft_memdel.c\

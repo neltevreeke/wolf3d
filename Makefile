@@ -6,7 +6,7 @@
 #    By: jvisser <jvisser@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/02/22 13:27:36 by nvreeke        #+#    #+#                 #
-#    Updated: 2019/04/16 13:27:36 by jvisser       ########   odam.nl          #
+#    Updated: 2019/04/30 17:52:28 by jvisser       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SRCS =	src/init.c \
 HEADER = src/wolf3d.h
 OBJ = $(SRCS:%.c=%.o)
 FLAGS = -L minilibx_macos/ -lmlx -framework OpenGL -framework AppKit -o $(BINARY)
-ERRFLAGS = -Wall -Wextra -Werror
+ERRFLAGS = -Wall -Wextra -Werror -O3
 GCC = gcc
 LIBS = ./libft/libft.a
 

@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:13:17 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/29 17:11:52 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/04/30 17:37:09 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,9 +141,10 @@ typedef struct	s_sprites
 	int			*bits_per_pixel;
 	int			*size_line;
 	int			*endian;
-	double		x;
-	double		y;
+	double		*x;
+	double		*y;
 	int			sprite;
+	double		Zbuffer[WIDTH];
 }				t_sprites;
 
 /*
@@ -235,6 +236,8 @@ typedef struct	s_mlx
 	t_player	*player;
 }				t_mlx;
 
+
+void	sprites_to_img(t_mlx *mlx);
 /*
 ***********************************************************	Prototypes
 */
