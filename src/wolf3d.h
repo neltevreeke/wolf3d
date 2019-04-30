@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:13:17 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/30 17:37:09 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/04/30 18:51:35 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@
 */
 
 # define AMOUNT_SPRITES 24
-# define AMOUNT_TEXTURES 39
+# define AMOUNT_TEXTURES 41
 
 /*
 ***********************************************************	Structs

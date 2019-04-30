@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:35:19 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/30 15:57:01 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/04/30 18:28:56 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,7 @@ t_player	*init_player(void)
 	player->planex = -0.5;
 	player->planey = 0.5;
 	player->ms =  0.13;
-	player->ammo = 6;
+	player->ammo = 600;
 	player->hp = 100;
 	return (player);
 }
