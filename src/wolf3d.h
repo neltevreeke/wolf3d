@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:13:17 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/30 18:51:35 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/05/20 19:58:43 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 # define MLX_PTR mlx->init
 # define WIN_PTR mlx->win
 # define IMG_PTR mlx->img
+# define MENU_PTR mlx->menu
 # define IMG_ADD mlx->data_addr
 # define MINIMAP_PTR mlx->minimap
 # define MINIMAP_ADD mlx->mm_data_addr
@@ -82,10 +83,19 @@
 
 # define AMOUNT_SPRITES 24
 # define AMOUNT_TEXTURES 41
+# define AMMO_SPRITE -18
+# define FULLHEAL_SPRITE -17
+# define HEAL_SPRITE -16
 
 /*
 ***********************************************************	Structs
 */
+
+typedef struct	s_coord
+{
+	int			x;
+	int			y;
+}				t_coord;
 
 typedef enum	e_bool
 {
@@ -110,9 +120,9 @@ typedef struct	s_screen
 {
 	t_bool		main_game;
 	t_bool		menu;
-	void**		gun_img;
+	void		**gun_img;
 	int			gunstate;
-	void*		save_img;
+	void		*save_img;
 	double		save_time;
 }				t_screen;
 
@@ -144,7 +154,7 @@ typedef struct	s_sprites
 	double		*x;
 	double		*y;
 	int			sprite;
-	double		Zbuffer[WIDTH];
+	double		zbuffer[WIDTH];
 }				t_sprites;
 
 /*
@@ -173,6 +183,9 @@ typedef struct	s_casting
 	int			step_x;
 	int			step_y;
 	int			lineheight;
+	int			texture_x;
+	double		topbot_wall_x;
+	double		topbot_wall_y;
 	double		camera_x;
 	double		ray_dir_x;
 	double		ray_dir_y;
@@ -181,6 +194,7 @@ typedef struct	s_casting
 	double		delta_dist_x;
 	double		delta_dist_y;
 	double		per_wall_dist;
+	double		wall_x;
 }				t_casting;
 
 /*
@@ -189,12 +203,12 @@ typedef struct	s_casting
 
 typedef struct	s_player
 {
-	double		posx; // Starting x of player
-	double		posy; // Starting y of player
-	double		dirx; // Viewing direction x
-	double		diry; // Viewing direction y
-	double		planex; // Viewing width x
-	double		planey; // Viewing width y
+	double		posx;
+	double		posy;
+	double		dirx;
+	double		diry;
+	double		planex;
+	double		planey;
 	double		ms;
 	int			ammo;
 	int			hp;
@@ -210,37 +224,40 @@ typedef struct	s_mlx
 	void		*init;
 	void		*win;
 	void		*img;
+	void		*menu;
 	void		*ui;
 	void		*minimap;
 	char		*data_addr;
 	char		*mm_data_addr;
 	char		*ui_data_addr;
-	
 	int			bits_per_pixel;
 	int			size_line;
 	int			endian;
-
 	int			mm_bits_per_pixel;
 	int			mm_size_line;
 	int			mm_endian;
-
 	int			ui_bits_per_pixel;
 	int			ui_size_line;
 	int			ui_endian;
 	int			max_x;
 	int			cur_x;
-
 	t_map		*map;
 	t_keys		*keys;
 	t_screen	*screen;
 	t_player	*player;
 }				t_mlx;
 
-
-void	sprites_to_img(t_mlx *mlx);
 /*
 ***********************************************************	Prototypes
 */
+
+/*
+**	Menu functions
+*/
+
+int				exit_x(void *nul);
+void			load_game(t_mlx *mlx);
+void			save_game(t_mlx *mlx);
 
 void			pixel_to_img(t_mlx *mlx, int px, int py, int color);
 void			sort_sprites(int *spriteorder, int *spritedistance, int amount);
@@ -257,17 +274,18 @@ void			create_ui(t_mlx *mlx, char *str);
 */
 
 void			ui_handlers(t_mlx *mlx);
-int				exit_x(void *nul);
 void			check_player_move(t_mlx *mlx);
+void			check_player_interaction(t_mlx *mlx);
 int				deal_key_press(int key, t_mlx *mlx);
 int				deal_key_release(int key, t_mlx *mlx);
 int				deal_mouse(int mousebutton, int x, int y, t_mlx *mlx);
 void			rotate(t_mlx *mlx);
 
 /*
-**	Event_handler functions
+**	Map functions
 */
 
+int				open_file(char *filename, int mode);
 void			fill_map(t_map *map, char *filename);
 void			malloc_map(t_map *map, char *filename);
 
@@ -279,7 +297,7 @@ double			get_cur_time(void);
 char			*get_fps(char *str);
 
 /*
-**	Fps meter functions
+**	Error functions
 */
 
 void			no_param(void);
@@ -287,9 +305,10 @@ void			exit_failure_errno(void);
 void			create_image(t_mlx *mlx);
 
 /*
-**	print map functions
+**	Print map functions
 */
 
 void			print_walls(t_mlx *mlx, t_casting casting);
+void			sprites_to_img(t_mlx *mlx);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: jvisser <jvisser@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/02/22 13:27:36 by nvreeke        #+#    #+#                 #
-#    Updated: 2019/04/30 18:27:35 by jvisser       ########   odam.nl          #
+#    Updated: 2019/05/20 19:57:50 by nvreeke       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,10 @@ SRCS =	src/init.c \
 		src/event_handlers.c \
 		src/input.c \
 		src/error.c \
-		src/raycast.c
+		src/raycast.c \
+		src/load_game.c \
+		src/save_game.c \
+		src/move.c
 HEADER = src/wolf3d.h
 OBJ = $(SRCS:%.c=%.o)
 FLAGS = -L minilibx_macos/ -lmlx -framework OpenGL -framework AppKit -o $(BINARY)

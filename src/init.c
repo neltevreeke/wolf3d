@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:35:19 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/30 18:28:56 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/05/20 19:57:33 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,34 +248,30 @@ t_screen	*init_screen(t_mlx *mlx)
 	return (screen);
 }
 
+
+/*
+**	Initializes menu
+*/
+
 /*
 **	Initializes program
 */
 
 t_mlx	*init_program(char *filename)
 {
+	int	x;
+	int	y;
 	t_mlx *mlx;
 
+	x = 0;
+	y = 0;
 	mlx = init_mlx();
 	mlx->map = init_map(filename, mlx);
 	mlx->keys = init_keys();
 	mlx->screen = init_screen(mlx);
 	mlx->player = init_player();
+	MENU_PTR = mlx_xpm_file_to_image(MLX_PTR, "textures/menu3.xpm", &x, &y);
 	return (mlx);
-}
-
-/*
-**	Creates the menu
-*/
-
-void	create_menu(t_mlx *mlx)
-{
-	int	x;
-	int	y;
-
-	x = 0;
-	y = 0;
-	IMG_PTR = mlx_xpm_file_to_image(MLX_PTR, "textures/menu3.xpm", &x, &y);
 }
 
 /*
@@ -392,24 +388,23 @@ int		loop_program(t_mlx *mlx)
 	fps_str = NULL;
 	fps_str = get_fps(fps_str);
 	check_player_move(mlx);
+	check_player_interaction(mlx);
 	ft_bzero(IMG_ADD, HEIGHT * WIDTH * (mlx->bits_per_pixel / 8));
 	if (mlx->screen->main_game == true)
 	{
 		create_image(mlx);
 		create_minimap(mlx);
+		mlx_put_image_to_window(MLX_PTR, WIN_PTR, IMG_PTR, 0, 0);
 	}
 	else if (mlx->screen->menu == true)
-		create_menu(mlx);
-	mlx_put_image_to_window(MLX_PTR, WIN_PTR, IMG_PTR, 0, 0);
+		mlx_put_image_to_window(MLX_PTR, WIN_PTR, MENU_PTR, 0, 0);
 	mlx_put_image_to_window(MLX_PTR, WIN_PTR, MINIMAP_PTR, 1000, 0);
 	mlx_put_image_to_window(MLX_PTR, WIN_PTR, UI_PTR, 1000, 200);
 	if (mlx->screen->save_time > get_cur_time() - 2000)
 		mlx_put_image_to_window(MLX_PTR, WIN_PTR, mlx->screen->save_img, 734, 505);
 	create_ui(mlx, fps_str);
 	if (mlx->screen->main_game == true)
-	{
 		put_gun_to_window(mlx);
-	}
 	free(fps_str);
 	return (0);
 }

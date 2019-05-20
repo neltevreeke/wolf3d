@@ -6,45 +6,191 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 18:35:01 by jvisser        #+#    #+#                */
-/*   Updated: 2019/04/30 17:44:21 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/05/20 19:56:33 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
 #include "wolf3d.h"
 
-void	pixel_to_img(t_mlx *mlx, int px, int py, int color)
+void			pixel_to_img(t_mlx *mlx, int px, int py, int color)
 {
 	color = mlx_get_color_value(MLX_PTR, color);
 	ft_memcpy(IMG_ADD + mlx->size_line * py + px * mlx->bits_per_pixel / 8,
 				&color, sizeof(int));
 }
 
-void	print_roof(t_mlx *mlx, t_casting casting)
+static void		print_roof(t_mlx *mlx, t_casting casting)
 {
-	int	start;
+	int			start;
 
 	start = 0;
 	while (start < (HEIGHT / 2 - casting.lineheight / 2))
-	{	
+	{
 		pixel_to_img(mlx, mlx->cur_x, start, 0x383838);
 		start++;
 	}
 }
 
-void	print_floor(t_mlx *mlx, t_casting casting)
+static void		print_floor(t_mlx *mlx, t_casting casting)
 {
 	int	start;
 
 	start = HEIGHT / 2 + casting.lineheight / 2;
 	while (start < HEIGHT)
-	{	
+	{
 		pixel_to_img(mlx, mlx->cur_x, start, 0x707070);
 		start++;
 	}
 }
 
-void    *raycasting(void *data)
+static void		init_raycasting(t_mlx *mlx, t_casting *casting)
+{
+	casting->camera_x = 2 * mlx->cur_x / (double)WIDTH - 1;
+	casting->ray_dir_x = mlx->player->dirx + mlx->player->planex * casting->camera_x;
+	casting->ray_dir_y = mlx->player->diry + mlx->player->planey * casting->camera_x;
+	casting->map_x = (int)mlx->player->posx;
+	casting->map_y = (int)mlx->player->posy;
+	casting->delta_dist_x = fabs(1 / casting->ray_dir_x);
+	casting->delta_dist_y = fabs(1 / casting->ray_dir_y);
+	casting->hit = 0;
+}
+
+static void		determine_step_side(t_mlx *mlx, t_casting *casting)
+{
+	if (casting->ray_dir_x < 0)
+	{
+		casting->step_x = -1;
+		casting->side_dist_x = (mlx->player->posx - casting->map_x) * casting->delta_dist_x;
+	}
+	else
+	{
+		casting->step_x = 1;
+		casting->side_dist_x = (casting->map_x + 1 - mlx->player->posx) * casting->delta_dist_x;
+	}
+	if (casting->ray_dir_y < 0)
+	{
+		casting->step_y = -1;
+		casting->side_dist_y = (mlx->player->posy - casting->map_y) * casting->delta_dist_y;
+	}
+	else
+	{
+		casting->step_y = 1;
+		casting->side_dist_y = (casting->map_y + 1 - mlx->player->posy) * casting->delta_dist_y;
+	}
+}
+
+static void		determine_side_hit(t_mlx *mlx, t_casting *casting)
+{
+	while (casting->hit == 0)
+	{
+		if (casting->side_dist_x < casting->side_dist_y)
+		{
+			casting->side_dist_x += casting->delta_dist_x;
+			casting->map_x += casting->step_x;
+			if (casting->step_x == 1)
+				casting->side = 0;
+			else
+				casting->side = 2;
+		}
+		else
+		{
+			casting->side_dist_y += casting->delta_dist_y;
+			casting->map_y += casting->step_y;
+			if (casting->step_y == 1)
+				casting->side = 1;
+			else
+				casting->side = 3;
+		}
+		if (mlx->map->level[casting->map_y][casting->map_x] > 0)
+			casting->hit = 1;
+	}
+}
+
+static void		determine_distance(t_mlx *mlx, t_casting *casting)
+{
+	if (casting->side % 2 == 0)
+		casting->per_wall_dist = (casting->map_x - mlx->player->posx + (1 - casting->step_x) / 2) / casting->ray_dir_x;
+	else
+		casting->per_wall_dist = (casting->map_y - mlx->player->posy + (1 - casting->step_y) / 2) / casting->ray_dir_y;
+}
+
+static void		determine_wall_x(t_mlx *mlx, t_casting *casting)
+{
+	if (casting->side % 2 == 0)
+		casting->wall_x = mlx->player->posy + casting->per_wall_dist * casting->ray_dir_y;
+	else
+		casting->wall_x = mlx->player->posx + casting->per_wall_dist * casting->ray_dir_x;
+	casting->wall_x -= floor((casting->wall_x));
+}
+
+static void		determine_texture_x(t_casting *casting)
+{
+	casting->texture_x = (int)(casting->wall_x * (double)128);
+	if(casting->side % 2 == 0 && casting->ray_dir_x > 0)
+		casting->texture_x = 128 - casting->texture_x - 1;
+	if(casting->side % 2 == 1 && casting->ray_dir_y < 0)
+		casting->texture_x = 128 - casting->texture_x - 1;
+	casting->texture_x = ft_abs(casting->texture_x);
+}
+
+static void		determine_begin_end(t_casting casting, int *begin, int *end)
+{
+	*begin = (HEIGHT / 2 - casting.lineheight / 2);
+	if (*begin < 0)
+		*begin = 0;
+	*end = (HEIGHT / 2 - casting.lineheight / 2) + casting.lineheight;
+	if (*end > HEIGHT)
+		*end = HEIGHT;
+}
+
+static void		print_wall(t_mlx *mlx, t_casting casting)
+{
+	int	end;
+	int	begin;
+	int	wall_y;
+	int	texture_y;
+	int	wall_number;
+
+	determine_begin_end(casting, &begin, &end);
+	wall_number = mlx->map->level[casting.map_y][casting.map_x];
+	while (begin < end)
+	{
+		if (begin < HEIGHT && begin >= 0)
+		{
+			wall_y = begin - HEIGHT * 0.5 + casting.lineheight * 0.5;
+			texture_y = abs(((wall_y * 128) / casting.lineheight));
+			ft_memcpy(IMG_ADD + mlx->size_line * begin + mlx->cur_x * mlx->bits_per_pixel / 8,
+					&mlx->map->textures->texture_data[(wall_number - 1 + casting.side) % AMOUNT_TEXTURES]
+					[texture_y % 128 * mlx->map->textures->size_line[wall_number - 1 + casting.side]
+					+ casting.texture_x % 128 * (mlx->map->textures->bits_per_pixel[wall_number - 1 + casting.side] / 8)],
+					sizeof(int));
+		}
+		begin++;
+	}
+}
+
+static void		determine_topbot(t_casting *casting)
+{
+	if(casting->side % 2 == 0)
+	{
+		casting->topbot_wall_y = casting->map_y + casting->wall_x;
+		if (casting->ray_dir_x > 0)
+			casting->topbot_wall_x = casting->map_x;
+		else if (casting->ray_dir_x < 0)
+			casting->topbot_wall_x = casting->map_x + 1.0;
+	}
+	else if(casting->side % 2 == 1)
+	{
+		casting->topbot_wall_x = casting->map_x + casting->wall_x;
+		if (casting->ray_dir_y > 0)
+			casting->topbot_wall_y = casting->map_y;
+		else if (casting->ray_dir_y < 0)
+			casting->topbot_wall_y = casting->map_y + 1.0;
+	}
+}
+
+void			*raycasting(void *data)
 {
 	t_mlx		*mlx;
 	t_casting	casting;
@@ -52,165 +198,40 @@ void    *raycasting(void *data)
 	mlx = (t_mlx*)data;
 	while (mlx->cur_x < mlx->max_x)
 	{
-		casting.camera_x = 2 * mlx->cur_x / (double)WIDTH - 1;
-		casting.ray_dir_x = mlx->player->dirx + mlx->player->planex * casting.camera_x;
-		casting.ray_dir_y = mlx->player->diry + mlx->player->planey * casting.camera_x;
+		init_raycasting(mlx, &casting);
+		determine_step_side(mlx, &casting);
+		determine_side_hit(mlx, &casting);
+		determine_distance(mlx, &casting);
 
-		casting.map_x = (int)mlx->player->posx;
-		casting.map_y = (int)mlx->player->posy;
-
-		casting.delta_dist_x = fabs(1 / casting.ray_dir_x);
-		casting.delta_dist_y = fabs(1 / casting.ray_dir_y);
-
-		casting.hit = 0;
-		if (casting.ray_dir_x < 0)
-		{
-			casting.step_x = -1;
-			casting.side_dist_x = (mlx->player->posx - casting.map_x) * casting.delta_dist_x;
-		}
-		else
-		{
-			casting.step_x = 1;
-			casting.side_dist_x = (casting.map_x + 1 - mlx->player->posx) * casting.delta_dist_x;
-		}
-		if (casting.ray_dir_y < 0)
-		{
-			casting.step_y = -1;
-			casting.side_dist_y = (mlx->player->posy - casting.map_y) * casting.delta_dist_y;
-		}
-		else
-		{
-			casting.step_y = 1;
-			casting.side_dist_y = (casting.map_y + 1 - mlx->player->posy) * casting.delta_dist_y;
-		}
-	
-		while (casting.hit == 0)
-		{
-			if (casting.side_dist_x < casting.side_dist_y)
-			{
-				casting.side_dist_x += casting.delta_dist_x;
-				casting.map_x += casting.step_x;
-				if (casting.step_x == 1)
-					casting.side = 0;
-				else
-					casting.side = 2;
-			}
-			else
-			{
-				casting.side_dist_y += casting.delta_dist_y;
-				casting.map_y += casting.step_y;
-				if (casting.step_y == 1)
-					casting.side = 1;
-				else
-					casting.side = 3;
-			}
-			if (mlx->map->level[casting.map_y][casting.map_x] > 0)
-				casting.hit = 1;
-		}
-		if (casting.side % 2 == 0)
-		{
-			casting.per_wall_dist = (casting.map_x - mlx->player->posx + (1 - casting.step_x) / 2) / casting.ray_dir_x;
-		}
-		else
-		{
-			casting.per_wall_dist = (casting.map_y - mlx->player->posy + (1 - casting.step_y) / 2) / casting.ray_dir_y;
-		}
-		mlx->map->sprites->Zbuffer[mlx->cur_x] = casting.per_wall_dist;
+		mlx->map->sprites->zbuffer[mlx->cur_x] = casting.per_wall_dist;
 		casting.lineheight = (int)(HEIGHT / casting.per_wall_dist);
 
-		double wallX;
-     	if (casting.side % 2 == 0)
-	  		wallX = mlx->player->posy + casting.per_wall_dist * casting.ray_dir_y;
-		else
-	  		wallX = mlx->player->posx + casting.per_wall_dist * casting.ray_dir_x;
-      	wallX -= floor((wallX));
-
-		int texX = (int)(wallX * (double)128);
-		if(casting.side % 2 == 0 && casting.ray_dir_x > 0)
-	  		texX = 128 - texX - 1;
-		if(casting.side % 2 == 1 && casting.ray_dir_y < 0)
-	  		texX = 128 - texX - 1;
-		texX = abs(texX);
-
-		// sky texture
-		// print_roof(mlx, casting);
-
-		int	index = mlx->map->level[casting.map_y][casting.map_x];
-		int y = (HEIGHT / 2 - casting.lineheight / 2);
-		if (y < 0)
-			y = 0;
-		int end = (HEIGHT / 2 - casting.lineheight / 2) + casting.lineheight;
-		if (end > HEIGHT)
-			end = HEIGHT;
-
-		// walls
-			while (y < end)
-			{
-				if (y < HEIGHT && y >= 0)
-				{
-					int d = y - HEIGHT * 0.5 + casting.lineheight * 0.5;
-					int texY = abs(((d * 128) / casting.lineheight));
-
-					ft_memcpy(IMG_ADD + mlx->size_line * y + mlx->cur_x * mlx->bits_per_pixel / 8,
-							&mlx->map->textures->texture_data[index - 1 + casting.side]
-							[ texY % 128 * mlx->map->textures->size_line[index - 1 + casting.side]
-							+ texX % 128 * (mlx->map->textures->bits_per_pixel[index - 1 + casting.side] / 8)],
-							sizeof(int));
-				}
-				y++;
-			}
-
-		// Floor texture
+		determine_wall_x(mlx, &casting);
+		determine_texture_x(&casting);
+		print_wall(mlx, casting);
+		determine_topbot(&casting);
+		print_roof(mlx, casting);
 		print_floor(mlx, casting);
-
-
-      //FLOOR CASTING
-      double floorXWall, floorYWall; //x, y position of the floor texel at the bottom of the wall
-
-      //4 different wall directions possible
-		if(casting.side % 2 == 0 && casting.ray_dir_x > 0)
-		{
-			floorXWall = casting.map_x;
-			floorYWall = casting.map_y + wallX;
-		}
-		else if(casting.side % 2 == 0 && casting.ray_dir_x < 0)
-		{
-			floorXWall = casting.map_x + 1.0;
-			floorYWall = casting.map_y + wallX;
-		}
-		else if(casting.side % 2 == 1 && casting.ray_dir_y > 0)
-		{
-			floorXWall = casting.map_x + wallX;
-			floorYWall = casting.map_y;
-		}
-		else
-		{
-			floorXWall = casting.map_x + wallX;
-			floorYWall = casting.map_y + 1.0;
-		}
 
 		double distWall, distPlayer, currentDist;
 
 		distWall = casting.per_wall_dist;
 		distPlayer = 0.0;
-	  end = casting.lineheight / 2 + HEIGHT / 2;
+	 	int end = casting.lineheight / 2 + HEIGHT / 2;
 		if (end < 0) end = HEIGHT;
 		for(int y = end + 1; y < HEIGHT; y++)
 		{
-			currentDist = HEIGHT / (2.0 * y - HEIGHT); //you could make a small lookup table for this instead
+			currentDist = HEIGHT / (2.0 * y - HEIGHT);
 
 			double weight = (currentDist - distPlayer) / (distWall - distPlayer);
 
-			double currentFloorX = weight * floorXWall + (1.0 - weight) * mlx->player->posx;
-			double currentFloorY = weight * floorYWall + (1.0 - weight) * mlx->player->posy;
-
-			int floorTexX, floorTexY;
-			floorTexX = (int)(currentFloorX * 128) % 128;
-			floorTexY = (int)(currentFloorY * 128) % 128;
+			double currentFloorX = weight * casting.topbot_wall_x + (1.0 - weight) * mlx->player->posx;
+			double currentFloorY = weight * casting.topbot_wall_y + (1.0 - weight) * mlx->player->posy;
+			
 		ft_memcpy(IMG_ADD + mlx->size_line * (HEIGHT - y) + mlx->cur_x * mlx->bits_per_pixel / 8,
 							&mlx->map->textures->texture_data[38]
-							[ floorTexY % 128 * mlx->map->textures->size_line[38]
-							+ floorTexX % 128 * (mlx->map->textures->bits_per_pixel[38] / 8)],
+							[((int)(currentFloorY * 128) % 128) * mlx->map->textures->size_line[38]
+							+ ((int)(currentFloorX * 128) % 128) * (mlx->map->textures->bits_per_pixel[38] / 8)],
 							sizeof(int));
       }
 
@@ -317,8 +338,8 @@ void	sprites_to_img(t_mlx *mlx)
         	//1) it's in front of camera plane so you don't see things behind you
         	//2) it's on the screen (left)
         	//3) it's on the screen (right)
-        	//4) ZBuffer, with perpendicular distance
-        		if(transformY > 0 && stripe > 0 && stripe < WIDTH && transformY < mlx->map->sprites->Zbuffer[stripe])
+        	//4) zbuffer, with perpendicular distance
+        		if(transformY > 0 && stripe > 0 && stripe < WIDTH && transformY < mlx->map->sprites->zbuffer[stripe])
         			for(int y = drawStartY; y < drawEndY; y++) //for every pixel of the current stripe
         			{
         			  	int d = (y) * 256 - HEIGHT * 128 + spriteHeight * 128; //256 and 128 factors to avoid floats
