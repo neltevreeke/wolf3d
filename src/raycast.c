@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 18:35:01 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/21 17:05:40 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/21 18:12:04 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,11 +288,67 @@ void	init_sprite_order_distance(t_mlx *mlx, t_spritecast *spritecast)
 	spritecast->amount = i;
 }
 
+static void	print_sprite(t_mlx *mlx, t_spritecast spritecast)
+{
+	while (spritecast.draw_start_y < spritecast.draw_end_y)
+	{
+		int d = (spritecast.draw_start_y) * 256 - HEIGHT * 128 + spritecast.sprite_height * 128;
+		spritecast.texture_y = ((d * 128) / spritecast.sprite_height) / 256;
+		int color = 0;
+		memcpy( &color, &mlx->map->sprites->sprite_data[ft_abs(spritecast.sprite_texture) - 1]
+		[ spritecast.texture_y % 128 * mlx->map->sprites->size_line[ft_abs(spritecast.sprite_texture) - 1]
+		+ spritecast.texture_x % 128 * (mlx->map->sprites->bits_per_pixel[ft_abs(spritecast.sprite_texture) - 1] / 8)], sizeof(int));
+		if ((color & 0x00FFFFFF) != 0)
+			memcpy(IMG_ADD + mlx->size_line * spritecast.draw_start_y + spritecast.draw_start_x * mlx->bits_per_pixel / 8,
+					&color, sizeof(int));
+		spritecast.draw_start_y++;
+	}
+}
+
+static void	determine_draw_start_end(t_spritecast *spritecast)
+{
+	spritecast->draw_start_y = -spritecast->sprite_height / 2 + HEIGHT / 2;
+	if(spritecast->draw_start_y < 0) spritecast->draw_start_y = 0;
+	spritecast->draw_end_y = spritecast->sprite_height / 2 + HEIGHT / 2;
+	if(spritecast->draw_end_y >= HEIGHT)
+		spritecast->draw_end_y = HEIGHT - 1;
+	spritecast->draw_start_x = -spritecast->sprite_width / 2 + spritecast->sprite_screen_x;
+	if(spritecast->draw_start_x < 0)
+		spritecast->draw_start_x = 0;
+	spritecast->draw_end_x = spritecast->sprite_width / 2 + spritecast->sprite_screen_x;
+	if(spritecast->draw_end_x >= WIDTH)
+		spritecast->draw_end_x = WIDTH - 1;
+
+}
+
+static void	determine_sprite_dimensions(t_mlx *mlx, t_spritecast *spritecast, int i)
+{
+	spritecast->sprite_x = mlx->map->sprites->x[i] + 0.5 - mlx->player->posx;
+	spritecast->sprite_y = mlx->map->sprites->y[i] + 0.5 - mlx->player->posy;
+	spritecast->inverse = 1.0 / (mlx->player->planex * mlx->player->diry - mlx->player->dirx * mlx->player->planey);
+	spritecast->transform_x = spritecast->inverse * (mlx->player->diry * spritecast->sprite_x - mlx->player->dirx * spritecast->sprite_y);
+	spritecast->transform_y = spritecast->inverse * (-mlx->player->planey * spritecast->sprite_x + mlx->player->planex * spritecast->sprite_y);
+	spritecast->sprite_width = abs( (int)(HEIGHT / (spritecast->transform_y)));	
+	spritecast->sprite_screen_x = (int)((WIDTH / 2) * (1 + spritecast->transform_x / spritecast->transform_y));
+	spritecast->sprite_height = abs((int)(HEIGHT / (spritecast->transform_y)));
+}
+
+static void	draw_sprite(t_mlx *mlx, t_spritecast *spritecast)
+{
+	while (spritecast->draw_start_x < spritecast->draw_end_x)
+	{
+		spritecast->texture_x = (int)(256 * (spritecast->draw_start_x - (-spritecast->sprite_width / 2
+								+ spritecast->sprite_screen_x)) * 128 / spritecast->sprite_width) / 256;
+		if (spritecast->transform_y > 0 && spritecast->draw_start_x > 0 && spritecast->draw_start_x < WIDTH
+		&& spritecast->transform_y < mlx->map->sprites->zbuffer[spritecast->draw_start_x])
+			print_sprite(mlx, *spritecast);
+		spritecast->draw_start_x++;
+	}
+}
+
 void	sprites_to_img(t_mlx *mlx)
 {
-		// Sprite casting
 	int	i;
-
 	t_spritecast	spritecast;
 
 	init_sprite_order_distance(mlx, &spritecast);
@@ -304,46 +360,10 @@ void	sprites_to_img(t_mlx *mlx)
 		i = 0;
 		while (spritecast.sprite_order[i] != spritecast.frunk && i < spritecast.amount)
 			i++;
-    	spritecast.sprite_x = mlx->map->sprites->x[i] + 0.5 - mlx->player->posx;
-    	spritecast.sprite_y = mlx->map->sprites->y[i] + 0.5 - mlx->player->posy;
-		spritecast.inverse = 1.0 / (mlx->player->planex * mlx->player->diry - mlx->player->dirx * mlx->player->planey);
-		spritecast.transform_x = spritecast.inverse * (mlx->player->diry * spritecast.sprite_x - mlx->player->dirx * spritecast.sprite_y);
-		spritecast.transform_y = spritecast.inverse * (-mlx->player->planey * spritecast.sprite_x + mlx->player->planex * spritecast.sprite_y);
-
-		int spriteScreenX = (int)((WIDTH / 2) * (1 + spritecast.transform_x / spritecast.transform_y));
-		int spriteHeight = abs((int)(HEIGHT / (spritecast.transform_y)));
-		int drawStartY = -spriteHeight / 2 + HEIGHT / 2;
-		if(drawStartY < 0) drawStartY = 0;
-		int drawEndY = spriteHeight / 2 + HEIGHT / 2;
-		if(drawEndY >= HEIGHT)
-			drawEndY = HEIGHT - 1;
-		int spriteWidth = abs( (int)(HEIGHT / (spritecast.transform_y)));
-		int drawStartX = -spriteWidth / 2 + spriteScreenX;
-		if(drawStartX < 0)
-			drawStartX = 0;
-		int drawEndX = spriteWidth / 2 + spriteScreenX;
-		if(drawEndX >= WIDTH)
-			drawEndX = WIDTH - 1;
-		int	sprite_texture = mlx->map->level[(int)mlx->map->sprites->y[i]][(int)mlx->map->sprites->x[i]];
-		for(int stripe = drawStartX; stripe < drawEndX; stripe++)
-		{
-			int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * 128 / spriteWidth) / 256;
-			if(spritecast.transform_y > 0 && stripe > 0 && stripe < WIDTH && spritecast.transform_y < mlx->map->sprites->zbuffer[stripe])
-			{
-				for(int y = drawStartY; y < drawEndY; y++)
-				{
-					int d = (y) * 256 - HEIGHT * 128 + spriteHeight * 128;
-					int texY = ((d * 128) / spriteHeight) / 256;
-					int color = 0;
-					memcpy( &color, &mlx->map->sprites->sprite_data[ft_abs(sprite_texture) - 1]
-					[ texY % 128 * mlx->map->sprites->size_line[ft_abs(sprite_texture) - 1]
-					+ texX % 128 * (mlx->map->sprites->bits_per_pixel[ft_abs(sprite_texture) - 1] / 8)], sizeof(int));
-					if((color & 0x00FFFFFF) != 0)
-						memcpy(IMG_ADD + mlx->size_line * y + stripe * mlx->bits_per_pixel / 8,
-								&color, sizeof(int));
-				}
-			}
-		}
+		determine_sprite_dimensions(mlx, &spritecast, i);
+		determine_draw_start_end(&spritecast);
+		spritecast.sprite_texture = mlx->map->level[(int)mlx->map->sprites->y[i]][(int)mlx->map->sprites->x[i]];
+		draw_sprite(mlx, &spritecast);
 		spritecast.frunk++;
 	}
 }
