@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:13:17 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/20 19:58:43 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/21 16:58:39 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@
 # define KEY_D 2
 # define KEY_S 1
 # define KEY_SPA 49
+# define KEY_P 35
 
 # define BTN_LEFT 1
 # define BTN_RIGHT 2
@@ -83,6 +84,7 @@
 
 # define AMOUNT_SPRITES 24
 # define AMOUNT_TEXTURES 41
+# define MAX_SPRITES 99
 # define AMMO_SPRITE -18
 # define FULLHEAL_SPRITE -17
 # define HEAL_SPRITE -16
@@ -120,6 +122,7 @@ typedef struct	s_screen
 {
 	t_bool		main_game;
 	t_bool		menu;
+	t_bool		wall_side_textures;
 	void		**gun_img;
 	int			gunstate;
 	void		*save_img;
@@ -198,6 +201,34 @@ typedef struct	s_casting
 }				t_casting;
 
 /*
+**	Spritecasting struct
+*/
+
+typedef struct	s_spritecast
+{
+	int			sprite_order[MAX_SPRITES];
+	int			sprite_distance[MAX_SPRITES];
+	int			frunk;
+	int			amount;
+	int			sprite_screen_x;
+	int			sprite_height;
+	int			sprite_width;
+	int			draw_start_x;
+	int			draw_start_y;
+	int			draw_end_x;
+	int			draw_end_y;
+	int			sprite_texture;
+	int			stripe;
+	int			texture_x;
+	int			texture_y;
+	double		sprite_x;
+	double		sprite_y;
+	double		transform_x;
+	double		transform_y;
+	double		inverse;
+}				t_spritecast;
+
+/*
 **	player struct
 */
 
@@ -260,7 +291,6 @@ void			load_game(t_mlx *mlx);
 void			save_game(t_mlx *mlx);
 
 void			pixel_to_img(t_mlx *mlx, int px, int py, int color);
-void			sort_sprites(int *spriteorder, int *spritedistance, int amount);
 
 /*
 **	UI functions
@@ -310,5 +340,11 @@ void			create_image(t_mlx *mlx);
 
 void			print_walls(t_mlx *mlx, t_casting casting);
 void			sprites_to_img(t_mlx *mlx);
+
+/*
+**	Game state functions
+*/
+
+void			switch_game_state(t_mlx *mlx);
 
 #endif

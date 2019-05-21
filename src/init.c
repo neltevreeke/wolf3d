@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:35:19 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/20 19:57:33 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/21 13:25:10 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ t_sprites	*init_sprites(t_mlx *mlx)
 	sprites->endian = (int*)malloc(sizeof(int) * AMOUNT_SPRITES);
 	sprites->size_line = (int*)malloc(sizeof(int) * AMOUNT_SPRITES);
 	sprites->bits_per_pixel = (int*)malloc(sizeof(int) * AMOUNT_SPRITES);
-
 	sprites->x = (double*)malloc(sizeof(double) * AMOUNT_SPRITES);
 	sprites->y = (double*)malloc(sizeof(double) * AMOUNT_SPRITES);
 	while (i < AMOUNT_SPRITES)
@@ -129,7 +128,6 @@ t_textures	*init_textures(t_mlx *mlx)
 	textures->texture_data = init_textures_data(textures);
 	return (textures);
 }
-
 
 /*
 **	Initializes Map
@@ -229,6 +227,7 @@ t_screen	*init_screen(t_mlx *mlx)
 	screen = MEM(t_screen);
 	screen->main_game = true;
 	screen->menu = false;
+	screen->wall_side_textures = true;
 	screen->gunstate = 0;
 	i = 0;
 	width = 0;
@@ -247,11 +246,6 @@ t_screen	*init_screen(t_mlx *mlx)
 	}
 	return (screen);
 }
-
-
-/*
-**	Initializes menu
-*/
 
 /*
 **	Initializes program
@@ -329,9 +323,6 @@ void	color_block(t_mlx *mlx, int y, int x, int color)
 /*
 **	creates the minimap
 */
-
-	// 7d160f
-	// 500a08
 
 void	create_minimap(t_mlx *mlx)
 {

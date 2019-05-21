@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 18:35:01 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/20 19:56:33 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/21 17:05:40 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,29 @@ void			pixel_to_img(t_mlx *mlx, int px, int py, int color)
 
 static void		print_roof(t_mlx *mlx, t_casting casting)
 {
-	int			start;
-
-	start = 0;
-	while (start < (HEIGHT / 2 - casting.lineheight / 2))
+	int		end;
+	int		begin;
+	double	current_dist;
+	double	current_floor_x;
+	double	current_floor_y;
+	
+	end = casting.lineheight / 2 + HEIGHT / 2;
+	if (end < 0)
+		end = HEIGHT;
+	begin = end + 1;
+	while (begin < HEIGHT)
 	{
-		pixel_to_img(mlx, mlx->cur_x, start, 0x383838);
-		start++;
+		current_dist = HEIGHT / (2.0 * begin - HEIGHT);
+		current_floor_x = (current_dist) / (casting.per_wall_dist) * casting.topbot_wall_x
+						+ (1.0 - (current_dist) / (casting.per_wall_dist)) * mlx->player->posx;
+		current_floor_y = (current_dist) / (casting.per_wall_dist) * casting.topbot_wall_y
+						+ (1.0 - (current_dist) / (casting.per_wall_dist)) * mlx->player->posy;
+		ft_memcpy(IMG_ADD + mlx->size_line * (HEIGHT - begin) + mlx->cur_x * mlx->bits_per_pixel / 8,
+					&mlx->map->textures->texture_data[38]
+					[((int)(current_floor_y * 128) % 128) * mlx->map->textures->size_line[38]
+					+ ((int)(current_floor_x * 128) % 128) * (mlx->map->textures->bits_per_pixel[38] / 8)],
+					sizeof(int));
+		begin++;
 	}
 }
 
@@ -160,10 +176,12 @@ static void		print_wall(t_mlx *mlx, t_casting casting)
 		{
 			wall_y = begin - HEIGHT * 0.5 + casting.lineheight * 0.5;
 			texture_y = abs(((wall_y * 128) / casting.lineheight));
+			if (mlx->screen->wall_side_textures == false)
+				casting.side = 0;
 			ft_memcpy(IMG_ADD + mlx->size_line * begin + mlx->cur_x * mlx->bits_per_pixel / 8,
 					&mlx->map->textures->texture_data[(wall_number - 1 + casting.side) % AMOUNT_TEXTURES]
-					[texture_y % 128 * mlx->map->textures->size_line[wall_number - 1 + casting.side]
-					+ casting.texture_x % 128 * (mlx->map->textures->bits_per_pixel[wall_number - 1 + casting.side] / 8)],
+					[texture_y % 128 * mlx->map->textures->size_line[(wall_number - 1 + casting.side) % AMOUNT_TEXTURES]
+					+ casting.texture_x % 128 * (mlx->map->textures->bits_per_pixel[(wall_number - 1 + casting.side) % AMOUNT_TEXTURES] / 8)],
 					sizeof(int));
 		}
 		begin++;
@@ -212,54 +230,29 @@ void			*raycasting(void *data)
 		determine_topbot(&casting);
 		print_roof(mlx, casting);
 		print_floor(mlx, casting);
-
-		double distWall, distPlayer, currentDist;
-
-		distWall = casting.per_wall_dist;
-		distPlayer = 0.0;
-	 	int end = casting.lineheight / 2 + HEIGHT / 2;
-		if (end < 0) end = HEIGHT;
-		for(int y = end + 1; y < HEIGHT; y++)
-		{
-			currentDist = HEIGHT / (2.0 * y - HEIGHT);
-
-			double weight = (currentDist - distPlayer) / (distWall - distPlayer);
-
-			double currentFloorX = weight * casting.topbot_wall_x + (1.0 - weight) * mlx->player->posx;
-			double currentFloorY = weight * casting.topbot_wall_y + (1.0 - weight) * mlx->player->posy;
-			
-		ft_memcpy(IMG_ADD + mlx->size_line * (HEIGHT - y) + mlx->cur_x * mlx->bits_per_pixel / 8,
-							&mlx->map->textures->texture_data[38]
-							[((int)(currentFloorY * 128) % 128) * mlx->map->textures->size_line[38]
-							+ ((int)(currentFloorX * 128) % 128) * (mlx->map->textures->bits_per_pixel[38] / 8)],
-							sizeof(int));
-      }
-
 		mlx->cur_x++;
 	}
 	return (data);
 }
 
-//	Hij swapped het goed. maar hij print nog steeds niet goed uit.
-//	Optimizen mogelijk?
-void	sort_sprites(int *spriteorder, int *spritedistance, int amount)
+static void	sort_sprites(t_spritecast *spritecast)
 {
 	int i;
 	int temp;
 	int	temp2;
 
 	i = 0;
-	while (i < amount - 1)
+	while (i < spritecast->amount - 1)
 	{
-		if (spritedistance[i] < spritedistance[i + 1])
+		if (spritecast->sprite_distance[i] < spritecast->sprite_distance[i + 1])
 		{
-			temp = spritedistance[i];
-			spritedistance[i] = spritedistance[i + 1];
-			spritedistance[i + 1] = temp;
+			temp = spritecast->sprite_distance[i];
+			spritecast->sprite_distance[i] = spritecast->sprite_distance[i + 1];
+			spritecast->sprite_distance[i + 1] = temp;
 
-			temp2 = spriteorder[i];
-			spriteorder[i] = spriteorder[i + 1];
-			spriteorder[i + 1] = temp2;
+			temp2 = spritecast->sprite_order[i];
+			spritecast->sprite_order[i] = spritecast->sprite_order[i + 1];
+			spritecast->sprite_order[i + 1] = temp2;
 			i = 0;
 		}
 		else
@@ -267,15 +260,11 @@ void	sort_sprites(int *spriteorder, int *spritedistance, int amount)
 	}
 }
 
-void	sprites_to_img(t_mlx *mlx)
+void	init_sprite_order_distance(t_mlx *mlx, t_spritecast *spritecast)
 {
-		// Sprite casting
 	int	i;
-	int	y;
 	int	x;
-	int	spriteorder[AMOUNT_SPRITES];
-	int	spritedistance[AMOUNT_SPRITES];
-	int amount;
+	int	y;
 
 	i = 0;
 	y = 0;
@@ -286,77 +275,77 @@ void	sprites_to_img(t_mlx *mlx)
 		{
 			if (mlx->map->level[y][x] < 0)
 			{
-					mlx->map->sprites->x[i] = x;
-					mlx->map->sprites->y[i] = y;
-     			spriteorder[i] = i;
-     			spritedistance[i] = ((mlx->player->posx - mlx->map->sprites->x[i]) * (mlx->player->posx - mlx->map->sprites->x[i]) + (mlx->player->posy - mlx->map->sprites->y[i]) * (mlx->player->posy - mlx->map->sprites->y[i]));
-					i++;
+				mlx->map->sprites->x[i] = x;
+				mlx->map->sprites->y[i] = y;
+     			spritecast->sprite_order[i] = i;
+     			spritecast->sprite_distance[i] = ((mlx->player->posx - mlx->map->sprites->x[i]) * (mlx->player->posx - mlx->map->sprites->x[i]) + (mlx->player->posy - mlx->map->sprites->y[i]) * (mlx->player->posy - mlx->map->sprites->y[i]));
+				i++;
 			}
 			x++;
 		}
 		y++;
 	}
-	amount = i;
-	sort_sprites(spriteorder, spritedistance, amount);
+	spritecast->amount = i;
+}
 
-	int frunk = 0;
-		while (frunk < amount)
+void	sprites_to_img(t_mlx *mlx)
+{
+		// Sprite casting
+	int	i;
+
+	t_spritecast	spritecast;
+
+	init_sprite_order_distance(mlx, &spritecast);
+	sort_sprites(&spritecast);
+
+	spritecast.frunk = 0;
+	while (spritecast.frunk < spritecast.amount)
+	{
+		i = 0;
+		while (spritecast.sprite_order[i] != spritecast.frunk && i < spritecast.amount)
+			i++;
+    	spritecast.sprite_x = mlx->map->sprites->x[i] + 0.5 - mlx->player->posx;
+    	spritecast.sprite_y = mlx->map->sprites->y[i] + 0.5 - mlx->player->posy;
+		spritecast.inverse = 1.0 / (mlx->player->planex * mlx->player->diry - mlx->player->dirx * mlx->player->planey);
+		spritecast.transform_x = spritecast.inverse * (mlx->player->diry * spritecast.sprite_x - mlx->player->dirx * spritecast.sprite_y);
+		spritecast.transform_y = spritecast.inverse * (-mlx->player->planey * spritecast.sprite_x + mlx->player->planex * spritecast.sprite_y);
+
+		int spriteScreenX = (int)((WIDTH / 2) * (1 + spritecast.transform_x / spritecast.transform_y));
+		int spriteHeight = abs((int)(HEIGHT / (spritecast.transform_y)));
+		int drawStartY = -spriteHeight / 2 + HEIGHT / 2;
+		if(drawStartY < 0) drawStartY = 0;
+		int drawEndY = spriteHeight / 2 + HEIGHT / 2;
+		if(drawEndY >= HEIGHT)
+			drawEndY = HEIGHT - 1;
+		int spriteWidth = abs( (int)(HEIGHT / (spritecast.transform_y)));
+		int drawStartX = -spriteWidth / 2 + spriteScreenX;
+		if(drawStartX < 0)
+			drawStartX = 0;
+		int drawEndX = spriteWidth / 2 + spriteScreenX;
+		if(drawEndX >= WIDTH)
+			drawEndX = WIDTH - 1;
+		int	sprite_texture = mlx->map->level[(int)mlx->map->sprites->y[i]][(int)mlx->map->sprites->x[i]];
+		for(int stripe = drawStartX; stripe < drawEndX; stripe++)
 		{
-					i = 0;
-					while (spriteorder[i] != frunk && i < amount)
-						i++;
-					// We resetten x en y hier i.p.v. die op een bepaalde manier over te nemen van bovenstaande loop.
-					// ik heb het geprobeerd over te nemen maar dan vind ie de sprites niet meer en print ie ze niet..
-     			double spriteX = mlx->map->sprites->x[i] + 0.5 - mlx->player->posx;
-     			double spriteY = mlx->map->sprites->y[i] + 0.5 - mlx->player->posy;
-
-					double invDet = 1.0 / (mlx->player->planex * mlx->player->diry - mlx->player->dirx * mlx->player->planey);
-
-    			double transformX = invDet * (mlx->player->diry * spriteX - mlx->player->dirx * spriteY);
-    			double transformY = invDet * (-mlx->player->planey * spriteX + mlx->player->planex * spriteY); //this is actually the depth inside the screen, that what Z is in 3D
-
-     			 int spriteScreenX = (int)((WIDTH / 2) * (1 + transformX / transformY));
-     			 int spriteHeight = abs((int)(HEIGHT / (transformY))); //using "transformY" instead of the real distance prevents fisheye
-      //calculate lowest and highest pixel to fill in current stripe
-    			 int drawStartY = -spriteHeight / 2 + HEIGHT / 2;
-    			  if(drawStartY < 0) drawStartY = 0;
-     			 int drawEndY = spriteHeight / 2 + HEIGHT / 2;
-     			 if(drawEndY >= HEIGHT)
-							drawEndY = HEIGHT - 1;
-				int spriteWidth = abs( (int)(HEIGHT / (transformY)));
-     			int drawStartX = -spriteWidth / 2 + spriteScreenX;
-     			if(drawStartX < 0)
-					drawStartX = 0;
-     			int drawEndX = spriteWidth / 2 + spriteScreenX;
-     			if(drawEndX >= WIDTH)
-				 	drawEndX = WIDTH - 1;
-			int	sprite_texture = mlx->map->level[(int)mlx->map->sprites->y[i]][(int)mlx->map->sprites->x[i]];
-			for(int stripe = drawStartX; stripe < drawEndX; stripe++)
-   			{
- 		       	int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * 128 / spriteWidth) / 256;
-        	//the conditions in the if are:
-        	//1) it's in front of camera plane so you don't see things behind you
-        	//2) it's on the screen (left)
-        	//3) it's on the screen (right)
-        	//4) zbuffer, with perpendicular distance
-        		if(transformY > 0 && stripe > 0 && stripe < WIDTH && transformY < mlx->map->sprites->zbuffer[stripe])
-        			for(int y = drawStartY; y < drawEndY; y++) //for every pixel of the current stripe
-        			{
-        			  	int d = (y) * 256 - HEIGHT * 128 + spriteHeight * 128; //256 and 128 factors to avoid floats
-        			  	int texY = ((d * 128) / spriteHeight) / 256;
-								
-									int color = 0;
-									memcpy( &color, &mlx->map->sprites->sprite_data[ft_abs(sprite_texture) - 1]
-									[ texY % 128 * mlx->map->sprites->size_line[ft_abs(sprite_texture) - 1]
-									+ texX % 128 * (mlx->map->sprites->bits_per_pixel[ft_abs(sprite_texture) - 1] / 8)], sizeof(int));
-        			  	if((color & 0x00FFFFFF) != 0)
-						 			memcpy(IMG_ADD + mlx->size_line * y + stripe * mlx->bits_per_pixel / 8,
-														&color,
-														sizeof(int));
-        			}
-      			}
-						frunk++;
+			int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * 128 / spriteWidth) / 256;
+			if(spritecast.transform_y > 0 && stripe > 0 && stripe < WIDTH && spritecast.transform_y < mlx->map->sprites->zbuffer[stripe])
+			{
+				for(int y = drawStartY; y < drawEndY; y++)
+				{
+					int d = (y) * 256 - HEIGHT * 128 + spriteHeight * 128;
+					int texY = ((d * 128) / spriteHeight) / 256;
+					int color = 0;
+					memcpy( &color, &mlx->map->sprites->sprite_data[ft_abs(sprite_texture) - 1]
+					[ texY % 128 * mlx->map->sprites->size_line[ft_abs(sprite_texture) - 1]
+					+ texX % 128 * (mlx->map->sprites->bits_per_pixel[ft_abs(sprite_texture) - 1] / 8)], sizeof(int));
+					if((color & 0x00FFFFFF) != 0)
+						memcpy(IMG_ADD + mlx->size_line * y + stripe * mlx->bits_per_pixel / 8,
+								&color, sizeof(int));
+				}
+			}
 		}
+		spritecast.frunk++;
+	}
 }
 
 void	crosshair_to_img(t_mlx *mlx)

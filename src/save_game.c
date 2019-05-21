@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/20 17:54:34 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/20 19:56:44 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/21 13:17:15 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void		save_game(t_mlx *mlx)
 	FILE	*save;
 	FILE	*save_map;
 
+	mlx->screen->save_time = get_cur_time();
 	save = fopen("src/gamesaves/save1", "w");
 	save_map = fopen("src/gamesaves/save_map", "w");
 	fprintf(save, "%d\n", mlx->player->ammo);
