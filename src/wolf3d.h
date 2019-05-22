@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:13:17 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/21 17:15:33 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/22 17:55:45 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ typedef enum	e_bool
 	true = 1,
 	false = 0
 }				t_bool;
+
 /*
 **	keys struct
 */
@@ -117,6 +118,10 @@ typedef struct	s_keys
 	t_bool		key_space;
 	t_bool		key_ctrl;
 }				t_keys;
+
+/*
+**	Interface / menu struct
+*/
 
 typedef struct	s_screen
 {
@@ -140,7 +145,6 @@ typedef struct	s_textures
 	int			*bits_per_pixel;
 	int			*size_line;
 	int			*endian;
-	int			amount_textures;
 }				t_textures;
 
 /*
@@ -187,6 +191,7 @@ typedef struct	s_casting
 	int			step_y;
 	int			lineheight;
 	int			texture_x;
+	int			texture_y;
 	double		topbot_wall_x;
 	double		topbot_wall_y;
 	double		camera_x;
@@ -283,6 +288,13 @@ typedef struct	s_mlx
 */
 
 /*
+**	Loop functions
+*/
+
+void			event_hooks(t_mlx *mlx);
+int				loop_program(t_mlx *mlx);
+
+/*
 **	Menu functions
 */
 
@@ -290,26 +302,36 @@ int				exit_x(void *nul);
 void			load_game(t_mlx *mlx);
 void			save_game(t_mlx *mlx);
 
-void			pixel_to_img(t_mlx *mlx, int px, int py, int color);
-
 /*
 **	UI functions
 */
 
 void			put_gun_to_window(t_mlx *mlx);
 void			create_ui(t_mlx *mlx, char *str);
+void			crosshair_to_img(t_mlx *mlx);
 
 /*
-**	Event_handler functions
+**	Keyboard functions
 */
 
-void			ui_handlers(t_mlx *mlx);
-void			check_player_move(t_mlx *mlx);
-void			check_player_interaction(t_mlx *mlx);
+t_keys			*init_keys(void);
 int				deal_key_press(int key, t_mlx *mlx);
 int				deal_key_release(int key, t_mlx *mlx);
+
+/*
+**	Mouse functions
+*/
+
 int				deal_mouse(int mousebutton, int x, int y, t_mlx *mlx);
+
+/*
+**	Player functions
+*/
+
+t_player		*init_player(void);
 void			rotate(t_mlx *mlx);
+void			check_player_move(t_mlx *mlx);
+void			check_player_interaction(t_mlx *mlx);
 
 /*
 **	Map functions
@@ -318,6 +340,13 @@ void			rotate(t_mlx *mlx);
 int				open_file(char *filename, int mode);
 void			fill_map(t_map *map, char *filename);
 void			malloc_map(t_map *map, char *filename);
+t_map			*init_map(char *filename, t_mlx *mlx);
+
+/*
+**	Minimap functions
+*/
+
+void			create_minimap(t_mlx *mlx);
 
 /*
 **	Fps meter functions
@@ -335,16 +364,61 @@ void			exit_failure_errno(void);
 void			create_image(t_mlx *mlx);
 
 /*
-**	Print map functions
+**	Print functions
 */
 
 void			print_walls(t_mlx *mlx, t_casting casting);
 void			sprites_to_img(t_mlx *mlx);
+void			pixel_to_img(t_mlx *mlx, int px, int py, int color);
+
+/*
+**	Sound functions
+*/
+
+void			play_gunshot_sound(t_mlx *mlx);
+void			play_footstep_sound(t_mlx *mlx);
 
 /*
 **	Game state functions
 */
 
 void			switch_game_state(t_mlx *mlx);
+
+/*
+**	Texture functions
+*/
+
+t_textures		*init_textures(t_mlx *mlx);
+
+/*
+**	Raycasting functions
+*/
+
+void			print_roof(t_mlx *mlx, t_casting casting);
+void			print_floor(t_mlx *mlx, t_casting casting);
+void			print_wall(t_mlx *mlx, t_casting casting);
+void			determine_step_side(t_mlx *mlx, t_casting *casting);
+void			determine_side_hit(t_mlx *mlx, t_casting *casting);
+void			determine_distance(t_mlx *mlx, t_casting *casting);
+void			determine_wall_x(t_mlx *mlx, t_casting *casting);
+void			determine_texture_x(t_casting *casting);
+void			determine_topbot(t_casting *casting);
+void			determine_begin_end(t_casting casting, int *begin, int *end);
+
+/*
+**	Sprite functions
+*/
+
+t_sprites		*init_sprites(t_mlx *mlx);
+void			sprites_to_img(t_mlx *mlx);
+void			determine_sprite_dimensions(t_mlx *mlx, t_spritecast *spritecast, int i);
+void			determine_draw_start_end(t_spritecast *spritecast);
+void			sort_sprites(t_spritecast *spritecast);
+
+/*
+**	Screen functions
+*/
+
+t_screen		*init_screen(t_mlx *mlx);
 
 #endif

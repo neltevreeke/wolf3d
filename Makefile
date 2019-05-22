@@ -6,22 +6,44 @@
 #    By: jvisser <jvisser@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/02/22 13:27:36 by nvreeke        #+#    #+#                 #
-#    Updated: 2019/05/21 17:15:33 by nvreeke       ########   odam.nl          #
+#    Updated: 2019/05/22 17:37:20 by nvreeke       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 BINARY = wolf3d
 SRCS =	src/init.c \
-		src/fps_meter.c \
-		src/event_handlers.c \
 		src/input.c \
 		src/error.c \
-		src/raycast.c \
+		src/program_loops.c \
+		\
+		src/sounds.c \
+		src/fps_meter.c \
+		\
 		src/load_game.c \
 		src/save_game.c \
-		src/move.c \
 		src/game_state.c \
-		src/player_interaction.c
+		src/player_interaction.c \
+		\
+		src/move.c \
+		src/screen.c \
+		\
+		src/mouse.c \
+		src/keyboard.c \
+		\
+		src/map.c \
+		src/minimap.c \
+		\
+		src/player.c \
+		src/interface.c \
+		\
+		src/sprites.c \
+		src/textures.c \
+		\
+		src/raycast.c \
+		src/print_sprites.c \
+		src/print_raycast.c \
+		src/calc_print_sprites.c \
+		src/calc_print_raycast.c
 HEADER = src/wolf3d.h
 OBJ = $(SRCS:%.c=%.o)
 FLAGS = -L minilibx_macos/ -lmlx -framework OpenGL -framework AppKit -o $(BINARY)

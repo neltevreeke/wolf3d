@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/20 17:49:50 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/20 19:56:47 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/22 11:49:59 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static int		get_load_info_int(int fd)
 {
-	int		ret;
-	int		result;
-	char	*line;
+	int			ret;
+	int			result;
+	char		*line;
 
 	ret = get_next_line(fd, &line);
 	if (ret < 0)
@@ -28,9 +28,9 @@ static int		get_load_info_int(int fd)
 
 static float	get_load_info_float(int fd)
 {
-	int		ret;
-	float	result;
-	char	*line;
+	int			ret;
+	float		result;
+	char		*line;
 
 	ret = get_next_line(fd, &line);
 	if (ret < 0)
@@ -42,7 +42,7 @@ static float	get_load_info_float(int fd)
 
 void			load_game(t_mlx *mlx)
 {
-	int		fd;
+	int			fd;
 
 	fd = open_file("src/gamesaves/save1", O_RDONLY);
 	mlx->player->ammo = get_load_info_int(fd);

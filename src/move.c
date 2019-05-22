@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/20 18:04:44 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/20 19:59:00 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/22 17:10:07 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,22 +96,6 @@ static void	move_backward(t_mlx *mlx)
 	|| mlx->map->level[(int)(mlx->player->posy)][(int)(mlx->player->posx
 		- mlx->player->dirx * mlx->player->ms)] == FULLHEAL_SPRITE)
 		mlx->player->posx -= movex;
-}
-
-static void	play_footstep_sound(t_mlx *mlx)
-{
-	int	status;
-
-	if (mlx->player->step_pid == 0
-	|| waitpid(mlx->player->step_pid, &status, WNOHANG) != 0)
-	{
-		mlx->player->step_pid = fork();
-		if (mlx->player->step_pid == 0)
-		{
-			system("afplay -v 0.5 src/sound_fx/voetstappen.wav");
-			exit(EXIT_SUCCESS);
-		}
-	}
 }
 
 void		check_player_move(t_mlx *mlx)

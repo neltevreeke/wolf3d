@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/02/28 13:51:14 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/20 19:56:47 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/22 17:37:30 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,28 +22,33 @@ int			open_file(char *filename, int mode)
 	return (fd);
 }
 
-void		malloc_map(t_map *map, char *filename)
+static void	determine_size(t_map *map, char *filename)
 {
-	char	*line;
 	int		fd;
 	int		ret;
-	int		temp;
+	char	*line;
 
-	fd = open(filename, O_RDONLY);
+	fd = open_file(filename, O_RDONLY);
 	ret = 1;
-	if (fd == -1)
-		exit_failure_errno();
-	while (ret)
+	while (ret > 0)
 	{
 		ret = get_next_line(fd, &line);
 		if (map->size_x == 0)
 			map->size_x = ft_wordcount(line, ' ');
-		if (ret)
+		if (ret > 0)
 		{
 			map->size_y++;
 			free(line);
 		}
 	}
+	close(fd);
+}
+
+void		malloc_map(t_map *map, char *filename)
+{
+	int		temp;
+
+	determine_size(map, filename);
 	map->level = (int**)malloc(sizeof(int*) * map->size_y);
 	temp = map->size_y;
 	while (temp)
@@ -51,10 +56,9 @@ void		malloc_map(t_map *map, char *filename)
 		map->level[temp - 1] = (int*)malloc(sizeof(int) * map->size_x);
 		temp--;
 	}
-	close(fd);
 }
 
-void		set_number(int *i, int *map_point, char *line)
+static void	set_number(int *i, int *map_point, char *line)
 {
 	while (line[*i] == ' ')
 		(*i)++;
@@ -76,7 +80,7 @@ void		fill_map(t_map *map, char *filename)
 	line = NULL;
 	ret = get_next_line(fd, &line);
 	coord.y = 0;
-	while (ret)
+	while (ret > 0)
 	{
 		i = 0;
 		coord.x = 0;

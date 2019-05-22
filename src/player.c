@@ -1,33 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   game_state.c                                       :+:    :+:            */
+/*   player.c                                           :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/05/21 13:12:10 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/22 12:06:36 by nvreeke       ########   odam.nl         */
+/*   Created: 2019/05/22 15:54:54 by nvreeke        #+#    #+#                */
+/*   Updated: 2019/05/22 16:12:02 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-int			exit_x(void *nul)
-{
-	(void)nul;
-	exit(EXIT_SUCCESS);
-}
+/*
+**	Initializes Player
+*/
 
-void		switch_game_state(t_mlx *mlx)
+t_player	*init_player(void)
 {
-	if (mlx->screen->main_game == true)
-	{
-		mlx->screen->main_game = false;
-		mlx->screen->menu = true;
-	}
-	else if (mlx->screen->menu == true)
-	{
-		mlx->screen->main_game = true;
-		mlx->screen->menu = false;
-	}
+	t_player	*player;
+
+	player = MEM(t_player);
+	if (!player)
+		exit_failure_errno();
+	player->posx = 35.5;
+	player->posy = 55.5;
+	player->dirx = 0.5;
+	player->diry = 0.5;
+	player->planex = -0.5;
+	player->planey = 0.5;
+	player->ms = 0.13;
+	player->ammo = 600;
+	player->hp = 100;
+	return (player);
 }
