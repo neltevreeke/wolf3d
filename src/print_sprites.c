@@ -6,11 +6,15 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 17:00:15 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/22 17:39:47 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 14:57:55 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+#include "../includes/xlm.h"
+#include "../includes/map.h"
+#include "../includes/player.h"
+#include "../includes/sprites.h"
 
 /*
 **	Sets the sprite distance accoring to sprite and player position

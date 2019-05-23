@@ -6,11 +6,14 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 14:32:29 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/22 14:50:15 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 14:57:19 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+#include "../includes/xlm.h"
+#include "../includes/sprites.h"
+
 
 /*
 **	Fills sprite data adress array

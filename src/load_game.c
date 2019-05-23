@@ -6,11 +6,14 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/20 17:49:50 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/22 11:49:59 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 14:34:53 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+#include "../includes/xlm.h"
+#include "../includes/map.h"
+#include "../includes/player.h"
 
 static int		get_load_info_int(int fd)
 {
@@ -44,7 +47,7 @@ void			load_game(t_mlx *mlx)
 {
 	int			fd;
 
-	fd = open_file("src/gamesaves/save1", O_RDONLY);
+	fd = open_file("src/gamesaves/save1", 00);
 	mlx->player->ammo = get_load_info_int(fd);
 	mlx->player->dirx = get_load_info_float(fd);
 	mlx->player->diry = get_load_info_float(fd);

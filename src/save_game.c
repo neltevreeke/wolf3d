@@ -6,11 +6,14 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/20 17:54:34 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/21 13:17:15 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 14:35:02 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+#include "../includes/xlm.h"
+#include "../includes/map.h"
+#include "../includes/player.h"
 
 static void	save_map_state(FILE *save, t_mlx *mlx)
 {

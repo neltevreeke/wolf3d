@@ -6,11 +6,13 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 16:02:25 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/22 16:12:07 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 14:34:05 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+#include "../includes/xlm.h"
+#include "../includes/player.h"
 
 /*
 **	Plays in-game gunshot sound

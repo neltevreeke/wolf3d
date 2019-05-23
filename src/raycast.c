@@ -6,12 +6,17 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 18:35:01 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/22 17:44:43 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 14:57:43 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
 #include "wolf3d.h"
+#include "../includes/xlm.h"
+#include "../includes/map.h"
+#include "../includes/player.h"
+#include "../includes/sprites.h"
+#include "../includes/raycast.h"
 
 /*
 **	Prints the pixel to the image
@@ -46,7 +51,7 @@ static void			init_raycasting(t_mlx *mlx, t_casting *casting)
 **	Raycast function
 */
 
-void				*raycasting(void *data)
+static void			*raycasting(void *data)
 {
 	t_mlx			*mlx;
 	t_casting		casting;

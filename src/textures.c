@@ -6,11 +6,12 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 14:25:14 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/22 14:36:48 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/05/23 13:31:42 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+#include "../includes/xlm.h"
 
 /*
 **	fills texture data adress array

@@ -6,11 +6,14 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 14:55:01 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/22 16:10:26 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 14:53:52 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include "wolf3d.h"
+#include "../includes/xlm.h"
+#include "../includes/player.h"
 
 /*
 **	Deals with clicks in the menu

@@ -6,11 +6,13 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 14:54:49 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/22 16:10:03 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 13:50:09 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+#include "../includes/xlm.h"
+#include "../includes/keys.h"
 
 /*
 **	Sets the states of keys on key press

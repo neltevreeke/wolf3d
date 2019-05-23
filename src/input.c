@@ -6,11 +6,15 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/02/28 13:51:14 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/22 17:37:30 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 14:33:24 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <fcntl.h>
+
 #include "wolf3d.h"
+#include "../includes/map.h"
+#include "../includes/player.h"
 
 int			open_file(char *filename, int mode)
 {

@@ -6,7 +6,7 @@
 #    By: jvisser <jvisser@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/02/22 13:27:36 by nvreeke        #+#    #+#                 #
-#    Updated: 2019/05/22 17:37:20 by nvreeke       ########   odam.nl          #
+#    Updated: 2019/05/23 14:31:13 by nvreeke       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,13 @@ SRCS =	src/init.c \
 		src/print_raycast.c \
 		src/calc_print_sprites.c \
 		src/calc_print_raycast.c
-HEADER = src/wolf3d.h
+HEADER = src/wolf3d.h \
+		includes/keys.h \
+		includes/map.h \
+		includes/minimap.h \
+		includes/raycast.h \
+		includes/xlm.h \
+		includes/player.h
 OBJ = $(SRCS:%.c=%.o)
 FLAGS = -L minilibx_macos/ -lmlx -framework OpenGL -framework AppKit -o $(BINARY)
 ERRFLAGS = -Wall -Wextra -Werror -O3

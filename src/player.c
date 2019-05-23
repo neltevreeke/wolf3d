@@ -6,11 +6,13 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 15:54:54 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/22 16:12:02 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 14:35:56 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+#include "../includes/player.h"
+
 
 /*
 **	Initializes Player

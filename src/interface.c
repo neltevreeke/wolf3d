@@ -6,11 +6,14 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 15:56:37 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/22 16:58:46 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 14:36:17 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+#include "../includes/xlm.h"
+#include "../includes/raycast.h"
+#include "../includes/player.h"
 
 /*
 **	Prints the crosshair to the image

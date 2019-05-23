@@ -6,11 +6,16 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 17:05:44 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/22 17:58:58 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 14:58:33 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+#include "../includes/xlm.h"
+#include "../includes/map.h"
+#include "../includes/player.h"
+#include "../includes/sprites.h"
+#include "../includes/raycast.h"
 
 /*
 **	Sorts the sprites accoring to distance (prints closest sprite last)

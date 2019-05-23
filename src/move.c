@@ -6,11 +6,15 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/20 18:04:44 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/22 17:10:07 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 14:35:28 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+#include "../includes/xlm.h"
+#include "../includes/map.h"
+#include "../includes/keys.h"
+#include "../includes/player.h"
 
 static void	rotate_left(t_mlx *mlx)
 {

@@ -6,11 +6,12 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 14:42:38 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/22 14:47:59 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 13:31:34 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+#include "../includes/xlm.h"
 
 /*
 **	Initializes window/screen

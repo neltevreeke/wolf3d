@@ -6,11 +6,17 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 15:58:36 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/22 15:59:17 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 14:50:08 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+#include "../includes/xlm.h"
+#include "../includes/keys.h"
+#include "../includes/mouse.h"
+#include "../includes/player.h"
+#include "../includes/minimap.h"
+#include "../includes/raycast.h"
 
 /*
 **	Keeps the program running in an infinite loop
