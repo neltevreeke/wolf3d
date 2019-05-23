@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/23 14:53:06 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/23 19:15:50 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/05/23 20:07:15 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ typedef struct	s_spritecast
 
 t_sprites		*init_sprites(t_mlx *mlx);
 void			sprites_to_img(t_mlx *mlx);
-void			determine_sprite_dimensions(t_mlx *mlx, t_spritecast *spritecast, int i);
+void			determine_sprite_dimensions(
+					t_mlx *mlx, t_spritecast *spritecast, int i);
 void			determine_draw_start_end(t_spritecast *spritecast);
 void			sort_sprites(t_spritecast *spritecast);
 

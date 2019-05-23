@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 17:05:44 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/23 19:50:44 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/05/23 20:06:34 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,12 @@ void			determine_sprite_dimensions(
 	spritecast->transform_y = spritecast->inverse
 				* (-mlx->player->planey * spritecast->sprite_x
 				+ mlx->player->planex * spritecast->sprite_y);
-	spritecast->sprite_width = ft_abs((int)(HEIGHT / (spritecast->transform_y)));
+	spritecast->sprite_width = ft_abs(
+							(int)(HEIGHT / (spritecast->transform_y)));
 	spritecast->sprite_screen_x = (int)((WIDTH / 2)
 				* (1 + spritecast->transform_x / spritecast->transform_y));
-	spritecast->sprite_height = ft_abs((int)(HEIGHT / (spritecast->transform_y)));
+	spritecast->sprite_height = ft_abs(
+							(int)(HEIGHT / (spritecast->transform_y)));
 }
 
 /*

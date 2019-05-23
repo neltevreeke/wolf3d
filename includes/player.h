@@ -6,14 +6,14 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/23 14:22:37 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/23 14:47:14 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 20:07:37 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PLAYER_H
 # define PLAYER_H
 
-#include <sys/types.h>
+# include <sys/types.h>
 
 typedef struct s_mlx	t_mlx;
 

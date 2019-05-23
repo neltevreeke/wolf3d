@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/23 13:37:34 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/23 14:46:30 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 20:08:51 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 # include "bool.h"
 
-typedef struct s_mlx t_mlx;
+typedef struct s_mlx	t_mlx;
 
 /*
 **	keys struct

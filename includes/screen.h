@@ -6,14 +6,14 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/23 18:59:41 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/23 19:01:30 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/05/23 20:07:31 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SCREEN_H
 # define SCREEN_H
 
-#include "bool.h"
+# include "bool.h"
 
 typedef struct s_mlx	t_mlx;
 
