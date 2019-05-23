@@ -6,13 +6,18 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/20 17:49:50 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/23 14:34:53 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 19:52:31 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wolf3d.h"
+#include <unistd.h>
+#include <stdlib.h>
+
+#include "../libft/libft.h"
+
 #include "../includes/xlm.h"
 #include "../includes/map.h"
+#include "../includes/error.h"
 #include "../includes/player.h"
 
 static int		get_load_info_int(int fd)

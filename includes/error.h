@@ -1,23 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_strdel.c                                        :+:    :+:            */
+/*   error.h                                            :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: nvreeke <marvin@codam.nl>                    +#+                     */
+/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/01/09 19:20:33 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/23 19:54:05 by jvisser       ########   odam.nl         */
+/*   Created: 2019/05/23 19:08:24 by jvisser        #+#    #+#                */
+/*   Updated: 2019/05/23 19:09:00 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#ifndef ERROR_H
+# define ERROR_H
 
-#include "libft.h"
+void			no_param(void);
+void			exit_failure_errno(void);
 
-void	ft_strdel(char **as)
-{
-	if (!as)
-		return ;
-	free(*as);
-	*as = NULL;
-}
+#endif

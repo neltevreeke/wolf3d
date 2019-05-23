@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/08 18:52:27 by jvisser        #+#    #+#                */
-/*   Updated: 2019/04/16 13:22:55 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/05/23 19:51:26 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 # define LIBFT_H
 # include <wchar.h>
 # include <string.h>
-# include <stdlib.h>
-# include <unistd.h>
 
 # define BUFF_SIZE 30
 

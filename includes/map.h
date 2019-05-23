@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/23 13:36:56 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/23 14:38:50 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 19:31:00 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,12 @@
 typedef struct s_mlx	t_mlx;
 typedef struct s_sprites	t_sprites;
 typedef struct s_textures	t_textures;
+
+typedef struct	s_coord
+{
+	int			x;
+	int			y;
+}				t_coord;
 
 typedef struct	s_map
 {

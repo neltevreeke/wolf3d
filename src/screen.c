@@ -6,12 +6,19 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 14:42:38 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/23 13:31:34 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 19:47:10 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wolf3d.h"
+#include <stdlib.h>
+
+#include "../libft/libft.h"
+
+#include "../includes/ui.h"
 #include "../includes/xlm.h"
+#include "../includes/screen.h"
+
+#include "../minilibx_macos/mlx.h"
 
 /*
 **	Initializes window/screen

@@ -6,17 +6,20 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/23 14:53:06 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/23 14:56:21 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 19:15:50 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SPRITES_H
 # define SPRITES_H
 
-#include "xlm.h"
+# define AMOUNT_SPRITES 24
+# define MAX_SPRITES 99
+# define AMMO_SPRITE -18
+# define FULLHEAL_SPRITE -17
+# define HEAL_SPRITE -16
 
 typedef struct s_mlx	t_mlx;
-typedef struct s_spritecast	t_spritecast;
 
 typedef struct	s_sprites
 {
@@ -30,6 +33,30 @@ typedef struct	s_sprites
 	int			sprite;
 	double		zbuffer[WIDTH];
 }				t_sprites;
+
+typedef struct	s_spritecast
+{
+	int			sprite_order[MAX_SPRITES];
+	int			sprite_distance[MAX_SPRITES];
+	int			frunk;
+	int			amount;
+	int			sprite_screen_x;
+	int			sprite_height;
+	int			sprite_width;
+	int			draw_start_x;
+	int			draw_start_y;
+	int			draw_end_x;
+	int			draw_end_y;
+	int			sprite_texture;
+	int			stripe;
+	int			texture_x;
+	int			texture_y;
+	double		sprite_x;
+	double		sprite_y;
+	double		transform_x;
+	double		transform_y;
+	double		inverse;
+}				t_spritecast;
 
 t_sprites		*init_sprites(t_mlx *mlx);
 void			sprites_to_img(t_mlx *mlx);

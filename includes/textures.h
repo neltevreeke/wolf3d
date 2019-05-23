@@ -1,23 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   minimap.h                                          :+:    :+:            */
+/*   textures.h                                         :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/05/23 12:59:25 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/23 19:59:43 by jvisser       ########   odam.nl         */
+/*   Created: 2019/05/23 19:11:36 by jvisser        #+#    #+#                */
+/*   Updated: 2019/05/23 19:16:48 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINIMAP_H
-# define MINIMAP_H
+#ifndef TEXTURES_H
+# define TEXTURES_H
 
-# include "xlm.h"
+# define AMOUNT_TEXTURES 41
 
-# define MINIMAP_PTR mlx->minimap
-# define MINIMAP_ADD mlx->mm_data_addr
+typedef struct s_mlx	t_mlx;
 
-void	create_minimap(t_mlx *mlx);
+typedef struct	s_textures
+{
+	void		**tex_arr;
+	char		**texture_data;
+	int			*bits_per_pixel;
+	int			*size_line;
+	int			*endian;
+}				t_textures;
+
+t_textures		*init_textures(t_mlx *mlx);
 
 #endif

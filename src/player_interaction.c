@@ -6,14 +6,14 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/21 13:05:57 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/23 14:35:18 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 19:59:06 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wolf3d.h"
 #include "../includes/xlm.h"
 #include "../includes/map.h"
 #include "../includes/player.h"
+#include "../includes/sprites.h"
 
 void		player_respawn(t_mlx *mlx)
 {

@@ -1,23 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_strdel.c                                        :+:    :+:            */
+/*   game_states.h                                      :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: nvreeke <marvin@codam.nl>                    +#+                     */
+/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/01/09 19:20:33 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/23 19:54:05 by jvisser       ########   odam.nl         */
+/*   Created: 2019/05/23 19:32:14 by jvisser        #+#    #+#                */
+/*   Updated: 2019/05/23 19:32:57 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#ifndef GAME_STATES_H
+# define GAME_STATES_H
 
-#include "libft.h"
+typedef struct s_mlx t_mlx;
 
-void	ft_strdel(char **as)
-{
-	if (!as)
-		return ;
-	free(*as);
-	*as = NULL;
-}
+void			switch_game_state(t_mlx *mlx);
+
+#endif

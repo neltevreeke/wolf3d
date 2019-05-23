@@ -6,11 +6,13 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/08 18:16:45 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/04/12 15:24:16 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 19:44:02 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wolf3d.h"
+#include <sys/time.h>
+
+#include "../libft/libft.h"
 
 /*
 **	Gets the current time of day in milliseconds.

@@ -5,10 +5,12 @@
 /*                                                     +:+                    */
 /*   By: nvreeke <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/01/09 19:20:33 by nvreeke       #+#    #+#                 */
-/*   Updated: 2019/01/09 19:20:34 by nvreeke       ########   odam.nl         */
+/*   Created: 2019/01/09 19:20:33 by nvreeke        #+#    #+#                */
+/*   Updated: 2019/05/23 19:55:47 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <unistd.h>
 
 #include "libft.h"
 

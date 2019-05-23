@@ -6,11 +6,14 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 15:54:54 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/23 14:35:56 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 19:48:41 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wolf3d.h"
+#include "../libft/libft.h"
+
+#include "../includes/xlm.h"
+#include "../includes/error.h"
 #include "../includes/player.h"
 
 

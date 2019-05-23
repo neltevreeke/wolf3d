@@ -6,16 +6,22 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 14:35:19 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/23 14:48:27 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 19:40:24 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wolf3d.h"
+#include "../libft/libft.h"
+
 #include "../includes/xlm.h"
 #include "../includes/map.h"
 #include "../includes/keys.h"
-#include "../includes/minimap.h"
+#include "../includes/error.h"
+#include "../includes/screen.h"
 #include "../includes/player.h"
+#include "../includes/minimap.h"
+#include "../includes/program_loops.h"
+
+#include "../minilibx_macos/mlx.h"
 
 /*
 **	Initializes MLX

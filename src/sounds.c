@@ -6,12 +6,15 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 16:02:25 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/23 14:34:05 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 19:43:33 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wolf3d.h"
+#include <stdlib.h>
+#include <unistd.h>
+
 #include "../includes/xlm.h"
+#include "../includes/screen.h"
 #include "../includes/player.h"
 
 /*

@@ -6,14 +6,18 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 14:55:01 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/23 14:53:52 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 19:48:05 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include "wolf3d.h"
+#include <stdlib.h>
+
 #include "../includes/xlm.h"
+#include "../includes/menu.h"
+#include "../includes/sound.h"
+#include "../includes/screen.h"
 #include "../includes/player.h"
+#include "../includes/game_states.h"
 
 /*
 **	Deals with clicks in the menu

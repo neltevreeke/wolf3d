@@ -6,13 +6,17 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 14:54:49 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/23 13:50:09 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 19:48:16 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wolf3d.h"
+#include "../libft/libft.h"
+
 #include "../includes/xlm.h"
 #include "../includes/keys.h"
+#include "../includes/error.h"
+#include "../includes/screen.h"
+#include "../includes/game_states.h"
 
 /*
 **	Sets the states of keys on key press

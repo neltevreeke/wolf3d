@@ -6,14 +6,17 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 15:53:29 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/23 14:57:11 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 19:48:25 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wolf3d.h"
+#include "../libft/libft.h"
+
 #include "../includes/xlm.h"
 #include "../includes/map.h"
+#include "../includes/error.h"
 #include "../includes/sprites.h"
+#include "../includes/textures.h"
 
 /*
 **	Initializes Map

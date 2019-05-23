@@ -6,15 +6,18 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 17:25:40 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/23 14:58:55 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 19:50:22 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wolf3d.h"
+#include "../libft/libft.h"
+
 #include "../includes/xlm.h"
 #include "../includes/map.h"
+#include "../includes/screen.h"
 #include "../includes/player.h"
 #include "../includes/raycast.h"
+#include "../includes/textures.h"
 
 /*
 **	Puts the pixel of the roof to the image
@@ -116,7 +119,7 @@ void			print_wall(t_mlx *mlx, t_casting casting)
 		if (begin < HEIGHT && begin >= 0)
 		{
 			wall_y = begin - HEIGHT * 0.5 + casting.lineheight * 0.5;
-			casting.texture_y = abs(((wall_y * 128) / casting.lineheight));
+			casting.texture_y = ft_abs(((wall_y * 128) / casting.lineheight));
 			if (mlx->screen->wall_side_textures == false)
 				casting.side = 0;
 			wall_pixel_to_img(mlx, casting, begin, wall_number);

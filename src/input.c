@@ -6,14 +6,18 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/02/28 13:51:14 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/23 14:33:24 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 19:51:55 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
+#include <unistd.h>
+#include <stdlib.h>
 
-#include "wolf3d.h"
+#include "../libft/libft.h"
+
 #include "../includes/map.h"
+#include "../includes/error.h"
 #include "../includes/player.h"
 
 int			open_file(char *filename, int mode)

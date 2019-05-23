@@ -6,12 +6,14 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/21 13:12:10 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/23 13:30:26 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 19:46:13 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wolf3d.h"
+#include <stdlib.h>
+
 #include "../includes/xlm.h"
+#include "../includes/screen.h"
 
 int			exit_x(void *nul)
 {

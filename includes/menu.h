@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_strdel.c                                        :+:    :+:            */
+/*   menu.h                                             :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: nvreeke <marvin@codam.nl>                    +#+                     */
+/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/01/09 19:20:33 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/23 19:54:05 by jvisser       ########   odam.nl         */
+/*   Created: 2019/05/23 19:21:43 by jvisser        #+#    #+#                */
+/*   Updated: 2019/05/23 19:22:36 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#ifndef MENU_H
+# define MENU_H
 
-#include "libft.h"
+typedef struct s_mlx	t_mlx;
 
-void	ft_strdel(char **as)
-{
-	if (!as)
-		return ;
-	free(*as);
-	*as = NULL;
-}
+int				exit_x(void *nul);
+void			load_game(t_mlx *mlx);
+void			save_game(t_mlx *mlx);
+
+#endif

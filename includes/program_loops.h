@@ -1,23 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_strdel.c                                        :+:    :+:            */
+/*   program_loops.h                                    :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: nvreeke <marvin@codam.nl>                    +#+                     */
+/*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/01/09 19:20:33 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/23 19:54:05 by jvisser       ########   odam.nl         */
+/*   Created: 2019/05/23 19:29:39 by jvisser        #+#    #+#                */
+/*   Updated: 2019/05/23 19:30:22 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#ifndef PROGRAM_LOOPS_H
+# define PROGRAM_LOOPS_H
 
-#include "libft.h"
+typedef struct s_mlx	t_mlx;
 
-void	ft_strdel(char **as)
-{
-	if (!as)
-		return ;
-	free(*as);
-	*as = NULL;
-}
+void			event_hooks(t_mlx *mlx);
+int				loop_program(t_mlx *mlx);
+
+#endif

@@ -6,11 +6,12 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 17:00:15 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/23 14:57:55 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 19:49:54 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wolf3d.h"
+#include "../libft/libft.h"
+
 #include "../includes/xlm.h"
 #include "../includes/map.h"
 #include "../includes/player.h"
@@ -80,7 +81,7 @@ static void	print_sprite(t_mlx *mlx, t_spritecast spritecast)
 			HEIGHT * 128 + spritecast.sprite_height * 128;
 		spritecast.texture_y = ((d * 128) / spritecast.sprite_height) / 256;
 		color = 0;
-		memcpy(&color, &mlx->map->sprites->sprite_data
+		ft_memcpy(&color, &mlx->map->sprites->sprite_data
 							[ft_abs(spritecast.sprite_texture) - 1]
 		[spritecast.texture_y % 128 * mlx->map->sprites->size_line
 							[ft_abs(spritecast.sprite_texture) - 1]

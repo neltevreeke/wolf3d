@@ -1,23 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   minimap.h                                          :+:    :+:            */
+/*   screen.h                                           :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/05/23 12:59:25 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/23 19:59:43 by jvisser       ########   odam.nl         */
+/*   Created: 2019/05/23 18:59:41 by jvisser        #+#    #+#                */
+/*   Updated: 2019/05/23 19:01:30 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINIMAP_H
-# define MINIMAP_H
+#ifndef SCREEN_H
+# define SCREEN_H
 
-# include "xlm.h"
+#include "bool.h"
 
-# define MINIMAP_PTR mlx->minimap
-# define MINIMAP_ADD mlx->mm_data_addr
+typedef struct s_mlx	t_mlx;
 
-void	create_minimap(t_mlx *mlx);
+typedef struct	s_screen
+{
+	t_bool		main_game;
+	t_bool		menu;
+	t_bool		wall_side_textures;
+	void		**gun_img;
+	int			gunstate;
+	void		*save_img;
+	double		save_time;
+}				t_screen;
+
+/*
+**	Screen functions
+*/
+
+t_screen		*init_screen(t_mlx *mlx);
 
 #endif

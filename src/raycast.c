@@ -6,17 +6,23 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/15 18:35:01 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/23 14:57:43 by nvreeke       ########   odam.nl         */
+/*   Updated: 2019/05/23 19:20:47 by jvisser       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <math.h>
 #include <pthread.h>
-#include "wolf3d.h"
+
+#include "../libft/libft.h"
+
+#include "../includes/ui.h"
 #include "../includes/xlm.h"
 #include "../includes/map.h"
 #include "../includes/player.h"
 #include "../includes/sprites.h"
 #include "../includes/raycast.h"
+
+#include "../minilibx_macos/mlx.h"
 
 /*
 **	Prints the pixel to the image
