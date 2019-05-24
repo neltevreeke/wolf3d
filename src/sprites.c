@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 14:32:29 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/23 19:49:19 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/05/24 15:53:00 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ static t_sprites	*malloc_sprite_struct(void)
 	sprites->endian = (int*)malloc(sizeof(int) * AMOUNT_SPRITES);
 	sprites->size_line = (int*)malloc(sizeof(int) * AMOUNT_SPRITES);
 	sprites->bits_per_pixel = (int*)malloc(sizeof(int) * AMOUNT_SPRITES);
-	sprites->x = (double*)malloc(sizeof(double) * AMOUNT_SPRITES);
-	sprites->y = (double*)malloc(sizeof(double) * AMOUNT_SPRITES);
+	sprites->x = (double*)malloc(sizeof(double) * MAX_SPRITES);
+	sprites->y = (double*)malloc(sizeof(double) * MAX_SPRITES);
 	return (sprites);
 }
 

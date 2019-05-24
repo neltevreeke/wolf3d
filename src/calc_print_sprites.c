@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 17:05:44 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/23 20:06:34 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/05/24 15:52:59 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,25 @@
 
 void			sort_sprites(t_spritecast *spritecast)
 {
-	int				i;
-	int				temp;
-	int				temp2;
+	int			i;
+	int			i2;
+	int			i3;
+	int			temp;
 
 	i = 0;
 	while (i < spritecast->amount - 1)
 	{
-		if (spritecast->sprite_distance[i] < spritecast->sprite_distance[i + 1])
+		i2 = 0;
+		i3 = 0;
+		while (spritecast->sprite_order[i2] != i)
+			i2++;
+		while (spritecast->sprite_order[i3] != i + 1)
+			i3++;
+		if (spritecast->sprite_distance[i2] < spritecast->sprite_distance[i3])
 		{
-			temp = spritecast->sprite_distance[i];
-			spritecast->sprite_distance[i] = spritecast->sprite_distance[i + 1];
-			spritecast->sprite_distance[i + 1] = temp;
-			temp2 = spritecast->sprite_order[i];
-			spritecast->sprite_order[i] = spritecast->sprite_order[i + 1];
-			spritecast->sprite_order[i + 1] = temp2;
+			temp = spritecast->sprite_order[i2];
+			spritecast->sprite_order[i2] = spritecast->sprite_order[i3];
+			spritecast->sprite_order[i3] = temp;
 			i = 0;
 		}
 		else

@@ -6,9 +6,11 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 14:54:49 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/23 19:48:16 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/05/24 17:39:57 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <stdlib.h>
 
 #include "../libft/libft.h"
 
@@ -24,17 +26,19 @@
 
 int			deal_key_press(int key, t_mlx *mlx)
 {
-	if (KEY_ESC == key)
+	if (key == KEY_ESC)
+		exit(EXIT_SUCCESS);
+	if (key == KEY_M)
 		switch_game_state(mlx);
 	else if (mlx->screen->main_game == true)
 	{
-		if (key == KEY_W)
+		if (key == KEY_W || key == KEY_UP)
 			mlx->keys->key_w = true;
-		else if (key == KEY_S)
+		else if (key == KEY_S || key == KEY_DOWN)
 			mlx->keys->key_s = true;
-		else if (key == KEY_A)
+		else if (key == KEY_A || key == KEY_LEFT)
 			mlx->keys->key_a = true;
-		else if (key == KEY_D)
+		else if (key == KEY_D || key == KEY_RIGHT)
 			mlx->keys->key_d = true;
 		else if (key == KEY_P)
 		{
@@ -55,13 +59,13 @@ int			deal_key_release(int key, t_mlx *mlx)
 {
 	if (mlx->screen->main_game == true)
 	{
-		if (key == KEY_W)
+		if (key == KEY_W || key == KEY_UP)
 			mlx->keys->key_w = false;
-		else if (key == KEY_S)
+		else if (key == KEY_S || key == KEY_DOWN)
 			mlx->keys->key_s = false;
-		else if (key == KEY_A)
+		else if (key == KEY_A || key == KEY_LEFT)
 			mlx->keys->key_a = false;
-		else if (key == KEY_D)
+		else if (key == KEY_D || key == KEY_RIGHT)
 			mlx->keys->key_d = false;
 	}
 	return (0);

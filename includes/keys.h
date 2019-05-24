@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/23 13:37:34 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/23 20:08:51 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/05/24 17:38:26 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@
 # define KEY_S 1
 # define KEY_SPA 49
 # define KEY_P 35
+# define KEY_M 46
+# define KEY_UP 126
+# define KEY_DOWN 125
+# define KEY_LEFT 123
+# define KEY_RIGHT 124
 
 # include "bool.h"
 

@@ -6,7 +6,7 @@
 /*   By: jvisser <jvisser@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/23 14:53:06 by jvisser        #+#    #+#                */
-/*   Updated: 2019/05/23 20:07:15 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/05/24 17:25:13 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 # define SPRITES_H
 
 # define AMOUNT_SPRITES 24
-# define MAX_SPRITES 99
+# define MAX_SPRITES 999
 # define AMMO_SPRITE -18
 # define FULLHEAL_SPRITE -17
 # define HEAL_SPRITE -16
+# define WIDTH 1000
 
 typedef struct s_mlx	t_mlx;
 

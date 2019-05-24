@@ -6,7 +6,7 @@
 /*   By: nvreeke <nvreeke@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/22 15:54:54 by nvreeke        #+#    #+#                */
-/*   Updated: 2019/05/23 20:06:52 by jvisser       ########   odam.nl         */
+/*   Updated: 2019/05/24 13:17:46 by nvreeke       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_player	*init_player(void)
 	player->planex = -0.5;
 	player->planey = 0.5;
 	player->ms = 0.13;
-	player->ammo = 600;
+	player->ammo = 12;
 	player->hp = 100;
 	return (player);
 }
