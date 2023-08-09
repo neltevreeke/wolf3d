@@ -11,7 +11,6 @@
 # **************************************************************************** #
 
 NAME = libft.a
-FLAGS = -Wall -Wextra -Werror -O3
 HEADER = libft.h ft_printf/ft_printf.h
 C_FILES =	ft_memalloc.c\
 			ft_memdel.c\
@@ -139,7 +138,7 @@ all: $(NAME)
 
 %.o: %.c
 	@echo "\033[1;32m 🛠️  Building $@ from $< file \033[0m"
-	@gcc $(FLAGS) -c -o $@ $<
+	@gcc -c -o $@ $<
 
 $(NAME): $(O_FILES)
 	@echo "\033[1;32m 🛠️  Building library from objects \033[0m"

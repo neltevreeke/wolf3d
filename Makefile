@@ -63,7 +63,6 @@ HEADER = includes/bool.h \
 		includes/xlm.h
 OBJ = $(SRCS:%.c=%.o)
 FLAGS = -L minilibx_macos/ -lmlx -framework OpenGL -framework AppKit -o $(BINARY)
-ERRFLAGS = -Wall -Wextra -Werror -O3
 GCC = gcc
 LIBS = ./libft/libft.a
 
@@ -71,13 +70,13 @@ all: $(BINARY)
 
 %.o: %.c $(HEADER)
 	@echo "\033[1;32m 🛠️  Building $@ from $< file \033[0m"
-	@gcc $(ERRFLAGS) -c -o $@ $<
+	@gcc -c -o $@ $<
 
 $(BINARY): $(OBJ)
 	@echo "Compiling..."
 	@make -C minilibx_macos re > /dev/null
 	@make -C libft
-	@$(GCC) $(SRCS) $(INC) -I/usr/X11/includes $(FLAGS) $(ERRFLAGS) $(LIBS)
+	@$(GCC) $(SRCS) $(INC) -I/usr/X11/includes $(FLAGS) $(LIBS)
 	@echo "Done"
 
 clean:
